@@ -1,0 +1,304 @@
+<!doctype html><html lang='it'><head><meta charset='UTF-8'/><meta name='viewport' content='width=device-width,initial-scale=1.0'/><title>Phoenix — ASH Swap</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;color:#f0e8ea;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;overflow-x:hidden;cursor:none;min-height:100%}
+a{text-decoration:none;color:inherit}
+
+/* HEADER */
+.header{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.5rem;border-bottom:1px solid rgba(192,34,62,.18);position:sticky;top:0;background:#000;z-index:50;white-space:nowrap}
+.brand{display:flex;align-items:center;gap:.4rem;flex-shrink:0}
+.brand img{width:52px;height:52px;object-fit:contain;mix-blend-mode:screen}
+.brand span{font-weight:900;letter-spacing:.06em;font-size:1.2rem;color:#fff;text-shadow:0 0 8px rgba(227,65,89,.9),0 0 18px rgba(192,34,62,.7);white-space:nowrap}
+.nav{display:flex;gap:.5rem;align-items:center;flex-wrap:nowrap}
+.nav a{color:rgba(255,255,255,.7);font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.02em;transition:color .2s;white-space:nowrap}
+.nav a:hover{color:#fff}
+.lang-switch{display:flex;gap:.3rem;margin-left:.5rem}
+.lang-switch button{background:transparent;border:2px solid transparent;padding:.2rem .2rem;border-radius:4px;cursor:none;transition:transform .2s,border-color .2s;line-height:0}
+.lang-switch button img{width:26px;height:19px;display:block;border-radius:2px}
+.lang-switch button:hover{transform:scale(1.15)}
+.lang-switch button.active{border-color:rgba(227,65,89,.8);transform:scale(1.15)}
+.btn-wallet{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:.55rem 1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:8px;cursor:none;font-size:.78rem;white-space:nowrap;transition:box-shadow .2s}
+.btn-wallet:hover{box-shadow:0 0 18px rgba(227,65,89,.6)}
+
+/* CANVAS FLAME */
+#flame{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:1000}
+
+/* PAGE */
+.page{min-height:calc(100vh - 70px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem}
+
+/* SWAP CARD */
+.card{background:linear-gradient(145deg,rgba(20,0,5,0.95),rgba(40,5,15,0.9));border:1px solid rgba(192,34,62,.35);border-radius:20px;padding:2rem;width:100%;max-width:440px;box-shadow:0 0 60px rgba(192,34,62,.15),0 0 120px rgba(192,34,62,.05);position:relative;z-index:2}
+
+.card-title{font-size:1.6rem;font-weight:900;text-align:center;margin-bottom:.3rem;background:linear-gradient(180deg,#e34159,#7a1228);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.card-sub{text-align:center;color:rgba(240,232,234,.5);font-size:.8rem;margin-bottom:1.8rem}
+
+/* FIELD */
+.field{background:rgba(0,0,0,.5);border:1px solid rgba(192,34,62,.2);border-radius:12px;padding:1rem 1.2rem;margin-bottom:.5rem;transition:border-color .2s}
+.field:focus-within{border-color:rgba(227,65,89,.5)}
+.frow{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem}
+.lbl{font-size:.75rem;color:rgba(240,232,234,.5);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.bal{font-size:.75rem;color:rgba(240,232,234,.4)}
+.bal span{color:#ff8a9c;cursor:none}
+.frow2{display:flex;align-items:center;gap:.8rem}
+.inp{background:transparent;border:none;outline:none;color:#fff;font-size:1.5rem;font-weight:700;width:100%;font-family:inherit}
+.inp::placeholder{color:rgba(255,255,255,.2)}
+.inp::-webkit-outer-spin-button,.inp::-webkit-inner-spin-button{-webkit-appearance:none}
+
+/* PILL TOKEN */
+.pill{display:flex;align-items:center;gap:.5rem;background:rgba(192,34,62,.2);border:1px solid rgba(192,34,62,.35);border-radius:20px;padding:.4rem .8rem;white-space:nowrap;flex-shrink:0}
+.pill-icon{font-size:1.1rem}
+.pill-name{font-weight:700;font-size:.9rem}
+
+/* SWITCH BTN */
+.swc{display:flex;justify-content:center;margin:.2rem 0}
+.sw{background:rgba(192,34,62,.25);border:1px solid rgba(192,34,62,.4);color:#ff8a9c;width:38px;height:38px;border-radius:50%;font-size:1.2rem;cursor:none;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.sw:hover{background:rgba(192,34,62,.5);transform:rotate(180deg)}
+
+/* RATE */
+.rate{display:flex;justify-content:space-between;font-size:.78rem;color:rgba(240,232,234,.45);padding:.6rem 0;border-top:1px solid rgba(192,34,62,.1);border-bottom:1px solid rgba(192,34,62,.1);margin:1rem 0}
+
+/* ACTION BTN */
+.act{width:100%;padding:1rem;border:none;border-radius:12px;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;cursor:none;transition:all .25s;margin-top:.5rem}
+.act-connect{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;box-shadow:0 0 20px rgba(192,34,62,.4)}
+.act-connect:hover{box-shadow:0 0 30px rgba(227,65,89,.6);transform:translateY(-1px)}
+.act-swap{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;box-shadow:0 0 20px rgba(192,34,62,.4)}
+.act-swap:hover:not(:disabled){box-shadow:0 0 30px rgba(227,65,89,.6);transform:translateY(-1px)}
+.act-swap:disabled{opacity:.45;cursor:not-allowed}
+.act-chain{background:rgba(255,160,0,.15);border:1px solid rgba(255,160,0,.4);color:#ffa500}
+.act-chain:hover{background:rgba(255,160,0,.25)}
+
+/* STATUS MESSAGES */
+.err{background:rgba(255,50,50,.1);border:1px solid rgba(255,80,80,.3);border-radius:8px;padding:.8rem 1rem;margin-top:.8rem;font-size:.82rem;color:#ff8a8a}
+.ok{display:block;background:rgba(50,200,100,.1);border:1px solid rgba(80,200,100,.3);border-radius:8px;padding:.8rem 1rem;margin-top:.8rem;font-size:.82rem;color:#6dffaa;text-align:center}
+.ok:hover{background:rgba(50,200,100,.2)}
+.busy{display:flex;align-items:center;justify-content:center;gap:.6rem;color:rgba(240,232,234,.6);font-size:.82rem;margin-top:.8rem}
+.spinner{width:16px;height:16px;border:2px solid rgba(192,34,62,.3);border-top-color:#c0223e;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* NOTE */
+.note{text-align:center;color:rgba(240,232,234,.3);font-size:.72rem;margin-top:1.2rem;line-height:1.6}
+.note a{color:rgba(227,65,89,.6)}
+.note a:hover{color:#ff8a9c}
+
+/* FOOTER */
+.footer{border-top:1px solid rgba(192,34,62,.12);padding:1.5rem;text-align:center;color:rgba(240,232,234,.3);font-size:.75rem;margin-top:2rem}
+
+@media(max-width:480px){.card{padding:1.2rem}.card-title{font-size:1.3rem}.inp{font-size:1.2rem}.nav{display:none}}
+</style></head>
+<body>
+<canvas id='flame'></canvas>
+
+<!-- HEADER -->
+<header class='header'>
+  <div class='brand'>
+    <img src='https://i.ibb.co/chkW0mST/fenice-sfondo-completamente-nero-c499a262.png' alt='Phoenix'/>
+    <span>PHOENIX</span>
+  </div>
+  <nav class='nav'>
+    <a href='index.html#academy'>Academy</a>
+    <a href='index.html#tornei'>Tornei</a>
+    <a href='index.html#elementi'>Elementi</a>
+    <a href='index.html#premi'>Premi</a>
+    <a href='guadagna-extra-ash.html'>💰 Guadagna ASH</a>
+    <a href='terms.html'>T&C</a>
+    <a href='privacy.html'>Privacy</a>
+  </nav>
+  <div style='display:flex;align-items:center;gap:.6rem'>
+    <div class='lang-switch'>
+      <button class='active' data-lang='it'><img src='https://flagcdn.com/24x18/it.png' alt='IT'/></button>
+      <button data-lang='en'><img src='https://flagcdn.com/24x18/gb.png' alt='GB'/></button>
+      <button data-lang='ru'><img src='https://flagcdn.com/24x18/ru.png' alt='RU'/></button>
+      <button data-lang='zh'><img src='https://flagcdn.com/24x18/cn.png' alt='CN'/></button>
+    </div>
+    <a href='index.html' class='btn-wallet'>← Back</a>
+  </div>
+</header>
+
+<!-- SWAP PAGE -->
+<div class='page'>
+  <div class='card'>
+    <div class='card-title'>🔥 ASH Swap</div>
+    <div class='card-sub'>Scambia USDC ↔ ASH sulla rete Base</div>
+
+    <!-- FROM -->
+    <div class='field'>
+      <div class='frow'>
+        <span class='lbl'>Paghi</span>
+        <span class='bal'>Saldo: <span id='fromBal'>—</span></span>
+      </div>
+      <div class='frow2'>
+        <input class='inp' id='amountIn' type='number' min='0' placeholder='0.0' oninput='calcOut()'/>
+        <div class='pill' id='fromPill'>
+          <span class='pill-icon'>$</span><span class='pill-name'>USDC</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SWITCH -->
+    <div class='swc'><button class='sw' onclick='toggle()'>⇅</button></div>
+
+    <!-- TO -->
+    <div class='field'>
+      <div class='frow'>
+        <span class='lbl'>Ricevi</span>
+        <span class='bal'>Saldo: <span id='toBal'>—</span></span>
+      </div>
+      <div class='frow2'>
+        <input class='inp' id='amountOut' type='text' placeholder='0.0' readonly/>
+        <div class='pill' id='toPill'>
+          <span class='pill-icon'>🔥</span><span class='pill-name'>ASH</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RATE -->
+    <div class='rate'>
+      <span>Prezzo fisso</span>
+      <span>1 USDC = 7 ASH</span>
+    </div>
+
+    <!-- ACTION -->
+    <div id='actionArea'>
+      <button class='act act-connect' onclick='connect()'>Connetti Wallet</button>
+    </div>
+
+    <!-- STATUS -->
+    <div id='statusArea'></div>
+
+    <!-- NOTE -->
+    <div class='note'>
+      Swap a prezzo fisso USDC ↔ ASH sulla rete Base Mainnet.<br/>
+      Contratto: <a href='https://basescan.org/address/0xE5104018379973BA5a65b82bC7E876b766357de6' target='_blank'>0xE510…7de6</a>
+    </div>
+  </div>
+</div>
+
+<footer class='footer'>&copy; 2026 Phoenix Academy &middot; Risorgi attraverso la conoscenza.</footer>
+
+<script src='https://cdn.jsdelivr.net/npm/ethers@6.13.1/dist/ethers.umd.min.js'></script>
+<script>
+const SWAP_ADDRESS = '0xE5104018379973BA5a65b82bC7E876b766357de6';
+const ASH_ADDRESS  = '0xd4FbB5E4Dd24C3F9A0F58Efa656A489D24E93BCd';
+const USDC_ADDRESS = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';
+const ASH_PER_USDC = 7;
+const BASE_CHAIN_ID = 8453;
+const BASE_HEX = '0x2105';
+const SWAP_ABI  = ['function buy(uint256 usdcAmount)','function sell(uint256 ashAmount)'];
+const ERC20_ABI = ['function balanceOf(address) view returns (uint256)','function allowance(address,address) view returns (uint256)','function approve(address,uint256) returns (bool)'];
+
+let address = null, chainId = null, dir = 'USDC_TO_ASH';
+const isUsdcToAsh = () => dir === 'USDC_TO_ASH';
+const short = a => a ? a.slice(0,6)+'…'+a.slice(-4) : '';
+const eth = () => window.ethereum;
+
+function calcOut() {
+  const v = parseFloat(document.getElementById('amountIn').value);
+  if (!v || v <= 0) { document.getElementById('amountOut').value = ''; return; }
+  const r = isUsdcToAsh() ? v * ASH_PER_USDC : v / ASH_PER_USDC;
+  document.getElementById('amountOut').value = r.toLocaleString('en-US',{maximumFractionDigits:6});
+}
+
+function toggle() {
+  dir = isUsdcToAsh() ? 'ASH_TO_USDC' : 'USDC_TO_ASH';
+  document.getElementById('amountIn').value = '';
+  document.getElementById('amountOut').value = '';
+  if (isUsdcToAsh()) {
+    document.getElementById('fromPill').innerHTML = '<span class="pill-icon">$</span><span class="pill-name">USDC</span>';
+    document.getElementById('toPill').innerHTML   = '<span class="pill-icon">🔥</span><span class="pill-name">ASH</span>';
+  } else {
+    document.getElementById('fromPill').innerHTML = '<span class="pill-icon">🔥</span><span class="pill-name">ASH</span>';
+    document.getElementById('toPill').innerHTML   = '<span class="pill-icon">$</span><span class="pill-name">USDC</span>';
+  }
+  if (address) refreshBals();
+  renderAction();
+}
+
+async function refreshBals() {
+  if (!eth() || !address) return;
+  try {
+    const p = new ethers.BrowserProvider(eth());
+    const u = new ethers.Contract(USDC_ADDRESS, ERC20_ABI, p);
+    const a = new ethers.Contract(ASH_ADDRESS,  ERC20_ABI, p);
+    const [ur, ar] = await Promise.all([u.balanceOf(address), a.balanceOf(address)]);
+    const uBal = parseFloat(ethers.formatUnits(ur, 6)).toLocaleString('en-US',{maximumFractionDigits:4});
+    const aBal = parseFloat(ethers.formatUnits(ar,18)).toLocaleString('en-US',{maximumFractionDigits:2});
+    document.getElementById('fromBal').textContent = isUsdcToAsh() ? uBal+' USDC' : aBal+' ASH';
+    document.getElementById('toBal').textContent   = isUsdcToAsh() ? aBal+' ASH'  : uBal+' USDC';
+  } catch(e){}
+}
+
+async function switchToBase() {
+  try { await eth().request({method:'wallet_switchEthereumChain',params:[{chainId:BASE_HEX}]}); }
+  catch(e) { if(e&&e.code===4902) await eth().request({method:'wallet_addEthereumChain',params:[{chainId:BASE_HEX,chainName:'Base',nativeCurrency:{name:'Ether',symbol:'ETH',decimals:18},rpcUrls:['https://mainnet.base.org'],blockExplorerUrls:['https://basescan.org']}]}); }
+}
+
+async function connect() {
+  if (!eth()) { setStatus('err','Nessun wallet trovato. Installa MetaMask.'); return; }
+  try {
+    const accs = await eth().request({method:'eth_requestAccounts'});
+    const cidHex = await eth().request({method:'eth_chainId'});
+    address = accs[0]; chainId = parseInt(cidHex,16);
+    if (chainId !== BASE_CHAIN_ID) await switchToBase();
+    await refreshBals();
+    renderAction();
+  } catch(e){ setStatus('err',(e&&e.message)||'Connessione rifiutata'); }
+}
+
+async function execute() {
+  if (!eth() || !address) return;
+  try {
+    setStatus('busy','Approvazione in corso…');
+    const p = new ethers.BrowserProvider(eth());
+    const signer = await p.getSigner();
+    const inAddr = isUsdcToAsh() ? USDC_ADDRESS : ASH_ADDRESS;
+    const inDec  = isUsdcToAsh() ? 6 : 18;
+    const amtIn  = ethers.parseUnits(document.getElementById('amountIn').value, inDec);
+    const erc    = new ethers.Contract(inAddr, ERC20_ABI, signer);
+    const owner  = await signer.getAddress();
+    const allow  = await erc.allowance(owner, SWAP_ADDRESS);
+    if (allow < amtIn) { const at = await erc.approve(SWAP_ADDRESS, ethers.MaxUint256); await at.wait(); }
+    setStatus('busy','Swap in corso…');
+    const swap = new ethers.Contract(SWAP_ADDRESS, SWAP_ABI, signer);
+    const tx   = isUsdcToAsh() ? await swap.buy(amtIn) : await swap.sell(amtIn);
+    await tx.wait();
+    setStatus('ok','✅ Swap completato! <a href="https://basescan.org/tx/'+tx.hash+'" target="_blank">Vedi su BaseScan →</a>');
+    document.getElementById('amountIn').value = '';
+    document.getElementById('amountOut').value = '';
+    refreshBals();
+  } catch(e){ setStatus('err',(e&&(e.shortMessage||e.message))||'Swap fallito'); }
+  renderAction();
+}
+
+function setStatus(type, msg) {
+  const el = document.getElementById('statusArea');
+  if (type==='busy') el.innerHTML = '<div class="busy"><div class="spinner"></div>'+msg+'</div>';
+  else if (type==='err') el.innerHTML = '<div class="err">'+msg+'</div>';
+  else if (type==='ok')  el.innerHTML = '<div class="ok">'+msg+'</div>';
+  else el.innerHTML='';
+}
+
+function renderAction() {
+  const area = document.getElementById('actionArea');
+  const amt  = parseFloat(document.getElementById('amountIn').value);
+  if (!address) {
+    area.innerHTML = '<button class="act act-connect" onclick="connect()">Connetti Wallet</button>';
+  } else if (chainId !== BASE_CHAIN_ID) {
+    area.innerHTML = '<button class="act act-chain" onclick="switchToBase()">Passa alla rete Base</button>';
+  } else {
+    area.innerHTML = '<button class="act act-swap" '+((!amt||amt<=0)?'disabled':'')+' onclick="execute()">Swap →</button>';
+  }
+}
+
+// Listen wallet events
+window.addEventListener('load', () => {
+  if (!eth() || !eth().on) return;
+  eth().on('accountsChanged', a => { address=a[0]||null; if(address){refreshBals();} renderAction(); });
+  eth().on('chainChanged', c => { chainId=parseInt(c,16); renderAction(); });
+});
+
+// Input → aggiorna bottone
+document.getElementById('amountIn').addEventListener('input', renderAction);
+</script>
+
+<!-- FLAME EFFECT -->
+<script>(function(){var c=document.getElementById('flame');var x=c.getContext('2d');var ps=[];var m={x:-100,y:-100,active:false};var dpr=window.devicePixelRatio||1;function rs(){dpr=window.devicePixelRatio||1;c.width=innerWidth*dpr;c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';x.setTransform(dpr,0,0,dpr,0,0)}rs();addEventListener('resize',rs);addEventListener('mousemove',function(e){m.x=e.clientX;m.y=e.clientY;m.active=true;for(var i=0;i<3;i++){ps.push({x:e.clientX+(Math.random()-.5)*6,y:e.clientY+(Math.random()-.5)*6,vx:(Math.random()-.5)*.6,vy:-Math.random()*1.4-.4,life:0,maxLife:28+Math.random()*20,size:6+Math.random()*8})}if(ps.length>220)ps.splice(0,ps.length-220)});addEventListener('mouseleave',function(){m.active=false});addEventListener('mousedown',function(e){for(var i=0;i<60;i++){var a=Math.PI*2*i/60+Math.random()*.4;var s=1.5+Math.random()*3.5;ps.push({x:e.clientX,y:e.clientY,vx:Math.cos(a)*s,vy:Math.sin(a)*s-.5,life:0,maxLife:38+Math.random()*30,size:10+Math.random()*14})}if(ps.length>400)ps.splice(0,ps.length-400)});function tick(){x.globalCompositeOperation='destination-out';x.fillStyle='rgba(0,0,0,0.18)';x.fillRect(0,0,c.width/dpr,c.height/dpr);x.globalCompositeOperation='lighter';for(var i=ps.length-1;i>=0;i--){var p=ps[i];p.life++;if(p.life>=p.maxLife){ps.splice(i,1);continue}p.x+=p.vx;p.y+=p.vy;p.vy-=.05;p.vx*=.96;var t=p.life/p.maxLife;var r=p.size*(1-t*.4);var al=(1-t)*.9;var g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,r);if(t<.45){g.addColorStop(0,'rgba(255,60,70,'+al+')');g.addColorStop(.35,'rgba(200,25,40,'+al*.85+')');g.addColorStop(.7,'rgba(130,10,25,'+al*.5+')');g.addColorStop(1,'rgba(60,0,10,0)')}else{var sm=(t-.45)/.55;var a2=al*(1-sm*.5);g.addColorStop(0,'rgba(160,20,35,'+a2*.75+')');g.addColorStop(.5,'rgba(90,8,20,'+a2*.4+')');g.addColorStop(1,'rgba(30,0,5,0)')}x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,r,0,Math.PI*2);x.fill()}if(m.active){var br=14;var cg=x.createRadialGradient(m.x,m.y,0,m.x,m.y,br);cg.addColorStop(0,'rgba(255,80,90,0.95)');cg.addColorStop(.35,'rgba(220,30,45,.8)');cg.addColorStop(.7,'rgba(140,12,28,0.5)');cg.addColorStop(1,'rgba(60,0,10,0)');x.fillStyle=cg;x.beginPath();x.arc(m.x,m.y,br,0,Math.PI*2);x.fill()}requestAnimationFrame(tick)}requestAnimationFrame(tick)})();</script>
+</body></html>
