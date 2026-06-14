@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="22" height="22">
+  <!-- Ombra base -->
+  <ellipse cx="16" cy="28" rx="11" ry="2.5" fill="#888" opacity=".3"/>
+  <!-- Mucchio ceneri principale -->
+  <path d="M7 26 Q6 17 10 12 Q9 8 13 6 Q11 13 15 14 Q13 8 16 4 Q19 8 17 14 Q20 11 19 6 Q23 10 21 16 Q24 12 23 8 Q27 12 25 18 Q27 21 26 26 Z" fill="#c8c8c8"/>
+  <!-- Striature scure nelle ceneri -->
+  <path d="M10 26 Q9 20 12 15 Q13 20 11 26Z" fill="#555"/>
+  <path d="M15.5 26 Q14 19 16 14 Q18 19 17 26Z" fill="#555"/>
+  <path d="M20 26 Q19 20 22 15 Q23 20 21 26Z" fill="#555"/>
+  <!-- Particelle di cenere sparse -->
+  <ellipse cx="11" cy="25" rx="2.5" ry="1" fill="#aaa" opacity=".9"/>
+  <ellipse cx="18" cy="24" rx="2" ry=".8" fill="#999" opacity=".9"/>
+  <ellipse cx="23" cy="25" rx="1.5" ry=".6" fill="#bbb" opacity=".8"/>
+  <!-- Braci quasi spente - piccolissimi punti arancio -->
+  <circle cx="14" cy="18" r=".8" fill="#ff6633" opacity=".5"/>
+  <circle cx="19" cy="16" r=".6" fill="#ff4400" opacity=".4"/>
+  <!-- Particelle volanti -->
+  <circle cx="8" cy="19" r="1" fill="#aaa" opacity=".5"/>
+  <circle cx="25" cy="17" r=".8" fill="#aaa" opacity=".4"/>
+  <circle cx="12" cy="12" r=".5" fill="#ccc" opacity=".3"/>
+  <circle cx="22" cy="10" r=".4" fill="#bbb" opacity=".3"/>
+</svg>
