@@ -1,0 +1,417 @@
+<!doctype html><html lang='it'><head><meta charset='UTF-8'/><meta name='viewport' content='width=device-width,initial-scale=1.0'/><title>Phoenix — Big Five</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;color:#f0e8ea;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;overflow-x:hidden;cursor:none;min-height:100%}
+a{text-decoration:none;color:inherit}
+@media(hover:none){html,body{cursor:auto}}
+
+/* HEADER */
+.header{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.5rem;border-bottom:1px solid rgba(192,34,62,.18);position:sticky;top:0;background:#000;z-index:50;white-space:nowrap}
+.brand{display:flex;align-items:center;gap:.4rem;flex-shrink:0}
+.brand img{width:52px;height:52px;object-fit:contain;mix-blend-mode:screen}
+.brand span{font-weight:900;letter-spacing:.06em;font-size:1.2rem;color:#fff;text-shadow:0 0 8px rgba(227,65,89,.9),0 0 18px rgba(192,34,62,.7)}
+.spacer{flex:1}
+.lang-switch{display:flex;gap:.3rem}
+.lang-switch button{background:transparent;border:2px solid transparent;padding:.2rem;border-radius:4px;cursor:none;transition:transform .2s,border-color .2s;line-height:0}
+.lang-switch button img{width:26px;height:19px;display:block;border-radius:2px}
+.lang-switch button:hover{transform:scale(1.15)}
+.lang-switch button.active{border-color:rgba(227,65,89,.8);transform:scale(1.15)}
+.btn-back{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:.55rem 1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:8px;cursor:none;font-size:.78rem;white-space:nowrap;margin-left:.6rem;transition:box-shadow .2s}
+.btn-back:hover{box-shadow:0 0 18px rgba(227,65,89,.6)}
+@media(hover:none){.lang-switch button,.btn-back{cursor:auto}}
+
+/* FLAME */
+#flame{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:1000}
+
+/* LAYOUT */
+.wrap{max-width:760px;margin:0 auto;padding:2.5rem 1.2rem 5rem;position:relative;z-index:2}
+
+/* INTRO */
+.intro{text-align:center;padding-top:1rem}
+.eyebrow{font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(227,65,89,.75);font-weight:700;margin-bottom:1rem}
+.title{font-size:clamp(2.4rem,7vw,4rem);font-weight:900;line-height:.95;letter-spacing:-.02em;text-transform:uppercase;background:linear-gradient(180deg,#ff5f6e,#7a1228);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.4rem}
+.subtitle{font-size:1.05rem;color:rgba(240,232,234,.65);max-width:520px;margin:0 auto 2rem;line-height:1.6}
+.meta-row{display:flex;justify-content:center;gap:2.4rem;margin:0 auto 2.4rem;flex-wrap:wrap}
+.meta{text-align:center}
+.meta b{display:block;font-size:1.9rem;font-weight:900;color:#fff;line-height:1}
+.meta small{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(240,232,234,.45)}
+.traits-legend{display:flex;flex-direction:column;gap:.6rem;max-width:480px;margin:0 auto 2.6rem;text-align:left}
+.tl{display:flex;align-items:baseline;gap:.7rem;padding:.7rem .9rem;border:1px solid rgba(192,34,62,.18);border-radius:10px;background:rgba(20,0,5,.5)}
+.tl i{width:9px;height:9px;border-radius:50%;flex-shrink:0;align-self:center}
+.tl b{font-size:.92rem;color:#fff;font-weight:700}
+.tl span{font-size:.82rem;color:rgba(240,232,234,.55);line-height:1.4}
+.start-btn,.nav-btn{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:1rem 2.4rem;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;border-radius:12px;cursor:none;box-shadow:0 0 24px rgba(192,34,62,.4);transition:transform .15s,box-shadow .15s}
+.start-btn:hover,.nav-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 0 34px rgba(227,65,89,.6)}
+@media(hover:none){.start-btn,.nav-btn{cursor:auto}}
+
+/* PROGRESS */
+.progress-head{position:sticky;top:67px;background:#000;padding:1.1rem 0 .9rem;z-index:20;border-bottom:1px solid rgba(192,34,62,.1)}
+.pbar{height:6px;background:rgba(192,34,62,.15);border-radius:99px;overflow:hidden}
+.pfill{height:100%;width:0;background:linear-gradient(90deg,#7a1228,#ff5f6e);border-radius:99px;transition:width .35s ease}
+.pmeta{display:flex;justify-content:space-between;margin-top:.5rem;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(240,232,234,.45)}
+.pmeta b{color:#ff8a9c}
+
+/* QUESTION CARD */
+.qcard{padding:2.6rem 0 1rem;min-height:48vh;display:flex;flex-direction:column;justify-content:center;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.qnum{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(227,65,89,.7);font-weight:700;margin-bottom:1rem}
+.qtext{font-size:clamp(1.4rem,4.2vw,2rem);font-weight:700;line-height:1.3;color:#fff;margin-bottom:2.2rem}
+.qtext .lead{color:rgba(240,232,234,.5);font-weight:500;display:block;font-size:.95rem;letter-spacing:.04em;margin-bottom:.5rem;text-transform:uppercase}
+.scale{display:flex;flex-direction:column;gap:.6rem}
+.opt{display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;border:1px solid rgba(192,34,62,.22);border-radius:12px;background:rgba(20,0,5,.5);cursor:none;transition:border-color .18s,background .18s,transform .12s;text-align:left;width:100%;color:inherit;font-family:inherit}
+.opt:hover{border-color:rgba(227,65,89,.55);background:rgba(40,5,15,.7)}
+.opt.sel{border-color:#e34159;background:rgba(192,34,62,.25);box-shadow:0 0 18px rgba(192,34,62,.25)}
+.dot{width:22px;height:22px;border-radius:50%;border:2px solid rgba(227,65,89,.5);flex-shrink:0;position:relative;transition:border-color .18s}
+.opt.sel .dot{border-color:#ff5f6e}
+.opt.sel .dot::after{content:'';position:absolute;inset:3px;border-radius:50%;background:#ff5f6e}
+.opt span{font-size:.98rem;font-weight:600}
+@media(hover:none){.opt{cursor:auto}}
+.qnav{display:flex;justify-content:space-between;align-items:center;margin-top:2rem}
+.nav-btn.ghost{background:transparent;border:1px solid rgba(192,34,62,.35);box-shadow:none;color:rgba(240,232,234,.7);padding:.85rem 1.6rem;font-size:.85rem}
+.nav-btn.ghost:hover{border-color:rgba(227,65,89,.6);color:#fff;transform:none;box-shadow:none}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed}
+
+/* RESULTS */
+.results{animation:fade .5s ease;text-align:center}
+.results .title{font-size:clamp(2rem,6vw,3.2rem);margin-bottom:.3rem}
+.chartwrap{max-width:460px;margin:1.5rem auto 2.4rem}
+.bars{display:flex;flex-direction:column;gap:1.1rem;max-width:560px;margin:0 auto 2.4rem;text-align:left}
+.brow{}
+.brow-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.45rem}
+.brow-top b{font-size:1rem;color:#fff;font-weight:700}
+.brow-top .pct{font-size:1.05rem;font-weight:900;color:#ff8a9c}
+.btrack{height:12px;background:rgba(192,34,62,.13);border-radius:99px;overflow:hidden}
+.bfill{height:100%;width:0;border-radius:99px;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.bdesc{font-size:.82rem;color:rgba(240,232,234,.55);margin-top:.45rem;line-height:1.5}
+.share-row{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.foot-note{font-size:.76rem;color:rgba(240,232,234,.35);margin-top:2.4rem;line-height:1.6;max-width:520px;margin-left:auto;margin-right:auto}
+.hidden{display:none!important}
+.footer{border-top:1px solid rgba(192,34,62,.12);padding:1.6rem;text-align:center;color:rgba(240,232,234,.3);font-size:.75rem;position:relative;z-index:2}
+</style></head>
+<body>
+<canvas id='flame'></canvas>
+
+<header class='header'>
+  <a href='index.html' class='brand'>
+    <img src='https://i.ibb.co/chkW0mST/fenice-sfondo-completamente-nero-c499a262.png' alt='Phoenix'/>
+    <span>PHOENIX</span>
+  </a>
+  <div class='spacer'></div>
+  <div class='lang-switch'>
+    <button class='active' data-lang='it'><img src='https://flagcdn.com/24x18/it.png' alt='IT'/></button>
+    <button data-lang='en'><img src='https://flagcdn.com/24x18/gb.png' alt='EN'/></button>
+  </div>
+  <a href='index.html' class='btn-back' data-i18n='back'>← Home</a>
+</header>
+
+<div class='wrap'>
+
+  <!-- INTRO -->
+  <section id='intro' class='intro'>
+    <div class='eyebrow' data-i18n='intro.eyebrow'>Modello a 5 fattori · OCEAN</div>
+    <h1 class='title' data-i18n='intro.title'>Big Five</h1>
+    <p class='subtitle' data-i18n='intro.subtitle'>Settanta affermazioni. Cinque dimensioni della personalità. Rispondi d'istinto: non esistono risposte giuste o sbagliate.</p>
+    <div class='meta-row'>
+      <div class='meta'><b>70</b><small data-i18n='intro.m1'>Domande</small></div>
+      <div class='meta'><b>5</b><small data-i18n='intro.m2'>Tratti</small></div>
+      <div class='meta'><b>~10'</b><small data-i18n='intro.m3'>Minuti</small></div>
+    </div>
+    <div class='traits-legend' id='legend'></div>
+    <button class='start-btn' id='startBtn' data-i18n='intro.start'>Inizia il test</button>
+    <p class='foot-note' data-i18n='intro.disclaimer'>Questo test è a scopo educativo e di intrattenimento. Non è uno strumento diagnostico clinico.</p>
+  </section>
+
+  <!-- TEST -->
+  <section id='test' class='hidden'>
+    <div class='progress-head'>
+      <div class='pbar'><div class='pfill' id='pfill'></div></div>
+      <div class='pmeta'>
+        <span><b id='qcur'>1</b> / 70</span>
+        <span id='qpct'>0%</span>
+      </div>
+    </div>
+    <div class='qcard' id='qcard'>
+      <div class='qnum' id='qnum'>01</div>
+      <div class='qtext'><span class='lead' data-i18n='q.lead'>Quanto ti rispecchia?</span><span id='qtext'></span></div>
+      <div class='scale' id='scale'></div>
+      <div class='qnav'>
+        <button class='nav-btn ghost' id='prevBtn' data-i18n='nav.prev'>← Indietro</button>
+        <button class='nav-btn' id='nextBtn' disabled data-i18n='nav.next'>Avanti →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id='results' class='results hidden'>
+    <div class='eyebrow' data-i18n='res.eyebrow'>Il tuo profilo</div>
+    <h1 class='title' data-i18n='res.title'>Risultati</h1>
+    <div class='chartwrap'><svg id='radar' viewBox='0 0 400 400' role='img' aria-label='Radar chart'></svg></div>
+    <div class='bars' id='bars'></div>
+    <div class='share-row'>
+      <button class='nav-btn' id='retakeBtn' data-i18n='res.retake'>Rifai il test</button>
+    </div>
+    <p class='foot-note' data-i18n='res.note'>I punteggi sono percentili relativi al modello a cinque fattori. Riflettono come hai risposto oggi, non un'etichetta fissa.</p>
+  </section>
+
+</div>
+
+<footer class='footer'>&copy; 2026 Phoenix Academy · <span data-i18n='foot'>Risorgi attraverso la conoscenza.</span></footer>
+
+<script>
+/* ============ DATA ============ */
+// trait: O C E A N | k: keying (+1 normal, -1 reverse)
+const Q = [
+  // OPENNESS (14)
+  {t:'O',k:1, it:"Ho un'immaginazione vivida e ricca.", en:"I have a vivid, rich imagination."},
+  {t:'O',k:1, it:"Mi affascinano le idee astratte e teoriche.", en:"I'm fascinated by abstract, theoretical ideas."},
+  {t:'O',k:1, it:"Cerco attivamente esperienze artistiche o creative.", en:"I actively seek out art and creative experiences."},
+  {t:'O',k:1, it:"Amo riflettere sul significato delle cose.", en:"I love reflecting on the meaning of things."},
+  {t:'O',k:1, it:"Provo volentieri cibi, luoghi e attività nuove.", en:"I happily try new foods, places and activities."},
+  {t:'O',k:1, it:"La bellezza della natura o dell'arte mi commuove.", en:"The beauty of nature or art moves me deeply."},
+  {t:'O',k:1, it:"Mi piace giocare con concetti e punti di vista insoliti.", en:"I enjoy playing with unusual concepts and viewpoints."},
+  {t:'O',k:-1,it:"Preferisco la routine alla novità.", en:"I prefer routine over novelty."},
+  {t:'O',k:-1,it:"Trovo noiose le discussioni filosofiche o teoriche.", en:"I find philosophical or theoretical talk boring."},
+  {t:'O',k:-1,it:"Faccio fatica a capire l'arte astratta.", en:"I struggle to appreciate abstract art."},
+  {t:'O',k:-1,it:"Evito di cambiare il mio modo di fare le cose.", en:"I avoid changing the way I do things."},
+  {t:'O',k:-1,it:"Mi interessano poco le idee fuori dall'ordinario.", en:"I have little interest in out-of-the-ordinary ideas."},
+  {t:'O',k:1, it:"Mi pongo spesso domande sul perché le cose funzionano così.", en:"I often wonder why things work the way they do."},
+  {t:'O',k:-1,it:"Preferisco il concreto e il pratico alla fantasia.", en:"I prefer the concrete and practical over fantasy."},
+  // CONSCIENTIOUSNESS (14)
+  {t:'C',k:1, it:"Porto sempre a termine ciò che inizio.", en:"I always finish what I start."},
+  {t:'C',k:1, it:"Tengo i miei spazi e i miei file ben organizzati.", en:"I keep my spaces and files well organized."},
+  {t:'C',k:1, it:"Pianifico in anticipo e rispetto le scadenze.", en:"I plan ahead and meet my deadlines."},
+  {t:'C',k:1, it:"Presto molta attenzione ai dettagli.", en:"I pay close attention to details."},
+  {t:'C',k:1, it:"Mi impegno duramente anche quando nessuno controlla.", en:"I work hard even when no one is watching."},
+  {t:'C',k:1, it:"Sono affidabile: gli altri possono contare su di me.", en:"I'm dependable — people can count on me."},
+  {t:'C',k:1, it:"Seguo un metodo preciso per fare le cose.", en:"I follow a careful method when doing things."},
+  {t:'C',k:-1,it:"Spesso rimando le cose all'ultimo momento.", en:"I often put things off to the last minute."},
+  {t:'C',k:-1,it:"Lascio spesso le mie cose in disordine.", en:"I often leave my belongings in a mess."},
+  {t:'C',k:-1,it:"Mi distraggo facilmente dai miei obiettivi.", en:"I'm easily distracted from my goals."},
+  {t:'C',k:-1,it:"Faccio le cose in modo impulsivo, senza pianificare.", en:"I do things impulsively, without a plan."},
+  {t:'C',k:-1,it:"Dimentico di rimettere le cose al loro posto.", en:"I forget to put things back where they belong."},
+  {t:'C',k:1, it:"Mi pongo standard elevati e cerco di rispettarli.", en:"I set high standards and try to meet them."},
+  {t:'C',k:-1,it:"Trascuro i doveri quando non ne ho voglia.", en:"I neglect duties when I don't feel like them."},
+  // EXTRAVERSION (14)
+  {t:'E',k:1, it:"Mi sento carico di energia in mezzo alla gente.", en:"I feel energized around other people."},
+  {t:'E',k:1, it:"Avvio facilmente conversazioni con sconosciuti.", en:"I easily start conversations with strangers."},
+  {t:'E',k:1, it:"Mi piace essere al centro dell'attenzione.", en:"I enjoy being the center of attention."},
+  {t:'E',k:1, it:"Cerco l'emozione e gli stimoli forti.", en:"I seek excitement and strong stimulation."},
+  {t:'E',k:1, it:"Parlo con molte persone diverse alle feste.", en:"I talk to many different people at parties."},
+  {t:'E',k:1, it:"Tendo a prendere io l'iniziativa nei gruppi.", en:"I tend to take the lead in groups."},
+  {t:'E',k:1, it:"Sono entusiasta e di buon umore con gli altri.", en:"I'm enthusiastic and upbeat around others."},
+  {t:'E',k:-1,it:"Preferisco stare in disparte e osservare.", en:"I prefer to stay in the background and observe."},
+  {t:'E',k:-1,it:"Dopo molta socialità ho bisogno di stare solo.", en:"After lots of socializing I need to be alone."},
+  {t:'E',k:-1,it:"Parlo poco quando sono in compagnia.", en:"I keep quiet when I'm in company."},
+  {t:'E',k:-1,it:"Trovo faticoso conoscere nuove persone.", en:"I find meeting new people draining."},
+  {t:'E',k:-1,it:"Preferisco una serata tranquilla a una festa.", en:"I'd choose a quiet night over a party."},
+  {t:'E',k:1, it:"Mi sento a mio agio a esprimere opinioni in pubblico.", en:"I'm comfortable voicing opinions in public."},
+  {t:'E',k:-1,it:"Evito le situazioni sociali affollate.", en:"I avoid crowded social situations."},
+  // AGREEABLENESS (14)
+  {t:'A',k:1, it:"Provo empatia per chi sta soffrendo.", en:"I feel empathy for those who are suffering."},
+  {t:'A',k:1, it:"Mi fido degli altri e do loro il beneficio del dubbio.", en:"I trust others and give them the benefit of the doubt."},
+  {t:'A',k:1, it:"Aiuto volentieri chi ha bisogno, anche a mio scapito.", en:"I gladly help those in need, even at a cost to me."},
+  {t:'A',k:1, it:"Cerco l'armonia ed evito i conflitti inutili.", en:"I seek harmony and avoid needless conflict."},
+  {t:'A',k:1, it:"Sono gentile e premuroso con quasi tutti.", en:"I'm kind and considerate to almost everyone."},
+  {t:'A',k:1, it:"Perdono facilmente chi mi ha fatto un torto.", en:"I forgive people who have wronged me."},
+  {t:'A',k:1, it:"Metto i bisogni del gruppo prima dei miei.", en:"I put the group's needs before my own."},
+  {t:'A',k:-1,it:"Sono scettico riguardo alle intenzioni altrui.", en:"I'm skeptical of other people's intentions."},
+  {t:'A',k:-1,it:"Dico ciò che penso anche se ferisce qualcuno.", en:"I say what I think even if it hurts someone."},
+  {t:'A',k:-1,it:"Metto i miei interessi davanti a quelli degli altri.", en:"I put my own interests ahead of others'."},
+  {t:'A',k:-1,it:"Mi importa poco dei problemi degli altri.", en:"I'm not much concerned with others' problems."},
+  {t:'A',k:-1,it:"Tendo a essere critico e a giudicare.", en:"I tend to be critical and judgmental."},
+  {t:'A',k:1, it:"Cerco di trattare tutti con rispetto e cortesia.", en:"I try to treat everyone with respect and courtesy."},
+  {t:'A',k:-1,it:"In una trattativa punto a vincere io.", en:"In a negotiation I aim to win for myself."},
+  // NEUROTICISM (14)
+  {t:'N',k:1, it:"Mi preoccupo spesso per le cose.", en:"I worry about things often."},
+  {t:'N',k:1, it:"I miei stati d'animo cambiano facilmente.", en:"My moods change easily."},
+  {t:'N',k:1, it:"Mi sento teso o ansioso senza un motivo chiaro.", en:"I feel tense or anxious for no clear reason."},
+  {t:'N',k:1, it:"Mi abbatto facilmente di fronte alle difficoltà.", en:"I get discouraged easily when facing setbacks."},
+  {t:'N',k:1, it:"Sono sensibile alle critiche e me la prendo.", en:"I'm sensitive to criticism and take it to heart."},
+  {t:'N',k:1, it:"Mi capita di sentirmi sopraffatto dalle emozioni.", en:"I sometimes feel overwhelmed by my emotions."},
+  {t:'N',k:1, it:"Rimugino a lungo sugli errori che ho commesso.", en:"I dwell for a long time on mistakes I've made."},
+  {t:'N',k:-1,it:"Resto calmo anche sotto forte pressione.", en:"I stay calm even under heavy pressure."},
+  {t:'N',k:-1,it:"Mi riprendo in fretta dagli eventi stressanti.", en:"I bounce back quickly from stressful events."},
+  {t:'N',k:-1,it:"Raramente mi sento triste o giù di morale.", en:"I rarely feel sad or down."},
+  {t:'N',k:-1,it:"Sono emotivamente stabile ed equilibrato.", en:"I'm emotionally stable and even-keeled."},
+  {t:'N',k:-1,it:"Le piccole seccature non mi turbano.", en:"Small hassles don't upset me."},
+  {t:'N',k:1, it:"Mi sento spesso insicuro riguardo a me stesso.", en:"I often feel insecure about myself."},
+  {t:'N',k:-1,it:"Affronto i problemi con serenità.", en:"I face problems with a calm mind."}
+];
+
+const TRAITS = {
+  O:{color:'#ff5f6e', it:{name:'Apertura', short:'Apertura mentale', hi:'Curioso, immaginativo, attratto da idee e novità.', lo:'Concreto, pratico, legato a ciò che è familiare.'}, en:{name:'Openness', short:'Openness to experience', hi:'Curious, imaginative, drawn to ideas and novelty.', lo:'Concrete, practical, grounded in the familiar.'}},
+  C:{color:'#ff8a3d', it:{name:'Coscienziosità', short:'Coscienziosità', hi:'Organizzato, disciplinato, orientato agli obiettivi.', lo:'Spontaneo, flessibile, meno legato ai piani.'}, en:{name:'Conscientiousness', short:'Conscientiousness', hi:'Organized, disciplined, goal-driven.', lo:'Spontaneous, flexible, less tied to plans.'}},
+  E:{color:'#ffd24a', it:{name:'Estroversione', short:'Estroversione', hi:'Socievole, energico, cerca stimoli e contatto.', lo:'Riservato, riflessivo, ricarica nella quiete.'}, en:{name:'Extraversion', short:'Extraversion', hi:'Sociable, energetic, seeks stimulation and contact.', lo:'Reserved, reflective, recharges in quiet.'}},
+  A:{color:'#4ad6a0', it:{name:'Gradevolezza', short:'Gradevolezza', hi:'Empatico, fiducioso, collaborativo.', lo:'Diretto, competitivo, scettico.'}, en:{name:'Agreeableness', short:'Agreeableness', hi:'Empathetic, trusting, cooperative.', lo:'Direct, competitive, skeptical.'}},
+  N:{color:'#5fa8ff', it:{name:'Nevroticismo', short:'Stabilità emotiva', hi:'Reattivo, sensibile, incline a preoccuparsi.', lo:'Calmo, stabile, resiliente allo stress.'}, en:{name:'Neuroticism', short:'Emotional stability', hi:'Reactive, sensitive, prone to worry.', lo:'Calm, stable, resilient to stress.'}}
+};
+const ORDER = ['O','C','E','A','N'];
+
+const SCALE = {
+  it:["Per niente d'accordo","Poco d'accordo","Neutrale","Abbastanza d'accordo","Del tutto d'accordo"],
+  en:["Strongly disagree","Disagree","Neutral","Agree","Strongly agree"]
+};
+
+const I18N = {
+  it:{back:'← Home', foot:'Risorgi attraverso la conoscenza.',
+    'intro.eyebrow':'Modello a 5 fattori · OCEAN','intro.title':'Big Five',
+    'intro.subtitle':"Settanta affermazioni. Cinque dimensioni della personalità. Rispondi d'istinto: non esistono risposte giuste o sbagliate.",
+    'intro.m1':'Domande','intro.m2':'Tratti','intro.m3':'Minuti','intro.start':'Inizia il test',
+    'intro.disclaimer':'Questo test è a scopo educativo e di intrattenimento. Non è uno strumento diagnostico clinico.',
+    'q.lead':'Quanto ti rispecchia?','nav.prev':'← Indietro','nav.next':'Avanti →',
+    'res.eyebrow':'Il tuo profilo','res.title':'Risultati','res.retake':'Rifai il test',
+    'res.note':"I punteggi sono percentili relativi al modello a cinque fattori. Riflettono come hai risposto oggi, non un'etichetta fissa."},
+  en:{back:'← Home', foot:'Rise through knowledge.',
+    'intro.eyebrow':'Five-Factor Model · OCEAN','intro.title':'Big Five',
+    'intro.subtitle':"Seventy statements. Five dimensions of personality. Answer on instinct — there are no right or wrong answers.",
+    'intro.m1':'Questions','intro.m2':'Traits','intro.m3':'Minutes','intro.start':'Start the test',
+    'intro.disclaimer':'This test is for education and entertainment. It is not a clinical diagnostic tool.',
+    'q.lead':'How much is this you?','nav.prev':'← Back','nav.next':'Next →',
+    'res.eyebrow':'Your profile','res.title':'Results','res.retake':'Retake the test',
+    'res.note':'Scores are percentiles relative to the five-factor model. They reflect how you answered today, not a fixed label.'}
+};
+
+/* ============ STATE ============ */
+let lang='it', idx=0;
+const answers=new Array(Q.length).fill(null);
+
+/* ============ I18N ============ */
+function applyI18n(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n'); if(I18N[lang][k]!=null) el.textContent=I18N[lang][k];
+  });
+  buildLegend();
+  if(!document.getElementById('test').classList.contains('hidden')) renderQ();
+  if(!document.getElementById('results').classList.contains('hidden')) renderResults();
+}
+function buildLegend(){
+  const el=document.getElementById('legend'); el.innerHTML='';
+  ORDER.forEach(t=>{
+    const tr=TRAITS[t][lang];
+    const d=document.createElement('div'); d.className='tl';
+    d.innerHTML="<i style='background:"+TRAITS[t].color+"'></i><b>"+tr.name+"</b><span>"+tr.hi+"</span>";
+    el.appendChild(d);
+  });
+}
+
+/* ============ TEST FLOW ============ */
+function startTest(){
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('results').classList.add('hidden');
+  document.getElementById('test').classList.remove('hidden');
+  idx=0; renderQ(); window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderQ(){
+  const q=Q[idx];
+  document.getElementById('qnum').textContent=String(idx+1).padStart(2,'0');
+  document.getElementById('qtext').textContent=q[lang];
+  const sc=document.getElementById('scale'); sc.innerHTML='';
+  SCALE[lang].forEach((label,v)=>{
+    const b=document.createElement('button'); b.className='opt'+(answers[idx]===v+1?' sel':'');
+    b.innerHTML="<span class='dot'></span><span>"+label+"</span>";
+    b.onclick=()=>{ answers[idx]=v+1; renderQ(); setTimeout(()=>{ if(idx<Q.length-1){idx++;renderQ();window.scrollTo({top:0,behavior:'smooth'});} else finish(); },220); };
+    sc.appendChild(b);
+  });
+  document.getElementById('prevBtn').disabled=idx===0;
+  const nb=document.getElementById('nextBtn');
+  nb.disabled=answers[idx]==null;
+  nb.textContent = idx===Q.length-1 ? (lang==='it'?'Vedi risultati →':'See results →') : I18N[lang]['nav.next'];
+  const done=answers.filter(a=>a!=null).length;
+  document.getElementById('qcur').textContent=idx+1;
+  const pct=Math.round((done/Q.length)*100);
+  document.getElementById('pfill').style.width=pct+'%';
+  document.getElementById('qpct').textContent=pct+'%';
+}
+document.getElementById('prevBtn').onclick=()=>{ if(idx>0){idx--;renderQ();window.scrollTo({top:0,behavior:'smooth'});} };
+document.getElementById('nextBtn').onclick=()=>{ if(answers[idx]==null)return; if(idx<Q.length-1){idx++;renderQ();window.scrollTo({top:0,behavior:'smooth'});} else finish(); };
+
+/* ============ SCORING ============ */
+function scores(){
+  const sum={O:0,C:0,E:0,A:0,N:0}, cnt={O:0,C:0,E:0,A:0,N:0};
+  Q.forEach((q,i)=>{ const a=answers[i]||3; const v=q.k===1?a:(6-a); sum[q.t]+=v; cnt[q.t]++; });
+  const pct={};
+  ORDER.forEach(t=>{ const min=cnt[t]*1,max=cnt[t]*5; pct[t]=Math.round(((sum[t]-min)/(max-min))*100); });
+  return pct;
+}
+function finish(){
+  document.getElementById('test').classList.add('hidden');
+  document.getElementById('results').classList.remove('hidden');
+  renderResults(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ============ RESULTS ============ */
+function renderResults(){
+  const pct=scores();
+  drawRadar(pct);
+  const bars=document.getElementById('bars'); bars.innerHTML='';
+  ORDER.forEach(t=>{
+    const tr=TRAITS[t][lang], p=pct[t];
+    const desc = p>=50 ? tr.hi : tr.lo;
+    const row=document.createElement('div'); row.className='brow';
+    row.innerHTML="<div class='brow-top'><b>"+tr.name+"</b><span class='pct'>"+p+"%</span></div>"+
+      "<div class='btrack'><div class='bfill' style='background:linear-gradient(90deg,"+TRAITS[t].color+"44,"+TRAITS[t].color+")'></div></div>"+
+      "<div class='bdesc'>"+desc+"</div>";
+    bars.appendChild(row);
+    requestAnimationFrame(()=>{ setTimeout(()=>{ row.querySelector('.bfill').style.width=p+'%'; },60); });
+  });
+}
+function drawRadar(pct){
+  const svg=document.getElementById('radar'); const NS='http://www.w3.org/2000/svg';
+  svg.innerHTML=''; const cx=200,cy=205,R=130,n=5;
+  const ang=i=>(-90+i*72)*Math.PI/180;
+  // grid rings
+  [0.25,0.5,0.75,1].forEach(r=>{
+    let pts='';
+    for(let i=0;i<n;i++){ pts+=(cx+Math.cos(ang(i))*R*r)+','+(cy+Math.sin(ang(i))*R*r)+' '; }
+    const poly=document.createElementNS(NS,'polygon');
+    poly.setAttribute('points',pts.trim());
+    poly.setAttribute('fill','none');
+    poly.setAttribute('stroke','rgba(192,34,62,'+(r===1?0.35:0.13)+')');
+    poly.setAttribute('stroke-width','1'); svg.appendChild(poly);
+  });
+  // spokes + labels
+  for(let i=0;i<n;i++){
+    const x=cx+Math.cos(ang(i))*R, y=cy+Math.sin(ang(i))*R;
+    const ln=document.createElementNS(NS,'line');
+    ln.setAttribute('x1',cx);ln.setAttribute('y1',cy);ln.setAttribute('x2',x);ln.setAttribute('y2',y);
+    ln.setAttribute('stroke','rgba(192,34,62,0.13)');ln.setAttribute('stroke-width','1');svg.appendChild(ln);
+    const lx=cx+Math.cos(ang(i))*(R+24), ly=cy+Math.sin(ang(i))*(R+24);
+    const tx=document.createElementNS(NS,'text');
+    tx.setAttribute('x',lx);tx.setAttribute('y',ly);
+    tx.setAttribute('fill',TRAITS[ORDER[i]].color);
+    tx.setAttribute('font-size','12');tx.setAttribute('font-weight','800');
+    tx.setAttribute('text-anchor', Math.abs(Math.cos(ang(i)))<0.3?'middle':(Math.cos(ang(i))>0?'start':'end'));
+    tx.setAttribute('dominant-baseline','middle');
+    tx.textContent=TRAITS[ORDER[i]][lang].name;
+    svg.appendChild(tx);
+  }
+  // data polygon
+  let pts='';
+  ORDER.forEach((t,i)=>{ const r=Math.max(pct[t],2)/100; pts+=(cx+Math.cos(ang(i))*R*r)+','+(cy+Math.sin(ang(i))*R*r)+' '; });
+  const grad=document.createElementNS(NS,'radialGradient'); grad.id='rgrad';
+  grad.innerHTML="<stop offset='0%' stop-color='#ff5f6e' stop-opacity='0.55'/><stop offset='100%' stop-color='#7a1228' stop-opacity='0.35'/>";
+  svg.appendChild(grad);
+  const poly=document.createElementNS(NS,'polygon');
+  poly.setAttribute('points',pts.trim());
+  poly.setAttribute('fill','url(#rgrad)');
+  poly.setAttribute('stroke','#ff5f6e');poly.setAttribute('stroke-width','2');
+  poly.setAttribute('stroke-linejoin','round');
+  svg.appendChild(poly);
+  ORDER.forEach((t,i)=>{ const r=Math.max(pct[t],2)/100; const x=cx+Math.cos(ang(i))*R*r,y=cy+Math.sin(ang(i))*R*r;
+    const c=document.createElementNS(NS,'circle'); c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r','4');
+    c.setAttribute('fill',TRAITS[t].color); svg.appendChild(c);
+  });
+}
+
+/* ============ EVENTS ============ */
+document.getElementById('startBtn').onclick=startTest;
+document.getElementById('retakeBtn').onclick=()=>{ answers.fill(null); document.getElementById('results').classList.add('hidden'); document.getElementById('intro').classList.remove('hidden'); window.scrollTo({top:0,behavior:'smooth'}); };
+document.querySelectorAll('.lang-switch button').forEach(b=>{
+  b.onclick=()=>{ document.querySelectorAll('.lang-switch button').forEach(x=>x.classList.remove('active')); b.classList.add('active'); lang=b.dataset.lang; applyI18n(); };
+});
+applyI18n();
+
+/* ============ FLAME (same as site) ============ */
+(function(){var c=document.getElementById('flame');var x=c.getContext('2d');var ps=[];var m={x:-100,y:-100,active:false};var dpr=window.devicePixelRatio||1;function rs(){dpr=window.devicePixelRatio||1;c.width=innerWidth*dpr;c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';x.setTransform(dpr,0,0,dpr,0,0)}rs();addEventListener('resize',rs);addEventListener('mousemove',function(e){m.x=e.clientX;m.y=e.clientY;m.active=true;for(var i=0;i<3;i++){ps.push({x:e.clientX+(Math.random()-.5)*6,y:e.clientY+(Math.random()-.5)*6,vx:(Math.random()-.5)*.6,vy:-Math.random()*1.4-.4,life:0,maxLife:28+Math.random()*20,size:6+Math.random()*8})}if(ps.length>220)ps.splice(0,ps.length-220)});addEventListener('mouseleave',function(){m.active=false});function tick(){x.globalCompositeOperation='destination-out';x.fillStyle='rgba(0,0,0,0.18)';x.fillRect(0,0,c.width/dpr,c.height/dpr);x.globalCompositeOperation='lighter';for(var i=ps.length-1;i>=0;i--){var p=ps[i];p.life++;if(p.life>=p.maxLife){ps.splice(i,1);continue}p.x+=p.vx;p.y+=p.vy;p.vy-=.05;p.vx*=.96;var t=p.life/p.maxLife;var r=p.size*(1-t*.4);var al=(1-t)*.9;var g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,r);if(t<.45){g.addColorStop(0,'rgba(255,60,70,'+al+')');g.addColorStop(.35,'rgba(200,25,40,'+al*.85+')');g.addColorStop(.7,'rgba(130,10,25,'+al*.5+')');g.addColorStop(1,'rgba(60,0,10,0)')}else{var sm=(t-.45)/.55;var a2=al*(1-sm*.5);g.addColorStop(0,'rgba(160,20,35,'+a2*.75+')');g.addColorStop(.5,'rgba(90,8,20,'+a2*.4+')');g.addColorStop(1,'rgba(30,0,5,0)')}x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,r,0,Math.PI*2);x.fill()}if(m.active){var br=14;var cg=x.createRadialGradient(m.x,m.y,0,m.x,m.y,br);cg.addColorStop(0,'rgba(255,80,90,0.95)');cg.addColorStop(.35,'rgba(220,30,45,.8)');cg.addColorStop(.7,'rgba(140,12,28,0.5)');cg.addColorStop(1,'rgba(60,0,10,0)');x.fillStyle=cg;x.beginPath();x.arc(m.x,m.y,br,0,Math.PI*2);x.fill()}requestAnimationFrame(tick)}requestAnimationFrame(tick)})();
+</script>
+</body></html>
