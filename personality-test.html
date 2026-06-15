@@ -144,7 +144,7 @@ a{text-decoration:none;color:inherit}
   <section id='results' class='results hidden'>
     <div class='eyebrow' data-i18n='res.eyebrow'>Il tuo profilo</div>
     <h1 class='title' data-i18n='res.title'>Risultati</h1>
-    <div class='chartwrap'><svg id='radar' viewBox='-40 0 480 410' role='img' aria-label='Radar chart'></svg></div>
+    <div class='chartwrap'><svg id='radar' viewBox='-50 0 520 410' role='img' aria-label='Radar chart'></svg></div>
     <div class='bars' id='bars'></div>
     <div class='share-row'>
       <button class='nav-btn' id='retakeBtn' data-i18n='res.retake'>Rifai il test</button>
@@ -379,7 +379,7 @@ function drawRadar(pct){
     const tx=document.createElementNS(NS,'text');
     tx.setAttribute('x',lx);tx.setAttribute('y',ly);
     tx.setAttribute('fill',TRAITS[ORDER[i]].color);
-    tx.setAttribute('font-size','12');tx.setAttribute('font-weight','800');
+    tx.setAttribute('font-size','11');tx.setAttribute('font-weight','800');
     tx.setAttribute('text-anchor', Math.abs(Math.cos(ang(i)))<0.3?'middle':(Math.cos(ang(i))>0?'start':'end'));
     tx.setAttribute('dominant-baseline','middle');
     tx.textContent=TRAITS[ORDER[i]][lang].name;
