@@ -144,7 +144,7 @@ a{text-decoration:none;color:inherit}
   <section id='results' class='results hidden'>
     <div class='eyebrow' data-i18n='res.eyebrow'>Il tuo profilo</div>
     <h1 class='title' data-i18n='res.title'>Risultati</h1>
-    <div class='chartwrap'><svg id='radar' viewBox='0 0 400 400' role='img' aria-label='Radar chart'></svg></div>
+    <div class='chartwrap'><svg id='radar' viewBox='-40 0 480 410' role='img' aria-label='Radar chart'></svg></div>
     <div class='bars' id='bars'></div>
     <div class='share-row'>
       <button class='nav-btn' id='retakeBtn' data-i18n='res.retake'>Rifai il test</button>
@@ -357,7 +357,7 @@ function renderResults(){
 }
 function drawRadar(pct){
   const svg=document.getElementById('radar'); const NS='http://www.w3.org/2000/svg';
-  svg.innerHTML=''; const cx=200,cy=205,R=130,n=5;
+  svg.innerHTML=''; const cx=200,cy=205,R=120,n=5;
   const ang=i=>(-90+i*72)*Math.PI/180;
   // grid rings
   [0.25,0.5,0.75,1].forEach(r=>{
