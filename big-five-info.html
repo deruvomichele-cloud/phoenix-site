@@ -1,0 +1,484 @@
+<!doctype html><html lang='it'><head><meta charset='UTF-8'/><meta name='viewport' content='width=device-width,initial-scale=1.0'/><title>Big Five — Spiegazione del modello</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;color:#f0e8ea;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;overflow-x:hidden;cursor:none;min-height:100%}
+a{text-decoration:none;color:inherit}
+@media(hover:none){html,body{cursor:auto}}
+
+/* HEADER */
+.header{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.5rem;border-bottom:1px solid rgba(192,34,62,.18);position:sticky;top:0;background:#000;z-index:50}
+.brand{display:flex;align-items:center;gap:.4rem;flex-shrink:0}
+.brand img{width:52px;height:52px;object-fit:contain;mix-blend-mode:screen}
+.brand span{font-weight:900;letter-spacing:.06em;font-size:1.2rem;color:#fff;text-shadow:0 0 8px rgba(227,65,89,.9),0 0 18px rgba(192,34,62,.7)}
+.spacer{flex:1}
+.lang-switch{display:flex;gap:.3rem}
+.lang-switch button{background:transparent;border:2px solid transparent;padding:.2rem;border-radius:4px;cursor:none;transition:transform .2s,border-color .2s;line-height:0}
+.lang-switch button img{width:26px;height:19px;display:block;border-radius:2px}
+.lang-switch button:hover{transform:scale(1.15)}
+.lang-switch button.active{border-color:rgba(227,65,89,.8);transform:scale(1.15)}
+.btn-back{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:.55rem 1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:8px;cursor:none;font-size:.78rem;white-space:nowrap;margin-left:.6rem;transition:box-shadow .2s}
+.btn-back:hover{box-shadow:0 0 18px rgba(227,65,89,.6)}
+@media(hover:none){.lang-switch button,.btn-back{cursor:auto}}
+
+/* FLAME */
+#flame{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:1000}
+
+/* LAYOUT */
+.wrap{max-width:820px;margin:0 auto;padding:2.5rem 1.2rem 5rem;position:relative;z-index:2}
+
+/* HERO */
+.hero{text-align:center;padding-top:1rem;margin-bottom:2.8rem}
+.eyebrow{font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(227,65,89,.75);font-weight:700;margin-bottom:1rem}
+.title{font-size:clamp(2.2rem,6vw,3.2rem);font-weight:900;line-height:.95;letter-spacing:-.02em;text-transform:uppercase;background:linear-gradient(180deg,#ff5f6e,#7a1228);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.4rem}
+.subtitle{font-size:1rem;color:rgba(240,232,234,.65);max-width:620px;margin:0 auto 1.4rem;line-height:1.6}
+
+/* SECTION */
+.section{margin-bottom:3rem;padding:2rem 1.4rem;border:1px solid rgba(192,34,62,.12);border-radius:14px;background:rgba(20,0,5,.5)}
+.section h2{font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:1rem;letter-spacing:-.01em}
+.section h3{font-size:1.15rem;font-weight:800;color:#ff8a9c;margin-top:1.6rem;margin-bottom:.7rem}
+.section p{font-size:.95rem;line-height:1.7;color:rgba(240,232,234,.75);margin-bottom:1rem}
+.section li{font-size:.95rem;line-height:1.7;color:rgba(240,232,234,.75);margin-left:1.6rem;margin-bottom:.6rem}
+
+/* TRAIT CARD */
+.trait-card{margin-bottom:2.2rem;padding:1.6rem;border:1px solid rgba(192,34,62,.15);border-radius:12px;background:rgba(30,0,8,.6)}
+.trait-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.trait-name{font-size:1.3rem;font-weight:900;color:#fff}
+.trait-code{font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,232,234,.4);font-weight:700}
+.trait-icon{width:16px;height:16px;border-radius:50%;flex-shrink:0}
+.trait-desc{font-size:.92rem;line-height:1.6;color:rgba(240,232,234,.65);margin-bottom:1.2rem;font-style:italic}
+.trait-scale{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.trait-pole{padding:.8rem;border-radius:10px;background:rgba(192,34,62,.08);border:1px solid rgba(192,34,62,.12)}
+.trait-pole h4{font-size:.85rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#ff8a9c;margin-bottom:.4rem}
+.trait-pole p{font-size:.88rem;line-height:1.5;color:rgba(240,232,234,.65)}
+
+/* GRID */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem}
+@media(max-width:720px){.grid-2{grid-template-columns:1fr}}
+
+/* QUOTE */
+.quote{padding:1.4rem 1.2rem;border-left:4px solid #ff5f6e;background:rgba(192,34,62,.08);margin:1.4rem 0;border-radius:4px;font-size:.95rem;font-style:italic;color:rgba(240,232,234,.7);line-height:1.6}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:2rem}
+.timeline-item{margin-bottom:2rem;position:relative}
+.timeline-item::before{content:'';position:absolute;left:-2rem;top:.3rem;width:12px;height:12px;border-radius:50%;background:#ff5f6e;border:3px solid #000}
+.timeline-item h4{font-weight:800;color:#ff8a9c;margin-bottom:.4rem;font-size:1rem}
+.timeline-item p{font-size:.92rem;line-height:1.6;color:rgba(240,232,234,.7)}
+
+/* BTN */
+.btn-test{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:1rem 2.4rem;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;border-radius:12px;cursor:none;box-shadow:0 0 24px rgba(192,34,62,.4);transition:transform .15s,box-shadow .15s;display:inline-block;margin-top:1rem}
+.btn-test:hover{transform:translateY(-2px);box-shadow:0 0 34px rgba(227,65,89,.6)}
+@media(hover:none){.btn-test{cursor:auto}}
+
+.hidden{display:none!important}
+.footer{border-top:1px solid rgba(192,34,62,.12);padding:1.6rem;text-align:center;color:rgba(240,232,234,.3);font-size:.75rem;position:relative;z-index:2}
+</style></head>
+<body>
+<canvas id='flame'></canvas>
+
+<header class='header'>
+  <a href='index.html' class='brand'>
+    <img src='https://i.ibb.co/chkW0mST/fenice-sfondo-completamente-nero-c499a262.png' alt='Phoenix'/>
+    <span>PHOENIX</span>
+  </a>
+  <div class='spacer'></div>
+  <div class='lang-switch'>
+    <button class='active' data-lang='it'><img src='https://flagcdn.com/24x18/it.png' alt='IT'/></button>
+    <button data-lang='en'><img src='https://flagcdn.com/24x18/gb.png' alt='EN'/></button>
+  </div>
+  <a href='personality-test.html' class='btn-back' data-i18n='nav.test'>← Al test</a>
+</header>
+
+<div class='wrap'>
+
+  <!-- HERO -->
+  <section class='hero'>
+    <div class='eyebrow' data-i18n='h.eyebrow'>Il modello psicologico</div>
+    <h1 class='title' data-i18n='h.title'>Big Five</h1>
+    <p class='subtitle' data-i18n='h.subtitle'>Scopri come il modello OCEAN spiega la personalità umana tramite cinque dimensioni indipendenti e universalmente riconosciute.</p>
+  </section>
+
+  <!-- INTRO -->
+  <section class='section'>
+    <h2 data-i18n='intro.h'>Cos'è il Big Five?</h2>
+    <p data-i18n='intro.p1'>Il Big Five (o Five Factor Model, FFM) è il modello di personalità più accreditato dalla comunità scientifica internazionale. Descrive la personalità umana attraverso cinque dimensioni indipendenti e universali, che insieme catturano la maggior parte delle variazioni individuali nel modo di pensare, sentire e agire.</p>
+    <p data-i18n='intro.p2'>A differenza di altri modelli che etichettano le persone con "tipi" fissi (come l'MBTI), il Big Five tratta ogni tratto come uno spettro continuo: non sei "estroverso sì o no", ma piuttosto più o meno estroverso rispetto alla popolazione generale.</p>
+    <p data-i18n='intro.p3'>L'acronimo OCEAN rappresenta i cinque tratti: <strong>O</strong>penness, <strong>C</strong>onscientiousness, <strong>E</strong>xtraversion, <strong>A</strong>greeableness, <strong>N</strong>euroticism.</p>
+  </section>
+
+  <!-- STORIA -->
+  <section class='section'>
+    <h2 data-i18n='history.h'>Una breve storia</h2>
+    <div class='timeline'>
+      <div class='timeline-item'>
+        <h4 data-i18n='hist.h1'>1936 — Allport & Odbert</h4>
+        <p data-i18n='hist.p1'>Gordon Allport e Harry Odbert compilano un elenco di 4.000+ aggettivi dalla lingua inglese per descrivere la personalità, identificando i tratti più rilevanti.</p>
+      </div>
+      <div class='timeline-item'>
+        <h4 data-i18n='hist.h2'>1961 — Cattell: 16 fattori</h4>
+        <p data-i18n='hist.p2'>Raymond Cattell riduce l'elenco a 35 aggettivi e identifica 16 fattori principali, creando il 16PF, il primo test di personalità sistematico.</p>
+      </div>
+      <div class='timeline-item'>
+        <h4 data-i18n='hist.h3'>1990 — Goldberg & il Five Factor Model</h4>
+        <p data-i18n='hist.p3'>Lewis Goldberg, tramite analisi fattoriale, dimostra che i 16 fattori di Cattell si riducono robustamente a cinque dimensioni universali. Il modello prende il nome di "Big Five".</p>
+      </div>
+      <div class='timeline-item'>
+        <h4 data-i18n='hist.h4'>2000–oggi — Validazione globale</h4>
+        <p data-i18n='hist.p4'>Migliaia di studi confermano che il Big Five emerge in decine di lingue e culture, diventando il gold standard della ricerca sulla personalità in psicologia.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- I 5 TRATTI -->
+  <section class='section'>
+    <h2 data-i18n='traits.h'>I Cinque Tratti</h2>
+
+    <!-- OPENNESS -->
+    <div class='trait-card'>
+      <div class='trait-head'>
+        <span class='trait-icon' style='background:#ff5f6e'></span>
+        <span class='trait-name' data-i18n='t.o.name'>Openness</span>
+        <span class='trait-code'>(O)</span>
+      </div>
+      <p class='trait-desc' data-i18n='t.o.desc'>Apertura all'esperienza, curiosità, immaginazione e ricettività alle idee nuove.</p>
+      <div class='trait-scale'>
+        <div class='trait-pole'>
+          <h4 data-i18n='t.o.high'>ALTO (Aperto)</h4>
+          <p data-i18n='t.o.high.p'>Curioso, creativo, attratto da arte e filosofia. Ama esplorare nuove idee e cambiamenti. Spesso impulsivo nel fare scelte insolite.</p>
+        </div>
+        <div class='trait-pole'>
+          <h4 data-i18n='t.o.low'>BASSO (Pratico)</h4>
+          <p data-i18n='t.o.low.p'>Concreto, pratico, legato alla routine. Preferisce le cose familiari e testate. Più scettico verso le novità.</p>
+        </div>
+      </div>
+      <p data-i18n='t.o.note'><strong data-i18n='note'>Nota:</strong> <span data-i18n='t.o.note.t'>Non è correlato all'intelligenza, bensì allo stile di pensiero e alla curiosità intellettuale.</span></p>
+    </div>
+
+    <!-- CONSCIENTIOUSNESS -->
+    <div class='trait-card'>
+      <div class='trait-head'>
+        <span class='trait-icon' style='background:#ff8a3d'></span>
+        <span class='trait-name' data-i18n='t.c.name'>Conscientiousness</span>
+        <span class='trait-code'>(C)</span>
+      </div>
+      <p class='trait-desc' data-i18n='t.c.desc'>Organizzazione, disciplina, affidabilità e orientamento agli obiettivi.</p>
+      <div class='trait-scale'>
+        <div class='trait-pole'>
+          <h4 data-i18n='t.c.high'>ALTO (Consapevole)</h4>
+          <p data-i18n='t.c.high.p'>Organizzato, puntuale, affidabile. Pianifica in anticipo e segue le proprie linee guida. Eccellente nella gestione di progetti.</p>
+        </div>
+        <div class='trait-pole'>
+          <h4 data-i18n='t.c.low'>BASSO (Spontaneo)</h4>
+          <p data-i18n='t.c.low.p'>Flessibile, rilassato, spontaneo. Tende a rimandare e a improvvisare. Meno legato ai dettagli.</p>
+        </div>
+      </div>
+      <p data-i18n='t.c.note'><strong data-i18n='note'>Nota:</strong> <span data-i18n='t.c.note.t'>È il più predittivo del successo scolastico e professionale. Alto = maggiore successo nella maggior parte dei campi.</span></p>
+    </div>
+
+    <!-- EXTRAVERSION -->
+    <div class='trait-card'>
+      <div class='trait-head'>
+        <span class='trait-icon' style='background:#ffd24a'></span>
+        <span class='trait-name' data-i18n='t.e.name'>Extraversion</span>
+        <span class='trait-code'>(E)</span>
+      </div>
+      <p class='trait-desc' data-i18n='t.e.desc'>Socievolezza, ricerca di stimoli, entusiasmo e grado di attivazione in situazioni sociali.</p>
+      <div class='trait-scale'>
+        <div class='trait-pole'>
+          <h4 data-i18n='t.e.high'>ALTO (Estroverso)</h4>
+          <p data-i18n='t.e.high.p'>Socievole, energico, parla facilmente. Si ritrova a proprio agio in gruppo e cerca attivamente contatto. Spesso leader naturali.</p>
+        </div>
+        <div class='trait-pole'>
+          <h4 data-i18n='t.e.low'>BASSO (Introverso)</h4>
+          <p data-i18n='t.e.low.p'>Tranquillo, riflessivo, preferisce piccoli gruppi o la solitudine. Si ricarica nella quiete. Meno bisognoso di stimolazione esterna.</p>
+        </div>
+      </div>
+      <p data-i18n='t.e.note'><strong data-i18n='note'>Nota:</strong> <span data-i18n='t.e.note.t'>L'introversione NON è timidezza — è semplicemente un bisogno diverso di stimolo sociale. Gli introversi possono essere perfettamente confidenti.</span></p>
+    </div>
+
+    <!-- AGREEABLENESS -->
+    <div class='trait-card'>
+      <div class='trait-head'>
+        <span class='trait-icon' style='background:#4ad6a0'></span>
+        <span class='trait-name' data-i18n='t.a.name'>Agreeableness</span>
+        <span class='trait-code'>(A)</span>
+      </div>
+      <p class='trait-desc' data-i18n='t.a.desc'>Empatia, collaborazione, fiducia e propensione alla cooperazione e all'armonia.</p>
+      <div class='trait-scale'>
+        <div class='trait-pole'>
+          <h4 data-i18n='t.a.high'>ALTO (Gradevolezza)</h4>
+          <p data-i18n='t.a.high.p'>Empatico, altruista, collaborativo. Si preoccupa genuinamente degli altri. Tende a scegliere l'armonia rispetto al conflitto.</p>
+        </div>
+        <div class='trait-pole'>
+          <h4 data-i18n='t.a.low'>BASSO (Competitivo)</h4>
+          <p data-i18n='t.a.low.p'>Diretto, scettico, competitivo. Tende a prioritizzare i propri interessi. Meno incline a conformarsi per armonia.</p>
+        </div>
+      </div>
+      <p data-i18n='t.a.note'><strong data-i18n='note'>Nota:</strong> <span data-i18n='t.a.note.t'>Non è "cattiveria" — bassi punteggi riflettono spesso un stile assertivo e diretto, utile in certi contesti come negoziazioni o leadership.</span></p>
+    </div>
+
+    <!-- NEUROTICISM -->
+    <div class='trait-card'>
+      <div class='trait-head'>
+        <span class='trait-icon' style='background:#5fa8ff'></span>
+        <span class='trait-name' data-i18n='t.n.name'>Neuroticism</span>
+        <span class='trait-code'>(N)</span>
+      </div>
+      <p class='trait-desc' data-i18n='t.n.desc'>Instabilità emotiva, sensibilità allo stress e reattività ai fattori negativi.</p>
+      <div class='trait-scale'>
+        <div class='trait-pole'>
+          <h4 data-i18n='t.n.high'>ALTO (Reattivo)</h4>
+          <p data-i18n='t.n.high.p'>Sensibile alle emozioni, incline a preoccuparsi, reagisce intensamente allo stress. Più reattivo ai fallimenti.</p>
+        </div>
+        <div class='trait-pole'>
+          <h4 data-i18n='t.n.low'>BASSO (Stabile)</h4>
+          <p data-i18n='t.n.low.p'>Calmo, equilibrato, resiliente. Affronta lo stress con serenità. Raramente sperimenta ansia o tristezza.</p>
+        </div>
+      </div>
+      <p data-i18n='t.n.note'><strong data-i18n='note'>Nota:</strong> <span data-i18n='t.n.note.t'>Spesso chiamato anche "Stabilità emotiva" (l'opposto). È il secondo più predittivo della salute mentale e del benessere.</span></p>
+    </div>
+
+  </section>
+
+  <!-- INTERPRETAZIONE -->
+  <section class='section'>
+    <h2 data-i18n='interp.h'>Come interpretare i risultati</h2>
+    <p data-i18n='interp.p1'>I punteggi del Big Five sono <strong>percentili</strong>: non hai un "tipo", ma un profilo di cinque numeri (0–100%) che ti posizionano rispetto alla popolazione generale.</p>
+    
+    <h3 data-i18n='interp.h2'>Le 5 cose da sapere</h3>
+    <ul>
+      <li data-i18n='interp.li1'><strong>Nessun punteggio è "migliore".</strong> Alto e basso sono solo diversi. Ad esempio, bassi livelli di Openness possono essere un vantaggio in campi che richiedono stabilità (artigianato, ingegneria); alti livelli di Neuroticism possono spingere a cure personali attente o a sensibilità artistica.</li>
+      <li data-i18n='interp.li2'><strong>I tratti sono indipendenti.</strong> Avere un punteggio alto in Extraversion non dice nulla su Agreeableness. Puoi essere estroverso ma competitivo, o introverso ma altruista.</li>
+      <li data-i18n='interp.li3'><strong>Sono stabili ma non immutabili.</strong> Decenni di ricerca dimostrano che i cinque tratti rimangono relativamente stabili dalla tarda adolescenza all'età adulta, eppure è possibile una crescita intenzionale in aree specifiche (ad es., aumentare la Conscientiousness tramite abitudini).</li>
+      <li data-i18n='interp.li4'><strong>Predittori reali del comportamento.</strong> Il Big Five predice effettivamente il successo scolastico (Conscientiousness), la soddisfazione relazionale (Agreeableness + basso Neuroticism), la creatività (Openness) e la salute fisica (basso Neuroticism).</li>
+      <li data-i18n='interp.li5'><strong>Universi in tutte le culture.</strong> Studi cross-culturali confermano che il Big Five emerge in modo robusto in decine di lingue e culture, dal Giappone al Brasile, suggerendo una base biologica/psicologica universale.</li>
+    </ul>
+  </section>
+
+  <!-- VALIDITÀ -->
+  <section class='section'>
+    <h2 data-i18n='valid.h'>Validità scientifica</h2>
+    <p data-i18n='valid.p1'>Perché il Big Five è il modello più affidabile?</p>
+    <ul>
+      <li data-i18n='valid.li1'><strong>Robusto a livello statistico.</strong> È stato derivato mediante analisi fattoriale su migliaia di risposte, non da intuizione teorica.</li>
+      <li data-i18n='valid.li2'><strong>Emerges cross-culturally.</strong> Riprodotto in 50+ lingue e culture indipendentemente, dal Cile al Vietnam.</li>
+      <li data-i18n='valid.li3'><strong>Predittivo del mondo reale.</strong> Predice successo universitario, performance lavorativa, qualità delle relazioni, salute mentale e longevità.</li>
+      <li data-i18n='valid.li4'><strong>Brevità senza sacrificare la precisione.</strong> Cattura l'80%+ della varianza di personalità con solo 5 dimensioni, a differenza di modelli più complessi.</li>
+    </ul>
+    <div class='quote' data-i18n='quote'>«Il Big Five è il più robusto, replicabile e utile modello di personalità della psicologia contemporanea. Non è perfetto, ma è il migliore che abbiamo.» — Paul Costa Jr., National Institute of Aging</div>
+  </section>
+
+  <!-- VS ALTRI MODELLI -->
+  <section class='section'>
+    <h2 data-i18n='vs.h'>Big Five vs. altri modelli</h2>
+    <div class='grid-2'>
+      <div>
+        <h3 data-i18n='vs.mbti.h'>Big Five vs. MBTI</h3>
+        <p data-i18n='vs.mbti.p'><strong>MBTI</strong> (Myers-Briggs Type Indicator) categorizza le persone in 16 tipi discreti. È popolare, ma ha una validità scientifica limitata. Il Big Five tratta i tratti come spettri continui, molto più in linea con i dati psicologici.</p>
+      </div>
+      <div>
+        <h3 data-i18n='vs.enneagram.h'>Big Five vs. Enneagramma</h3>
+        <p data-i18n='vs.enneagram.p'>L'<strong>Enneagramma</strong> è un sistema mistico affascinante ma senza supporto empirico rigorosamente validato. Il Big Five è sostenuto da decenni di ricerca peer-reviewed.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class='section' style='text-align:center'>
+    <h2 data-i18n='cta.h'>Pronti a scoprire il vostro profilo?</h2>
+    <p data-i18n='cta.p'>Rispondete a 70 domande in ~10 minuti e ricevete un profilo radar personalizzato che vi mostra dove vi collocate sui cinque tratti.</p>
+    <a href='personality-test.html' class='btn-test' data-i18n='cta.btn'>Fai il test Big Five →</a>
+  </section>
+
+</div>
+
+<footer class='footer'>&copy; 2026 Phoenix Academy · <span data-i18n='foot'>Risorgi attraverso la conoscenza.</span></footer>
+
+<script>
+let lang='it';
+
+const I18N = {
+  it:{
+    'h.eyebrow':'Il modello psicologico',
+    'h.title':'Big Five',
+    'h.subtitle':'Scopri come il modello OCEAN spiega la personalità umana tramite cinque dimensioni indipendenti e universalmente riconosciute.',
+    'intro.h':'Cos\'è il Big Five?',
+    'intro.p1':'Il Big Five (o Five Factor Model, FFM) è il modello di personalità più accreditato dalla comunità scientifica internazionale. Descrive la personalità umana attraverso cinque dimensioni indipendenti e universali, che insieme catturano la maggior parte delle variazioni individuali nel modo di pensare, sentire e agire.',
+    'intro.p2':'A differenza di altri modelli che etichettano le persone con "tipi" fissi (come l\'MBTI), il Big Five tratta ogni tratto come uno spettro continuo: non sei "estroverso sì o no", ma piuttosto più o meno estroverso rispetto alla popolazione generale.',
+    'intro.p3':'L\'acronimo OCEAN rappresenta i cinque tratti: <strong>O</strong>penness, <strong>C</strong>onscientiousness, <strong>E</strong>xtraversion, <strong>A</strong>greeableness, <strong>N</strong>euroticism.',
+    'history.h':'Una breve storia',
+    'hist.h1':'1936 — Allport & Odbert',
+    'hist.p1':'Gordon Allport e Harry Odbert compilano un elenco di 4.000+ aggettivi dalla lingua inglese per descrivere la personalità, identificando i tratti più rilevanti.',
+    'hist.h2':'1961 — Cattell: 16 fattori',
+    'hist.p2':'Raymond Cattell riduce l\'elenco a 35 aggettivi e identifica 16 fattori principali, creando il 16PF, il primo test di personalità sistematico.',
+    'hist.h3':'1990 — Goldberg & il Five Factor Model',
+    'hist.p3':'Lewis Goldberg, tramite analisi fattoriale, dimostra che i 16 fattori di Cattell si riducono robustamente a cinque dimensioni universali. Il modello prende il nome di "Big Five".',
+    'hist.h4':'2000–oggi — Validazione globale',
+    'hist.p4':'Migliaia di studi confermano che il Big Five emerge in decine di lingue e culture, diventando il gold standard della ricerca sulla personalità in psicologia.',
+    'traits.h':'I Cinque Tratti',
+    't.o.name':'Openness (Apertura)',
+    't.o.desc':'Apertura all\'esperienza, curiosità, immaginazione e ricettività alle idee nuove.',
+    't.o.high':'ALTO (Aperto)',
+    't.o.high.p':'Curioso, creativo, attratto da arte e filosofia. Ama esplorare nuove idee e cambiamenti. Spesso impulsivo nel fare scelte insolite.',
+    't.o.low':'BASSO (Pratico)',
+    't.o.low.p':'Concreto, pratico, legato alla routine. Preferisce le cose familiari e testate. Più scettico verso le novità.',
+    't.o.note':'Non è correlato all\'intelligenza, bensì allo stile di pensiero e alla curiosità intellettuale.',
+    't.c.name':'Conscientiousness (Coscienziosità)',
+    't.c.desc':'Organizzazione, disciplina, affidabilità e orientamento agli obiettivi.',
+    't.c.high':'ALTO (Consapevole)',
+    't.c.high.p':'Organizzato, puntuale, affidabile. Pianifica in anticipo e segue le proprie linee guida. Eccellente nella gestione di progetti.',
+    't.c.low':'BASSO (Spontaneo)',
+    't.c.low.p':'Flessibile, rilassato, spontaneo. Tende a rimandare e a improvvisare. Meno legato ai dettagli.',
+    't.c.note.t':'È il più predittivo del successo scolastico e professionale. Alto = maggiore successo nella maggior parte dei campi.',
+    't.e.name':'Extraversion (Estroversione)',
+    't.e.desc':'Socievolezza, ricerca di stimoli, entusiasmo e grado di attivazione in situazioni sociali.',
+    't.e.high':'ALTO (Estroverso)',
+    't.e.high.p':'Socievole, energico, parla facilmente. Si ritrova a proprio agio in gruppo e cerca attivamente contatto. Spesso leader naturali.',
+    't.e.low':'BASSO (Introverso)',
+    't.e.low.p':'Tranquillo, riflessivo, preferisce piccoli gruppi o la solitudine. Si ricarica nella quiete. Meno bisognoso di stimolazione esterna.',
+    't.e.note.t':'L\'introversione NON è timidezza — è semplicemente un bisogno diverso di stimolo sociale. Gli introversi possono essere perfettamente confidenti.',
+    't.a.name':'Agreeableness (Gradevolezza)',
+    't.a.desc':'Empatia, collaborazione, fiducia e propensione alla cooperazione e all\'armonia.',
+    't.a.high':'ALTO (Gradevolezza)',
+    't.a.high.p':'Empatico, altruista, collaborativo. Si preoccupa genuinamente degli altri. Tende a scegliere l\'armonia rispetto al conflitto.',
+    't.a.low':'BASSO (Competitivo)',
+    't.a.low.p':'Diretto, scettico, competitivo. Tende a prioritizzare i propri interessi. Meno incline a conformarsi per armonia.',
+    't.a.note.t':'Non è "cattiveria" — bassi punteggi riflettono spesso uno stile assertivo e diretto, utile in certi contesti come negoziazioni o leadership.',
+    't.n.name':'Neuroticism (Nevroticismo)',
+    't.n.desc':'Instabilità emotiva, sensibilità allo stress e reattività ai fattori negativi.',
+    't.n.high':'ALTO (Reattivo)',
+    't.n.high.p':'Sensibile alle emozioni, incline a preoccuparsi, reagisce intensamente allo stress. Più reattivo ai fallimenti.',
+    't.n.low':'BASSO (Stabile)',
+    't.n.low.p':'Calmo, equilibrato, resiliente. Affronta lo stress con serenità. Raramente sperimenta ansia o tristezza.',
+    't.n.note.t':'Spesso chiamato anche "Stabilità emotiva" (l\'opposto). È il secondo più predittivo della salute mentale e del benessere.',
+    'note':'Nota:',
+    'interp.h':'Come interpretare i risultati',
+    'interp.p1':'I punteggi del Big Five sono <strong>percentili</strong>: non hai un "tipo", ma un profilo di cinque numeri (0–100%) che ti posizionano rispetto alla popolazione generale.',
+    'interp.h2':'Le 5 cose da sapere',
+    'interp.li1':'<strong>Nessun punteggio è "migliore".</strong> Alto e basso sono solo diversi. Ad esempio, bassi livelli di Openness possono essere un vantaggio in campi che richiedono stabilità (artigianato, ingegneria); alti livelli di Neuroticism possono spingere a cure personali attente o a sensibilità artistica.',
+    'interp.li2':'<strong>I tratti sono indipendenti.</strong> Avere un punteggio alto in Extraversion non dice nulla su Agreeableness. Puoi essere estroverso ma competitivo, o introverso ma altruista.',
+    'interp.li3':'<strong>Sono stabili ma non immutabili.</strong> Decenni di ricerca dimostrano che i cinque tratti rimangono relativamente stabili dalla tarda adolescenza all\'età adulta, eppure è possibile una crescita intenzionale in aree specifiche (ad es., aumentare la Conscientiousness tramite abitudini).',
+    'interp.li4':'<strong>Predittori reali del comportamento.</strong> Il Big Five predice effettivamente il successo scolastico (Conscientiousness), la soddisfazione relazionale (Agreeableness + basso Neuroticism), la creatività (Openness) e la salute fisica (basso Neuroticism).',
+    'interp.li5':'<strong>Universi in tutte le culture.</strong> Studi cross-culturali confermano che il Big Five emerge in modo robusto in decine di lingue e culture, dal Giappone al Brasile, suggerendo una base biologica/psicologica universale.',
+    'valid.h':'Validità scientifica',
+    'valid.p1':'Perché il Big Five è il modello più affidabile?',
+    'valid.li1':'<strong>Robusto a livello statistico.</strong> È stato derivato mediante analisi fattoriale su migliaia di risposte, non da intuizione teorica.',
+    'valid.li2':'<strong>Emerges cross-culturally.</strong> Riprodotto in 50+ lingue e culture indipendentemente, dal Cile al Vietnam.',
+    'valid.li3':'<strong>Predittivo del mondo reale.</strong> Predice successo universitario, performance lavorativa, qualità delle relazioni, salute mentale e longevità.',
+    'valid.li4':'<strong>Brevità senza sacrificare la precisione.</strong> Cattura l\'80%+ della varianza di personalità con solo 5 dimensioni, a differenza di modelli più complessi.',
+    'quote':'«Il Big Five è il più robusto, replicabile e utile modello di personalità della psicologia contemporanea. Non è perfetto, ma è il migliore che abbiamo.» — Paul Costa Jr., National Institute of Aging',
+    'vs.h':'Big Five vs. altri modelli',
+    'vs.mbti.h':'Big Five vs. MBTI',
+    'vs.mbti.p':'<strong>MBTI</strong> (Myers-Briggs Type Indicator) categorizza le persone in 16 tipi discreti. È popolare, ma ha una validità scientifica limitata. Il Big Five tratta i tratti come spettri continui, molto più in linea con i dati psicologici.',
+    'vs.enneagram.h':'Big Five vs. Enneagramma',
+    'vs.enneagram.p':'L\'<strong>Enneagramma</strong> è un sistema mistico affascinante ma senza supporto empirico rigorosamente validato. Il Big Five è sostenuto da decenni di ricerca peer-reviewed.',
+    'cta.h':'Pronti a scoprire il vostro profilo?',
+    'cta.p':'Rispondete a 70 domande in ~10 minuti e ricevete un profilo radar personalizzato che vi mostra dove vi collocate sui cinque tratti.',
+    'cta.btn':'Fai il test Big Five →',
+    'nav.test':'← Al test',
+    'foot':'Risorgi attraverso la conoscenza.'
+  },
+  en:{
+    'h.eyebrow':'The psychological model',
+    'h.title':'Big Five',
+    'h.subtitle':'Discover how the OCEAN model explains human personality through five independent and universally recognized dimensions.',
+    'intro.h':'What is the Big Five?',
+    'intro.p1':'The Big Five (or Five Factor Model, FFM) is the personality model most accredited by the international scientific community. It describes human personality through five independent and universal dimensions that together capture most of the individual variation in how people think, feel, and act.',
+    'intro.p2':'Unlike other models that label people with fixed "types" (like MBTI), the Big Five treats each trait as a continuous spectrum: you\'re not "extroverted yes or no," but rather more or less extroverted compared to the general population.',
+    'intro.p3':'The acronym OCEAN represents the five traits: <strong>O</strong>penness, <strong>C</strong>onscientiousness, <strong>E</strong>xtraversion, <strong>A</strong>greeableness, <strong>N</strong>euroticism.',
+    'history.h':'A brief history',
+    'hist.h1':'1936 — Allport & Odbert',
+    'hist.p1':'Gordon Allport and Harry Odbert compile a list of 4,000+ adjectives from the English language to describe personality, identifying the most relevant traits.',
+    'hist.h2':'1961 — Cattell: 16 factors',
+    'hist.p2':'Raymond Cattell reduces the list to 35 adjectives and identifies 16 principal factors, creating the 16PF, the first systematic personality test.',
+    'hist.h3':'1990 — Goldberg & the Five Factor Model',
+    'hist.p3':'Lewis Goldberg, through factor analysis, demonstrates that Cattell\'s 16 factors robustly reduce to five universal dimensions. The model becomes known as the "Big Five."',
+    'hist.h4':'2000–today — Global validation',
+    'hist.p4':'Thousands of studies confirm that the Big Five emerges in dozens of languages and cultures, becoming the gold standard in personality research in psychology.',
+    'traits.h':'The Five Traits',
+    't.o.name':'Openness',
+    't.o.desc':'Openness to experience, curiosity, imagination, and receptiveness to new ideas.',
+    't.o.high':'HIGH (Open)',
+    't.o.high.p':'Curious, creative, drawn to art and philosophy. Loves exploring new ideas and change. Often impulsive in making unusual choices.',
+    't.o.low':'LOW (Practical)',
+    't.o.low.p':'Concrete, practical, attached to routine. Prefers familiar and tested things. More skeptical of novelty.',
+    't.o.note.t':'It is not correlated with intelligence, but rather with thinking style and intellectual curiosity.',
+    't.c.name':'Conscientiousness',
+    't.c.desc':'Organization, discipline, dependability, and goal orientation.',
+    't.c.high':'HIGH (Conscientious)',
+    't.c.high.p':'Organized, punctual, dependable. Plans ahead and follows own guidelines. Excellent at project management.',
+    't.c.low':'LOW (Spontaneous)',
+    't.c.low.p':'Flexible, relaxed, spontaneous. Tends to procrastinate and improvise. Less detail-oriented.',
+    't.c.note.t':'It is the most predictive of academic and professional success. High = greater success in most fields.',
+    't.e.name':'Extraversion',
+    't.e.desc':'Sociability, stimulus-seeking, enthusiasm, and degree of activation in social situations.',
+    't.e.high':'HIGH (Extraverted)',
+    't.e.high.p':'Sociable, energetic, talks easily. Comfortable in groups and actively seeks contact. Often natural leaders.',
+    't.e.low':'LOW (Introverted)',
+    't.e.low.p':'Quiet, reflective, prefers small groups or solitude. Recharges in quiet. Less need for external stimulation.',
+    't.e.note.t':'Introversion is NOT shyness — it\'s simply a different need for social stimulus. Introverts can be perfectly confident.',
+    't.a.name':'Agreeableness',
+    't.a.desc':'Empathy, collaboration, trust, and propensity for cooperation and harmony.',
+    't.a.high':'HIGH (Agreeable)',
+    't.a.high.p':'Empathetic, altruistic, cooperative. Genuinely cares about others. Tends to choose harmony over conflict.',
+    't.a.low':'LOW (Competitive)',
+    't.a.low.p':'Direct, skeptical, competitive. Tends to prioritize own interests. Less inclined to conform for harmony.',
+    't.a.note.t':'It is not "meanness" — low scores often reflect an assertive and direct style, useful in contexts like negotiations or leadership.',
+    't.n.name':'Neuroticism',
+    't.n.desc':'Emotional instability, sensitivity to stress, and reactivity to negative factors.',
+    't.n.high':'HIGH (Reactive)',
+    't.n.high.p':'Sensitive to emotions, prone to worry, reacts intensely to stress. More reactive to setbacks.',
+    't.n.low':'LOW (Stable)',
+    't.n.low.p':'Calm, balanced, resilient. Faces stress with serenity. Rarely experiences anxiety or sadness.',
+    't.n.note.t':'Often called "Emotional Stability" (the opposite). It is the second most predictive of mental health and wellbeing.',
+    'note':'Note:',
+    'interp.h':'How to interpret your results',
+    'interp.p1':'Big Five scores are <strong>percentiles</strong>: you don\'t have a "type," but rather a profile of five numbers (0–100%) that position you relative to the general population.',
+    'interp.h2':'The 5 things to know',
+    'interp.li1':'<strong>No score is "better."</strong> High and low are just different. For example, low Openness can be an advantage in fields requiring stability (craftsmanship, engineering); high Neuroticism can drive attentive self-care or artistic sensitivity.',
+    'interp.li2':'<strong>Traits are independent.</strong> Having a high Extraversion score tells you nothing about Agreeableness. You can be extraverted yet competitive, or introverted yet altruistic.',
+    'interp.li3':'<strong>They\'re stable but not immutable.</strong> Decades of research show that the five traits remain relatively stable from late adolescence through adulthood, yet intentional growth in specific areas is possible (e.g., increasing Conscientiousness through habits).',
+    'interp.li4':'<strong>Real predictors of behavior.</strong> The Big Five actually predicts academic success (Conscientiousness), relationship satisfaction (Agreeableness + low Neuroticism), creativity (Openness), and physical health (low Neuroticism).',
+    'interp.li5':'<strong>Universal across cultures.</strong> Cross-cultural studies confirm that the Big Five emerges robustly in dozens of languages and cultures, from Japan to Brazil, suggesting a universal biological/psychological basis.',
+    'valid.h':'Scientific validity',
+    'valid.p1':'Why is the Big Five the most reliable model?',
+    'valid.li1':'<strong>Statistically robust.</strong> It was derived through factor analysis on thousands of responses, not theoretical intuition.',
+    'valid.li2':'<strong>Emerges cross-culturally.</strong> Replicated in 50+ languages and cultures independently, from Chile to Vietnam.',
+    'valid.li3':'<strong>Predictive of real-world outcomes.</strong> Predicts university success, work performance, relationship quality, mental health, and longevity.',
+    'valid.li4':'<strong>Brevity without sacrificing precision.</strong> Captures 80%+ of personality variance with just 5 dimensions, unlike more complex models.',
+    'quote':'\"The Big Five is the most robust, replicable, and useful personality model in contemporary psychology. It\'s not perfect, but it\'s the best we have.\" — Paul Costa Jr., National Institute of Aging',
+    'vs.h':'Big Five vs. other models',
+    'vs.mbti.h':'Big Five vs. MBTI',
+    'vs.mbti.p':'<strong>MBTI</strong> (Myers-Briggs Type Indicator) categorizes people into 16 discrete types. It\'s popular, but has limited scientific validity. The Big Five treats traits as continuous spectra, much more aligned with psychological data.',
+    'vs.enneagram.h':'Big Five vs. Enneagram',
+    'vs.enneagram.p':'The <strong>Enneagram</strong> is a fascinating mystical system but without rigorously validated empirical support. The Big Five is backed by decades of peer-reviewed research.',
+    'cta.h':'Ready to discover your profile?',
+    'cta.p':'Answer 70 questions in ~10 minutes and receive a personalized radar profile showing where you land on the five traits.',
+    'cta.btn':'Take the Big Five test →',
+    'nav.test':'← To test',
+    'foot':'Rise through knowledge.'
+  }
+};
+
+function applyI18n(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(I18N[lang][k]!=null) el.innerHTML=I18N[lang][k];
+  });
+}
+
+document.querySelectorAll('.lang-switch button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('.lang-switch button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    lang=b.dataset.lang;
+    applyI18n();
+  };
+});
+
+applyI18n();
+
+/* FLAME */
+(function(){var c=document.getElementById('flame');var x=c.getContext('2d');var ps=[];var m={x:-100,y:-100,active:false};var dpr=window.devicePixelRatio||1;function rs(){dpr=window.devicePixelRatio||1;c.width=innerWidth*dpr;c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';x.setTransform(dpr,0,0,dpr,0,0)}rs();addEventListener('resize',rs);addEventListener('mousemove',function(e){m.x=e.clientX;m.y=e.clientY;m.active=true;for(var i=0;i<3;i++){ps.push({x:e.clientX+(Math.random()-.5)*6,y:e.clientY+(Math.random()-.5)*6,vx:(Math.random()-.5)*.6,vy:-Math.random()*1.4-.4,life:0,maxLife:28+Math.random()*20,size:6+Math.random()*8})}if(ps.length>220)ps.splice(0,ps.length-220)});addEventListener('mouseleave',function(){m.active=false});function tick(){x.globalCompositeOperation='destination-out';x.fillStyle='rgba(0,0,0,0.18)';x.fillRect(0,0,c.width/dpr,c.height/dpr);x.globalCompositeOperation='lighter';for(var i=ps.length-1;i>=0;i--){var p=ps[i];p.life++;if(p.life>=p.maxLife){ps.splice(i,1);continue}p.x+=p.vx;p.y+=p.vy;p.vy-=.05;p.vx*=.96;var t=p.life/p.maxLife;var r=p.size*(1-t*.4);var al=(1-t)*.9;var g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,r);if(t<.45){g.addColorStop(0,'rgba(255,60,70,'+al+')');g.addColorStop(.35,'rgba(200,25,40,'+al*.85+')');g.addColorStop(.7,'rgba(130,10,25,'+al*.5+')');g.addColorStop(1,'rgba(60,0,10,0)')}else{var sm=(t-.45)/.55;var a2=al*(1-sm*.5);g.addColorStop(0,'rgba(160,20,35,'+a2*.75+')');g.addColorStop(.5,'rgba(90,8,20,'+a2*.4+')');g.addColorStop(1,'rgba(30,0,5,0)')}x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,r,0,Math.PI*2);x.fill()}if(m.active){var br=14;var cg=x.createRadialGradient(m.x,m.y,0,m.x,m.y,br);cg.addColorStop(0,'rgba(255,80,90,0.95)');cg.addColorStop(.35,'rgba(220,30,45,.8)');cg.addColorStop(.7,'rgba(140,12,28,0.5)');cg.addColorStop(1,'rgba(60,0,10,0)');x.fillStyle=cg;x.beginPath();x.arc(m.x,m.y,br,0,Math.PI*2);x.fill()}requestAnimationFrame(tick)}requestAnimationFrame(tick)})();
+</script>
+</body></html>
