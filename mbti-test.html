@@ -1,0 +1,375 @@
+<!doctype html><html lang='it'><head><meta charset='UTF-8'/><meta name='viewport' content='width=device-width,initial-scale=1.0'/><title>Phoenix — MBTI</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;color:#f0e8ea;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;overflow-x:hidden;cursor:none;min-height:100%}
+a{text-decoration:none;color:inherit}
+@media(hover:none){html,body{cursor:auto}}
+.header{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.5rem;border-bottom:1px solid rgba(192,34,62,.18);position:sticky;top:0;background:#000;z-index:50}
+.brand{display:flex;align-items:center;gap:.4rem;flex-shrink:0}
+.brand img{width:52px;height:52px;object-fit:contain;mix-blend-mode:screen}
+.brand span{font-weight:900;letter-spacing:.06em;font-size:1.2rem;color:#fff;text-shadow:0 0 8px rgba(227,65,89,.9),0 0 18px rgba(192,34,62,.7)}
+.spacer{flex:1}
+.lang-switch{display:flex;gap:.3rem}
+.lang-switch button{background:transparent;border:2px solid transparent;padding:.2rem;border-radius:4px;cursor:none;transition:transform .2s,border-color .2s;line-height:0}
+.lang-switch button img{width:26px;height:19px;display:block;border-radius:2px}
+.lang-switch button:hover{transform:scale(1.15)}
+.lang-switch button.active{border-color:rgba(227,65,89,.8);transform:scale(1.15)}
+.btn-back{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:.55rem 1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:8px;cursor:none;font-size:.78rem;white-space:nowrap;margin-left:.6rem;transition:box-shadow .2s}
+.btn-back:hover{box-shadow:0 0 18px rgba(227,65,89,.6)}
+@media(hover:none){.lang-switch button,.btn-back{cursor:auto}}
+#flame{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:1000}
+.wrap{max-width:760px;margin:0 auto;padding:2.5rem 1.2rem 5rem;position:relative;z-index:2}
+.intro{text-align:center;padding-top:1rem}
+.eyebrow{font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(227,65,89,.75);font-weight:700;margin-bottom:1rem}
+.title{font-size:clamp(2.4rem,7vw,4rem);font-weight:900;line-height:.95;letter-spacing:-.02em;text-transform:uppercase;background:linear-gradient(180deg,#ff5f6e,#7a1228);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.4rem}
+.subtitle{font-size:1.05rem;color:rgba(240,232,234,.65);max-width:520px;margin:0 auto 2rem;line-height:1.6}
+.meta-row{display:flex;justify-content:center;gap:2.4rem;margin:0 auto 2.4rem;flex-wrap:wrap}
+.meta{text-align:center}
+.meta b{display:block;font-size:1.9rem;font-weight:900;color:#fff;line-height:1}
+.meta small{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(240,232,234,.45)}
+.dich-legend{display:flex;flex-direction:column;gap:.6rem;max-width:480px;margin:0 auto 2.6rem;text-align:left}
+.dl{display:flex;align-items:center;gap:.7rem;padding:.7rem .9rem;border:1px solid rgba(192,34,62,.18);border-radius:10px;background:rgba(20,0,5,.5)}
+.dl b{font-size:.92rem;color:#fff;font-weight:700;min-width:42px}
+.dl span{font-size:.82rem;color:rgba(240,232,234,.55);line-height:1.4}
+.start-btn,.nav-btn{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:1rem 2.4rem;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;border-radius:12px;cursor:none;box-shadow:0 0 24px rgba(192,34,62,.4);transition:transform .15s,box-shadow .15s}
+.start-btn:hover,.nav-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 0 34px rgba(227,65,89,.6)}
+@media(hover:none){.start-btn,.nav-btn{cursor:auto}}
+.progress-head{position:sticky;top:67px;background:#000;padding:1.1rem 0 .9rem;z-index:20;border-bottom:1px solid rgba(192,34,62,.1)}
+.pbar{height:6px;background:rgba(192,34,62,.15);border-radius:99px;overflow:hidden}
+.pfill{height:100%;width:0;background:linear-gradient(90deg,#7a1228,#ff5f6e);border-radius:99px;transition:width .35s ease}
+.pmeta{display:flex;justify-content:space-between;margin-top:.5rem;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(240,232,234,.45)}
+.pmeta b{color:#ff8a9c}
+.qcard{padding:2.6rem 0 1rem;min-height:48vh;display:flex;flex-direction:column;justify-content:center;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.qnum{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(227,65,89,.7);font-weight:700;margin-bottom:1rem}
+.qtext{font-size:clamp(1.4rem,4.2vw,2rem);font-weight:700;line-height:1.3;color:#fff;margin-bottom:2.2rem}
+.qtext .lead{color:rgba(240,232,234,.5);font-weight:500;display:block;font-size:.95rem;letter-spacing:.04em;margin-bottom:.5rem;text-transform:uppercase}
+.scale{display:flex;flex-direction:column;gap:.6rem}
+.opt{display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;border:1px solid rgba(192,34,62,.22);border-radius:12px;background:rgba(20,0,5,.5);cursor:none;transition:border-color .18s,background .18s,transform .12s;text-align:left;width:100%;color:inherit;font-family:inherit}
+.opt:hover{border-color:rgba(227,65,89,.55);background:rgba(40,5,15,.7)}
+.opt.sel{border-color:#e34159;background:rgba(192,34,62,.25);box-shadow:0 0 18px rgba(192,34,62,.25)}
+.dot{width:22px;height:22px;border-radius:50%;border:2px solid rgba(227,65,89,.5);flex-shrink:0;position:relative;transition:border-color .18s}
+.opt.sel .dot{border-color:#ff5f6e}
+.opt.sel .dot::after{content:'';position:absolute;inset:3px;border-radius:50%;background:#ff5f6e}
+.opt span{font-size:.98rem;font-weight:600}
+@media(hover:none){.opt{cursor:auto}}
+.qnav{display:flex;justify-content:space-between;align-items:center;margin-top:2rem}
+.nav-btn.ghost{background:transparent;border:1px solid rgba(192,34,62,.35);box-shadow:none;color:rgba(240,232,234,.7);padding:.85rem 1.6rem;font-size:.85rem}
+.nav-btn.ghost:hover{border-color:rgba(227,65,89,.6);color:#fff;transform:none;box-shadow:none}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed}
+.results{animation:fade .5s ease;text-align:center}
+.type-badge{font-size:clamp(3.5rem,12vw,6rem);font-weight:900;letter-spacing:.05em;background:linear-gradient(180deg,#ff5f6e,#7a1228);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin:1rem 0 .3rem}
+.type-name{font-size:1.5rem;font-weight:800;color:#fff;margin-bottom:.3rem}
+.type-element{display:inline-block;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:#ff8a9c;border:1px solid rgba(227,65,89,.4);border-radius:99px;padding:.3rem .9rem;margin-bottom:1.4rem}
+.type-desc{font-size:1rem;color:rgba(240,232,234,.7);max-width:520px;margin:0 auto 2.4rem;line-height:1.6}
+.axes{display:flex;flex-direction:column;gap:1.3rem;max-width:560px;margin:0 auto 2.4rem;text-align:left}
+.axis-row{}
+.axis-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.5rem;font-size:.9rem}
+.axis-top .l{font-weight:700}.axis-top .r{font-weight:700}
+.axis-top .on{color:#ff8a9c}.axis-top .off{color:rgba(240,232,234,.4)}
+.axis-track{height:14px;background:rgba(192,34,62,.13);border-radius:99px;overflow:hidden;position:relative;display:flex}
+.axis-fillL{height:100%;background:linear-gradient(90deg,#ff5f6e,#c0223e);transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.axis-pct{font-size:.78rem;color:rgba(240,232,234,.5);margin-top:.35rem;text-align:center}
+.share-row{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.link-btn{background:transparent;border:1px solid rgba(227,65,89,.4);color:#ff8a9c;padding:1rem 1.8rem;border-radius:12px;font-weight:700;font-size:.9rem;cursor:none;transition:border-color .2s,color .2s}
+.link-btn:hover{border-color:#ff5f6e;color:#fff}
+@media(hover:none){.link-btn{cursor:auto}}
+.foot-note{font-size:.76rem;color:rgba(240,232,234,.35);margin-top:2.4rem;line-height:1.6;max-width:520px;margin-left:auto;margin-right:auto}
+.hidden{display:none!important}
+.footer{border-top:1px solid rgba(192,34,62,.12);padding:1.6rem;text-align:center;color:rgba(240,232,234,.3);font-size:.75rem;position:relative;z-index:2}
+</style></head>
+<body>
+<canvas id='flame'></canvas>
+<header class='header'>
+  <a href='index.html' class='brand'>
+    <img src='https://i.ibb.co/chkW0mST/fenice-sfondo-completamente-nero-c499a262.png' alt='Phoenix'/>
+    <span>PHOENIX</span>
+  </a>
+  <div class='spacer'></div>
+  <div class='lang-switch'>
+    <button class='active' data-lang='it'><img src='https://flagcdn.com/24x18/it.png' alt='IT'/></button>
+    <button data-lang='en'><img src='https://flagcdn.com/24x18/gb.png' alt='EN'/></button>
+  </div>
+  <a href='index.html' class='btn-back' data-i18n='back'>← Home</a>
+</header>
+
+<div class='wrap'>
+  <section id='intro' class='intro'>
+    <div class='eyebrow' data-i18n='intro.eyebrow'>16 Tipi · Myers-Briggs</div>
+    <h1 class='title' data-i18n='intro.title'>MBTI</h1>
+    <p class='subtitle' data-i18n='intro.subtitle'>Settanta domande. Quattro dimensioni. Scopri quale dei 16 tipi di personalità ti rappresenta — e quale elemento Phoenix incarna.</p>
+    <div class='meta-row'>
+      <div class='meta'><b>70</b><small data-i18n='intro.m1'>Domande</small></div>
+      <div class='meta'><b>16</b><small data-i18n='intro.m2'>Tipi</small></div>
+      <div class='meta'><b>~10'</b><small data-i18n='intro.m3'>Minuti</small></div>
+    </div>
+    <div class='dich-legend' id='legend'></div>
+    <button class='start-btn' id='startBtn' data-i18n='intro.start'>Inizia il test</button>
+    <p class='foot-note' data-i18n='intro.disclaimer'>Questo test è a scopo educativo e di intrattenimento, ispirato al modello Myers-Briggs. Non è uno strumento diagnostico ufficiale.</p>
+    <p style='margin-top:.8rem;font-size:.85rem'><a href='mbti-info.html' style='color:#ff8a9c;text-decoration:underline'>📖 Scopri il modello MBTI</a></p>
+  </section>
+
+  <section id='test' class='hidden'>
+    <div class='progress-head'>
+      <div class='pbar'><div class='pfill' id='pfill'></div></div>
+      <div class='pmeta'>
+        <span><b id='qcur'>1</b> / 70</span>
+        <span id='qpct'>0%</span>
+      </div>
+    </div>
+    <div class='qcard' id='qcard'>
+      <div class='qnum' id='qnum'>01</div>
+      <div class='qtext'><span class='lead' data-i18n='q.lead'>Quanto sei d'accordo?</span><span id='qtext'></span></div>
+      <div class='scale' id='scale'></div>
+      <div class='qnav'>
+        <button class='nav-btn ghost' id='prevBtn' data-i18n='nav.prev'>← Indietro</button>
+        <button class='nav-btn' id='nextBtn' disabled data-i18n='nav.next'>Avanti →</button>
+      </div>
+    </div>
+  </section>
+
+  <section id='results' class='results hidden'>
+    <div class='eyebrow' data-i18n='res.eyebrow'>Il tuo tipo</div>
+    <div class='type-badge' id='typeBadge'>————</div>
+    <div class='type-name' id='typeName'></div>
+    <div class='type-element' id='typeElement'></div>
+    <p class='type-desc' id='typeDesc'></p>
+    <div class='axes' id='axes'></div>
+    <div class='share-row'>
+      <a class='link-btn' id='idrLink' href='#' target='_blank' rel='noopener' data-i18n='res.idr'>🎭 Personaggi famosi con il tuo tipo (IDRlabs)</a>
+    </div>
+    <div class='share-row'>
+      <button class='nav-btn' id='retakeBtn' data-i18n='res.retake'>Rifai il test</button>
+    </div>
+    <p class='foot-note' data-i18n='res.note'>Il tuo tipo riflette le tue preferenze attuali. Le persone possono evolvere e situazioni diverse possono far emergere lati differenti.</p>
+  </section>
+</div>
+
+<footer class='footer'>&copy; 2026 Phoenix Academy · <span data-i18n='foot'>Risorgi attraverso la conoscenza.</span></footer>
+
+<script>
+/* ============ QUESTIONS ============
+   axis: EI | SN | TF | JP
+   k: +1 means "agree" pushes toward the FIRST letter (E,S,T,J); -1 toward SECOND (I,N,F,P) */
+const Q = [
+  // E/I — 18
+  {a:'EI',k:1, it:"Mi sento ricaricato dopo aver passato tempo con molte persone.", en:"I feel recharged after spending time with lots of people."},
+  {a:'EI',k:1, it:"Avvio facilmente conversazioni con sconosciuti.", en:"I easily start conversations with strangers."},
+  {a:'EI',k:1, it:"Preferisco lavorare in gruppo piuttosto che da solo.", en:"I prefer working in a group rather than alone."},
+  {a:'EI',k:1, it:"Tendo a pensare ad alta voce mentre parlo.", en:"I tend to think out loud as I talk."},
+  {a:'EI',k:1, it:"Alle feste conosco molte persone nuove.", en:"At parties I meet lots of new people."},
+  {a:'EI',k:1, it:"Mi sento a mio agio a essere al centro dell'attenzione.", en:"I'm comfortable being the center of attention."},
+  {a:'EI',k:1, it:"Cerco attivamente attività sociali nel mio tempo libero.", en:"I actively seek social activities in my free time."},
+  {a:'EI',k:1, it:"Reagisco rapidamente e parlo senza pensarci troppo.", en:"I react quickly and speak without overthinking."},
+  {a:'EI',k:1, it:"Conosco molte persone e mi definirei socievole.", en:"I know many people and would call myself sociable."},
+  {a:'EI',k:-1,it:"Dopo molta socialità ho bisogno di tempo da solo per ricaricarmi.", en:"After lots of socializing I need alone time to recharge."},
+  {a:'EI',k:-1,it:"Preferisco approfondire pochi rapporti stretti che averne molti.", en:"I prefer a few deep relationships over having many."},
+  {a:'EI',k:-1,it:"Rifletto a lungo prima di parlare.", en:"I reflect for a while before speaking."},
+  {a:'EI',k:-1,it:"Una serata tranquilla a casa è la mia idea di relax.", en:"A quiet evening at home is my idea of relaxing."},
+  {a:'EI',k:-1,it:"Trovo gli ambienti affollati faticosi.", en:"I find crowded environments draining."},
+  {a:'EI',k:-1,it:"Tendo a tenere per me i miei pensieri.", en:"I tend to keep my thoughts to myself."},
+  {a:'EI',k:-1,it:"Preferisco osservare prima di partecipare.", en:"I prefer to observe before participating."},
+  {a:'EI',k:1, it:"Mi annoio facilmente quando sto da solo troppo a lungo.", en:"I get bored easily when alone for too long."},
+  {a:'EI',k:-1,it:"Lavoro meglio in un ambiente silenzioso e privato.", en:"I work best in a quiet, private environment."},
+  // S/N — 18
+  {a:'SN',k:1, it:"Mi concentro sui fatti concreti più che sulle possibilità.", en:"I focus on concrete facts more than possibilities."},
+  {a:'SN',k:1, it:"Preferisco istruzioni pratiche e dettagliate.", en:"I prefer practical, detailed instructions."},
+  {a:'SN',k:1, it:"Mi fido di ciò che posso vedere e toccare.", en:"I trust what I can see and touch."},
+  {a:'SN',k:1, it:"Vivo nel presente più che fantasticare sul futuro.", en:"I live in the present more than daydreaming about the future."},
+  {a:'SN',k:1, it:"Noto subito i dettagli pratici di una situazione.", en:"I quickly notice the practical details of a situation."},
+  {a:'SN',k:1, it:"Preferisco metodi collaudati a soluzioni sperimentali.", en:"I prefer proven methods over experimental solutions."},
+  {a:'SN',k:1, it:"Descrivo le cose in modo letterale e preciso.", en:"I describe things literally and precisely."},
+  {a:'SN',k:1, it:"Imparo meglio facendo che teorizzando.", en:"I learn better by doing than by theorizing."},
+  {a:'SN',k:1, it:"Apprezzo la routine e la prevedibilità.", en:"I appreciate routine and predictability."},
+  {a:'SN',k:-1,it:"Mi perdo spesso a immaginare scenari e possibilità future.", en:"I often get lost imagining future scenarios and possibilities."},
+  {a:'SN',k:-1,it:"Mi affascinano le idee astratte e i concetti teorici.", en:"I'm fascinated by abstract ideas and theoretical concepts."},
+  {a:'SN',k:-1,it:"Cerco il significato nascosto e i collegamenti tra le cose.", en:"I look for hidden meaning and connections between things."},
+  {a:'SN',k:-1,it:"Mi annoio con i dettagli ripetitivi.", en:"I get bored with repetitive details."},
+  {a:'SN',k:-1,it:"Preferisco innovare piuttosto che seguire la tradizione.", en:"I prefer to innovate rather than follow tradition."},
+  {a:'SN',k:-1,it:"Tendo a pensare al quadro generale più che ai particolari.", en:"I tend to think about the big picture more than particulars."},
+  {a:'SN',k:-1,it:"Mi piace immaginare come le cose potrebbero essere.", en:"I like to imagine how things could be."},
+  {a:'SN',k:-1,it:"Le metafore e i simboli mi vengono naturali.", en:"Metaphors and symbols come naturally to me."},
+  {a:'SN',k:1, it:"Preferisco un piano concreto a una visione vaga.", en:"I prefer a concrete plan over a vague vision."},
+  // T/F — 17
+  {a:'TF',k:1, it:"Prendo decisioni basandomi sulla logica più che sui sentimenti.", en:"I make decisions based on logic more than feelings."},
+  {a:'TF',k:1, it:"La verità è più importante del tatto.", en:"Truth is more important than tact."},
+  {a:'TF',k:1, it:"Analizzo i problemi in modo oggettivo e distaccato.", en:"I analyze problems objectively and detached."},
+  {a:'TF',k:1, it:"Valuto le idee in base alla loro coerenza logica.", en:"I judge ideas by their logical consistency."},
+  {a:'TF',k:1, it:"Critico volentieri se serve a migliorare qualcosa.", en:"I'll readily criticize if it helps improve something."},
+  {a:'TF',k:1, it:"Mantengo la calma e la razionalità nei conflitti.", en:"I stay calm and rational during conflicts."},
+  {a:'TF',k:1, it:"L'equità conta più della compassione nelle regole.", en:"Fairness matters more than compassion in rules."},
+  {a:'TF',k:1, it:"Mi convincono gli argomenti, non le emozioni.", en:"I'm convinced by arguments, not emotions."},
+  {a:'TF',k:-1,it:"Considero molto come le mie decisioni influenzano gli altri.", en:"I deeply consider how my decisions affect others."},
+  {a:'TF',k:-1,it:"L'armonia del gruppo è una mia priorità.", en:"Group harmony is a priority for me."},
+  {a:'TF',k:-1,it:"Provo empatia facilmente per chi soffre.", en:"I feel empathy easily for those who suffer."},
+  {a:'TF',k:-1,it:"Preferisco incoraggiare piuttosto che criticare.", en:"I prefer to encourage rather than criticize."},
+  {a:'TF',k:-1,it:"Seguo il cuore quando devo fare scelte importanti.", en:"I follow my heart for important choices."},
+  {a:'TF',k:-1,it:"Mi sento ferito dalle critiche dure anche se giuste.", en:"Harsh criticism hurts me even when it's fair."},
+  {a:'TF',k:-1,it:"Cerco di capire i sentimenti dietro le parole.", en:"I try to understand the feelings behind words."},
+  {a:'TF',k:-1,it:"Faccio di tutto per evitare di ferire qualcuno.", en:"I go out of my way to avoid hurting someone."},
+  {a:'TF',k:1, it:"Riesco a essere imparziale anche con persone care.", en:"I can be impartial even with people I love."},
+  // J/P — 17
+  {a:'JP',k:1, it:"Mi piace pianificare e seguire un programma.", en:"I like to plan and stick to a schedule."},
+  {a:'JP',k:1, it:"Tengo le mie cose ordinate e organizzate.", en:"I keep my things tidy and organized."},
+  {a:'JP',k:1, it:"Preferisco decidere in fretta che lasciare le opzioni aperte.", en:"I prefer to decide quickly rather than keep options open."},
+  {a:'JP',k:1, it:"Finisco i compiti prima di rilassarmi.", en:"I finish tasks before relaxing."},
+  {a:'JP',k:1, it:"Faccio liste e rispetto le scadenze.", en:"I make lists and meet deadlines."},
+  {a:'JP',k:1, it:"Mi sento a disagio quando le cose sono irrisolte.", en:"I feel uneasy when things are unresolved."},
+  {a:'JP',k:1, it:"Preferisco sapere cosa aspettarmi in anticipo.", en:"I prefer to know what to expect in advance."},
+  {a:'JP',k:1, it:"Arrivo puntuale o in anticipo agli appuntamenti.", en:"I arrive on time or early to appointments."},
+  {a:'JP',k:1, it:"Stabilisco obiettivi chiari e li perseguo con metodo.", en:"I set clear goals and pursue them methodically."},
+  {a:'JP',k:-1,it:"Mi adatto facilmente ai cambiamenti dell'ultimo minuto.", en:"I adapt easily to last-minute changes."},
+  {a:'JP',k:-1,it:"Preferisco tenere le opzioni aperte il più a lungo possibile.", en:"I prefer keeping options open as long as possible."},
+  {a:'JP',k:-1,it:"Lavoro meglio sotto la pressione dell'ultimo momento.", en:"I work best under last-minute pressure."},
+  {a:'JP',k:-1,it:"Mi annoiano la routine e i programmi rigidi.", en:"Routine and rigid schedules bore me."},
+  {a:'JP',k:-1,it:"Sono spontaneo e mi piace improvvisare.", en:"I'm spontaneous and like to improvise."},
+  {a:'JP',k:-1,it:"Lascio spesso le decisioni all'ultimo.", en:"I often leave decisions until the last moment."},
+  {a:'JP',k:-1,it:"Mi piace esplorare senza un piano preciso.", en:"I like to explore without a fixed plan."},
+  {a:'JP',k:-1,it:"Cambio idea facilmente quando emergono nuove possibilità.", en:"I change my mind easily when new possibilities arise."}
+];
+
+const TYPES = {
+  ISTJ:{el:'Terra', it:{n:'Il Logista', d:'Responsabile, pratico, organizzato. Affidabile come la terra su cui poggi.'}, en:{n:'The Logistician', d:'Responsible, practical, organized. Dependable as the ground beneath you.'}},
+  ISFJ:{el:'Acqua', it:{n:'Il Difensore', d:'Premuroso, leale, protettivo. Scorre dove c\'è bisogno di cura.'}, en:{n:'The Defender', d:'Supportive, faithful, caring. Flows where care is needed.'}},
+  INFJ:{el:'Luce', it:{n:'L\'Avvocato', d:'Idealista, visionario, di principi. Illumina la strada agli altri.'}, en:{n:'The Advocate', d:'Idealistic, principled, visionary. Lights the way for others.'}},
+  INTJ:{el:'Fulmine', it:{n:'L\'Architetto', d:'Strategico, indipendente, innovativo. Colpisce con precisione mirata.'}, en:{n:'The Architect', d:'Strategic, independent, innovative. Strikes with targeted precision.'}},
+  ISTP:{el:'Aria', it:{n:'Il Virtuoso', d:'Osservatore, pratico, tattico. Si muove libero e adattabile.'}, en:{n:'The Virtuoso', d:'Observant, practical, tactical. Moves free and adaptable.'}},
+  ISFP:{el:'Fuoco', it:{n:'L\'Avventuriero', d:'Artistico, sensibile, flessibile. Arde di passione silenziosa.'}, en:{n:'The Adventurer', d:'Artistic, sensitive, flexible. Burns with quiet passion.'}},
+  INFP:{el:'Ombra', it:{n:'Il Mediatore', d:'Poetico, gentile, altruista. Profondo e misterioso come l\'ombra.'}, en:{n:'The Mediator', d:'Poetic, kind, altruistic. Deep and mysterious as shadow.'}},
+  INTP:{el:'Aria', it:{n:'Il Logico', d:'Analitico, innovativo, curioso. Pensiero leggero e instancabile.'}, en:{n:'The Logician', d:'Analytical, innovative, curious. Light, tireless thought.'}},
+  ESTP:{el:'Fulmine', it:{n:'L\'Imprenditore', d:'Energico, pragmatico, audace. Veloce e imprevedibile.'}, en:{n:'The Entrepreneur', d:'Energetic, pragmatic, bold. Fast and unpredictable.'}},
+  ESFP:{el:'Fuoco', it:{n:'L\'Intrattenitore', d:'Spontaneo, socievole, amichevole. Scalda ogni ambiente.'}, en:{n:'The Entertainer', d:'Spontaneous, outgoing, friendly. Warms every room.'}},
+  ENFP:{el:'Aria', it:{n:'Il Sognatore', d:'Entusiasta, creativo, socievole. Libero come il vento.'}, en:{n:'The Campaigner', d:'Enthusiastic, creative, sociable. Free as the wind.'}},
+  ENFJ:{el:'Luce', it:{n:'Il Protagonista', d:'Carismatico, ispiratore, responsabile. Guida con calore.'}, en:{n:'The Protagonist', d:'Charismatic, inspiring, responsible. Leads with warmth.'}},
+  ESTJ:{el:'Terra', it:{n:'Il Dirigente', d:'Efficiente, organizzato, esecutivo. Solido e affidabile.'}, en:{n:'The Executive', d:'Efficient, organized, executive. Solid and reliable.'}},
+  ESFJ:{el:'Acqua', it:{n:'Il Console', d:'Coscienzioso, socievole, tradizionale. Unisce le persone.'}, en:{n:'The Consul', d:'Conscientious, sociable, traditional. Brings people together.'}},
+  ENTJ:{el:'Fuoco', it:{n:'Il Comandante', d:'Deciso, leader naturale, strategico. Brucia di ambizione.'}, en:{n:'The Commander', d:'Decisive, natural leader, strategic. Burns with ambition.'}},
+  ENTP:{el:'Fulmine', it:{n:'Il Dibattitore', d:'Brillante, curioso, provocatore. Scocca idee come lampi.'}, en:{n:'The Debater', d:'Bright, curious, provocative. Sparks ideas like lightning.'}}
+};
+
+const SCALE = {
+  it:["Per niente d'accordo","Poco d'accordo","Neutrale","Abbastanza d'accordo","Del tutto d'accordo"],
+  en:["Strongly disagree","Disagree","Neutral","Agree","Strongly agree"]
+};
+
+const DICH = {
+  it:[["E / I","Estroversione vs Introversione — dove prendi energia"],["S / N","Sensazione vs Intuizione — come raccogli informazioni"],["T / F","Pensiero vs Sentimento — come decidi"],["J / P","Giudizio vs Percezione — come affronti il mondo"]],
+  en:[["E / I","Extraversion vs Introversion — where you draw energy"],["S / N","Sensing vs Intuition — how you gather information"],["T / F","Thinking vs Feeling — how you decide"],["J / P","Judging vs Perceiving — how you approach the world"]]
+};
+
+const I18N = {
+  it:{back:'← Home', foot:'Risorgi attraverso la conoscenza.',
+    'intro.eyebrow':'16 Tipi · Myers-Briggs','intro.title':'MBTI',
+    'intro.subtitle':"Settanta domande. Quattro dimensioni. Scopri quale dei 16 tipi di personalità ti rappresenta — e quale elemento Phoenix incarna.",
+    'intro.m1':'Domande','intro.m2':'Tipi','intro.m3':'Minuti','intro.start':'Inizia il test',
+    'intro.disclaimer':'Questo test è a scopo educativo e di intrattenimento, ispirato al modello Myers-Briggs. Non è uno strumento diagnostico ufficiale.',
+    'q.lead':"Quanto sei d'accordo?",'nav.prev':'← Indietro','nav.next':'Avanti →',
+    'res.eyebrow':'Il tuo tipo','res.retake':'Rifai il test','res.idr':'🎭 Personaggi famosi con il tuo tipo (IDRlabs)',
+    'res.note':'Il tuo tipo riflette le tue preferenze attuali. Le persone possono evolvere e situazioni diverse possono far emergere lati differenti.'},
+  en:{back:'← Home', foot:'Rise through knowledge.',
+    'intro.eyebrow':'16 Types · Myers-Briggs','intro.title':'MBTI',
+    'intro.subtitle':"Seventy questions. Four dimensions. Discover which of the 16 personality types represents you — and which Phoenix element you embody.",
+    'intro.m1':'Questions','intro.m2':'Types','intro.m3':'Minutes','intro.start':'Start the test',
+    'intro.disclaimer':'This test is for education and entertainment, inspired by the Myers-Briggs model. It is not an official diagnostic tool.',
+    'q.lead':'How much do you agree?','nav.prev':'← Back','nav.next':'Next →',
+    'res.eyebrow':'Your type','res.retake':'Retake the test','res.idr':'🎭 Famous people with your type (IDRlabs)',
+    'res.note':'Your type reflects your current preferences. People can evolve and different situations can bring out different sides.'}
+};
+
+let lang='it', idx=0;
+const answers=new Array(Q.length).fill(null);
+
+function applyI18n(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(I18N[lang][k]!=null)el.textContent=I18N[lang][k];});
+  buildLegend();
+  if(!document.getElementById('test').classList.contains('hidden'))renderQ();
+  if(!document.getElementById('results').classList.contains('hidden'))renderResults();
+}
+function buildLegend(){
+  const el=document.getElementById('legend'); el.innerHTML='';
+  DICH[lang].forEach(d=>{const x=document.createElement('div');x.className='dl';x.innerHTML="<b>"+d[0]+"</b><span>"+d[1]+"</span>";el.appendChild(x);});
+}
+function startTest(){
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('results').classList.add('hidden');
+  document.getElementById('test').classList.remove('hidden');
+  idx=0;renderQ();window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderQ(){
+  const q=Q[idx];
+  document.getElementById('qnum').textContent=String(idx+1).padStart(2,'0');
+  document.getElementById('qtext').textContent=q[lang];
+  const sc=document.getElementById('scale');sc.innerHTML='';
+  SCALE[lang].forEach((label,v)=>{
+    const b=document.createElement('button');b.className='opt'+(answers[idx]===v+1?' sel':'');
+    b.innerHTML="<span class='dot'></span><span>"+label+"</span>";
+    b.onclick=()=>{answers[idx]=v+1;renderQ();setTimeout(()=>{if(idx<Q.length-1){idx++;renderQ();window.scrollTo({top:0,behavior:'smooth'});}else finish();},220);};
+    sc.appendChild(b);
+  });
+  document.getElementById('prevBtn').disabled=idx===0;
+  const nb=document.getElementById('nextBtn');nb.disabled=answers[idx]==null;
+  nb.textContent=idx===Q.length-1?(lang==='it'?'Vedi risultato →':'See result →'):I18N[lang]['nav.next'];
+  const done=answers.filter(a=>a!=null).length;
+  document.getElementById('qcur').textContent=idx+1;
+  const pct=Math.round((done/Q.length)*100);
+  document.getElementById('pfill').style.width=pct+'%';
+  document.getElementById('qpct').textContent=pct+'%';
+}
+document.getElementById('prevBtn').onclick=()=>{if(idx>0){idx--;renderQ();window.scrollTo({top:0,behavior:'smooth'});}};
+document.getElementById('nextBtn').onclick=()=>{if(answers[idx]==null)return;if(idx<Q.length-1){idx++;renderQ();window.scrollTo({top:0,behavior:'smooth'});}else finish();};
+
+function computeType(){
+  // for each axis, sum signed contributions. answer 1..5 -> -2..+2 ; * k
+  const raw={EI:0,SN:0,TF:0,JP:0}, cnt={EI:0,SN:0,TF:0,JP:0};
+  Q.forEach((q,i)=>{const a=answers[i]||3;const v=(a-3)*q.k;raw[q.a]+=v;cnt[q.a]++;});
+  // percentage toward first letter: map raw range [-2*cnt, +2*cnt] -> [0,100]
+  const firstPct={};
+  ['EI','SN','TF','JP'].forEach(ax=>{const max=2*cnt[ax];firstPct[ax]=Math.round(((raw[ax]+max)/(2*max))*100);});
+  const letters=
+    (firstPct.EI>=50?'E':'I')+
+    (firstPct.SN>=50?'S':'N')+
+    (firstPct.TF>=50?'T':'F')+
+    (firstPct.JP>=50?'J':'P');
+  return {letters, firstPct};
+}
+function finish(){
+  document.getElementById('test').classList.add('hidden');
+  document.getElementById('results').classList.remove('hidden');
+  renderResults();window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderResults(){
+  const {letters,firstPct}=computeType();
+  const T=TYPES[letters];
+  document.getElementById('typeBadge').textContent=letters;
+  document.getElementById('typeName').textContent=T[lang].n;
+  document.getElementById('typeElement').textContent=(lang==='it'?'Elemento: ':'Element: ')+T.el;
+  document.getElementById('typeDesc').textContent=T[lang].d;
+  // IDRlabs link to famous people of this type
+  document.getElementById('idrLink').href='https://www.idrlabs.com/famous-'+letters.toLowerCase()+'.php';
+  // axes bars
+  const axesEl=document.getElementById('axes');axesEl.innerHTML='';
+  const axisDefs=[['EI','E','I'],['SN','S','N'],['TF','T','F'],['JP','J','P']];
+  const labelMap=lang==='it'
+    ?{E:'Estroversione',I:'Introversione',S:'Sensazione',N:'Intuizione',T:'Pensiero',F:'Sentimento',J:'Giudizio',P:'Percezione'}
+    :{E:'Extraversion',I:'Introversion',S:'Sensing',N:'Intuition',T:'Thinking',F:'Feeling',J:'Judging',P:'Perceiving'};
+  axisDefs.forEach(([ax,L,R])=>{
+    const p=firstPct[ax]; const winner=p>=50?L:R; const wpct=p>=50?p:100-p;
+    const row=document.createElement('div');row.className='axis-row';
+    row.innerHTML=
+      "<div class='axis-top'><span class='l "+(p>=50?'on':'off')+"'>"+L+" · "+labelMap[L]+"</span>"+
+      "<span class='r "+(p<50?'on':'off')+"'>"+labelMap[R]+" · "+R+"</span></div>"+
+      "<div class='axis-track'><div class='axis-fillL' style='width:0'></div></div>"+
+      "<div class='axis-pct'>"+winner+" "+wpct+"%</div>";
+    axesEl.appendChild(row);
+    requestAnimationFrame(()=>{setTimeout(()=>{row.querySelector('.axis-fillL').style.width=p+'%';},60);});
+  });
+}
+document.getElementById('startBtn').onclick=startTest;
+document.getElementById('retakeBtn').onclick=()=>{answers.fill(null);document.getElementById('results').classList.add('hidden');document.getElementById('intro').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});};
+document.querySelectorAll('.lang-switch button').forEach(b=>{b.onclick=()=>{document.querySelectorAll('.lang-switch button').forEach(x=>x.classList.remove('active'));b.classList.add('active');lang=b.dataset.lang;applyI18n();};});
+applyI18n();
+
+/* FLAME */
+(function(){var c=document.getElementById('flame');var x=c.getContext('2d');var ps=[];var m={x:-100,y:-100,active:false};var dpr=window.devicePixelRatio||1;function rs(){dpr=window.devicePixelRatio||1;c.width=innerWidth*dpr;c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';x.setTransform(dpr,0,0,dpr,0,0)}rs();addEventListener('resize',rs);addEventListener('mousemove',function(e){m.x=e.clientX;m.y=e.clientY;m.active=true;for(var i=0;i<3;i++){ps.push({x:e.clientX+(Math.random()-.5)*6,y:e.clientY+(Math.random()-.5)*6,vx:(Math.random()-.5)*.6,vy:-Math.random()*1.4-.4,life:0,maxLife:28+Math.random()*20,size:6+Math.random()*8})}if(ps.length>220)ps.splice(0,ps.length-220)});addEventListener('mouseleave',function(){m.active=false});function tick(){x.globalCompositeOperation='destination-out';x.fillStyle='rgba(0,0,0,0.18)';x.fillRect(0,0,c.width/dpr,c.height/dpr);x.globalCompositeOperation='lighter';for(var i=ps.length-1;i>=0;i--){var p=ps[i];p.life++;if(p.life>=p.maxLife){ps.splice(i,1);continue}p.x+=p.vx;p.y+=p.vy;p.vy-=.05;p.vx*=.96;var t=p.life/p.maxLife;var r=p.size*(1-t*.4);var al=(1-t)*.9;var g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,r);if(t<.45){g.addColorStop(0,'rgba(255,60,70,'+al+')');g.addColorStop(.35,'rgba(200,25,40,'+al*.85+')');g.addColorStop(.7,'rgba(130,10,25,'+al*.5+')');g.addColorStop(1,'rgba(60,0,10,0)')}else{var sm=(t-.45)/.55;var a2=al*(1-sm*.5);g.addColorStop(0,'rgba(160,20,35,'+a2*.75+')');g.addColorStop(.5,'rgba(90,8,20,'+a2*.4+')');g.addColorStop(1,'rgba(30,0,5,0)')}x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,r,0,Math.PI*2);x.fill()}if(m.active){var br=14;var cg=x.createRadialGradient(m.x,m.y,0,m.x,m.y,br);cg.addColorStop(0,'rgba(255,80,90,0.95)');cg.addColorStop(.35,'rgba(220,30,45,.8)');cg.addColorStop(.7,'rgba(140,12,28,0.5)');cg.addColorStop(1,'rgba(60,0,10,0)');x.fillStyle=cg;x.beginPath();x.arc(m.x,m.y,br,0,Math.PI*2);x.fill()}requestAnimationFrame(tick)}requestAnimationFrame(tick)})();
+</script>
+</body></html>

@@ -1,0 +1,310 @@
+<!doctype html><html lang='it'><head><meta charset='UTF-8'/><meta name='viewport' content='width=device-width,initial-scale=1.0'/><title>MBTI — Spiegazione del modello</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;color:#f0e8ea;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;overflow-x:hidden;cursor:none;min-height:100%}
+a{text-decoration:none;color:inherit}
+@media(hover:none){html,body{cursor:auto}}
+.header{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.5rem;border-bottom:1px solid rgba(192,34,62,.18);position:sticky;top:0;background:#000;z-index:50}
+.brand{display:flex;align-items:center;gap:.4rem;flex-shrink:0}
+.brand img{width:52px;height:52px;object-fit:contain;mix-blend-mode:screen}
+.brand span{font-weight:900;letter-spacing:.06em;font-size:1.2rem;color:#fff;text-shadow:0 0 8px rgba(227,65,89,.9),0 0 18px rgba(192,34,62,.7)}
+.spacer{flex:1}
+.lang-switch{display:flex;gap:.3rem}
+.lang-switch button{background:transparent;border:2px solid transparent;padding:.2rem;border-radius:4px;cursor:none;transition:transform .2s,border-color .2s;line-height:0}
+.lang-switch button img{width:26px;height:19px;display:block;border-radius:2px}
+.lang-switch button:hover{transform:scale(1.15)}
+.lang-switch button.active{border-color:rgba(227,65,89,.8);transform:scale(1.15)}
+.btn-back{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:.55rem 1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:8px;cursor:none;font-size:.78rem;white-space:nowrap;margin-left:.6rem;transition:box-shadow .2s}
+.btn-back:hover{box-shadow:0 0 18px rgba(227,65,89,.6)}
+@media(hover:none){.lang-switch button,.btn-back{cursor:auto}}
+#flame{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:1000}
+.wrap{max-width:820px;margin:0 auto;padding:2.5rem 1.2rem 5rem;position:relative;z-index:2}
+.hero{text-align:center;padding-top:1rem;margin-bottom:2.8rem}
+.eyebrow{font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(227,65,89,.75);font-weight:700;margin-bottom:1rem}
+.title{font-size:clamp(2.2rem,6vw,3.2rem);font-weight:900;line-height:.95;letter-spacing:-.02em;text-transform:uppercase;background:linear-gradient(180deg,#ff5f6e,#7a1228);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.4rem}
+.subtitle{font-size:1rem;color:rgba(240,232,234,.65);max-width:620px;margin:0 auto 1.4rem;line-height:1.6}
+.section{margin-bottom:3rem;padding:2rem 1.4rem;border:1px solid rgba(192,34,62,.12);border-radius:14px;background:rgba(20,0,5,.5)}
+.section h2{font-size:1.5rem;font-weight:900;color:#fff;margin-bottom:1rem;letter-spacing:-.01em}
+.section h3{font-size:1.15rem;font-weight:800;color:#ff8a9c;margin-top:1.6rem;margin-bottom:.7rem}
+.section p{font-size:.95rem;line-height:1.7;color:rgba(240,232,234,.75);margin-bottom:1rem}
+.section li{font-size:.95rem;line-height:1.7;color:rgba(240,232,234,.75);margin-left:1.6rem;margin-bottom:.6rem}
+.dich-card{margin-bottom:1.6rem;padding:1.4rem;border:1px solid rgba(192,34,62,.15);border-radius:12px;background:rgba(30,0,8,.6)}
+.dich-letters{font-size:1.6rem;font-weight:900;color:#ff5f6e;margin-bottom:.3rem;letter-spacing:.1em}
+.dich-title{font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:.9rem}
+.dich-poles{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.dich-pole{padding:.8rem;border-radius:10px;background:rgba(192,34,62,.08);border:1px solid rgba(192,34,62,.12)}
+.dich-pole h4{font-size:.85rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#ff8a9c;margin-bottom:.4rem}
+.dich-pole p{font-size:.88rem;line-height:1.5;color:rgba(240,232,234,.65);margin:0}
+.types-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-top:1rem}
+@media(max-width:640px){.types-grid{grid-template-columns:repeat(2,1fr)}}
+.type-chip{padding:.8rem .5rem;border:1px solid rgba(192,34,62,.18);border-radius:10px;background:rgba(30,0,8,.6);text-align:center}
+.type-chip b{display:block;font-size:1.05rem;font-weight:900;color:#ff5f6e;letter-spacing:.06em}
+.type-chip span{font-size:.72rem;color:rgba(240,232,234,.55);display:block;margin-top:.2rem;line-height:1.3}
+.type-chip i{font-size:.65rem;color:#ff8a9c;font-style:normal;text-transform:uppercase;letter-spacing:.08em;display:block;margin-top:.25rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem}
+@media(max-width:720px){.grid-2{grid-template-columns:1fr}}
+.timeline{position:relative;padding-left:2rem}
+.timeline-item{margin-bottom:2rem;position:relative}
+.timeline-item::before{content:'';position:absolute;left:-2rem;top:.3rem;width:12px;height:12px;border-radius:50%;background:#ff5f6e;border:3px solid #000}
+.timeline-item h4{font-weight:800;color:#ff8a9c;margin-bottom:.4rem;font-size:1rem}
+.timeline-item p{font-size:.92rem;line-height:1.6;color:rgba(240,232,234,.7)}
+.quote{padding:1.4rem 1.2rem;border-left:4px solid #ff5f6e;background:rgba(192,34,62,.08);margin:1.4rem 0;border-radius:4px;font-size:.95rem;font-style:italic;color:rgba(240,232,234,.7);line-height:1.6}
+.btn-test{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:1rem 2.4rem;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;border-radius:12px;cursor:none;box-shadow:0 0 24px rgba(192,34,62,.4);transition:transform .15s,box-shadow .15s;display:inline-block;margin-top:1rem}
+.btn-test:hover{transform:translateY(-2px);box-shadow:0 0 34px rgba(227,65,89,.6)}
+.link-inline{color:#ff8a9c;text-decoration:underline}
+@media(hover:none){.btn-test{cursor:auto}}
+.footer{border-top:1px solid rgba(192,34,62,.12);padding:1.6rem;text-align:center;color:rgba(240,232,234,.3);font-size:.75rem;position:relative;z-index:2}
+</style></head>
+<body>
+<canvas id='flame'></canvas>
+<header class='header'>
+  <a href='index.html' class='brand'>
+    <img src='https://i.ibb.co/chkW0mST/fenice-sfondo-completamente-nero-c499a262.png' alt='Phoenix'/>
+    <span>PHOENIX</span>
+  </a>
+  <div class='spacer'></div>
+  <div class='lang-switch'>
+    <button class='active' data-lang='it'><img src='https://flagcdn.com/24x18/it.png' alt='IT'/></button>
+    <button data-lang='en'><img src='https://flagcdn.com/24x18/gb.png' alt='EN'/></button>
+  </div>
+  <a href='mbti-test.html' class='btn-back' data-i18n='nav.test'>← Al test</a>
+</header>
+
+<div class='wrap'>
+  <section class='hero'>
+    <div class='eyebrow' data-i18n='h.eyebrow'>Il modello dei tipi</div>
+    <h1 class='title' data-i18n='h.title'>MBTI</h1>
+    <p class='subtitle' data-i18n='h.subtitle'>Il Myers-Briggs Type Indicator descrive la personalità tramite quattro dicotomie che si combinano in 16 tipi distinti.</p>
+  </section>
+
+  <section class='section'>
+    <h2 data-i18n='intro.h'>Cos'è l'MBTI?</h2>
+    <p data-i18n='intro.p1'>Il Myers-Briggs Type Indicator (MBTI) è uno dei sistemi di personalità più diffusi al mondo. Si basa sulle teorie dello psichiatra svizzero Carl Gustav Jung sui "tipi psicologici" e classifica le persone in 16 tipi, ognuno indicato da quattro lettere.</p>
+    <p data-i18n='intro.p2'>Ogni tipo nasce dalla combinazione di quattro dicotomie: dove prendi energia (E/I), come raccogli informazioni (S/N), come prendi decisioni (T/F) e come ti rapporti al mondo esterno (J/P).</p>
+    <p data-i18n='intro.p3'>A differenza del Big Five, che usa spettri continui, l'MBTI assegna un "tipo" categorico. È molto popolare e intuitivo, anche se la comunità scientifica lo considera meno rigoroso del Big Five.</p>
+  </section>
+
+  <section class='section'>
+    <h2 data-i18n='dich.h'>Le Quattro Dicotomie</h2>
+
+    <div class='dich-card'>
+      <div class='dich-letters'>E / I</div>
+      <div class='dich-title' data-i18n='d.ei.t'>Estroversione vs Introversione — Dove prendi energia</div>
+      <div class='dich-poles'>
+        <div class='dich-pole'><h4 data-i18n='d.ei.eh'>E — Estroversione</h4><p data-i18n='d.ei.ep'>Ti ricarichi stando con gli altri. Pensi parlando, ami stimoli e attività sociali.</p></div>
+        <div class='dich-pole'><h4 data-i18n='d.ei.ih'>I — Introversione</h4><p data-i18n='d.ei.ip'>Ti ricarichi nella quiete. Rifletti prima di parlare, preferisci pochi rapporti profondi.</p></div>
+      </div>
+    </div>
+
+    <div class='dich-card'>
+      <div class='dich-letters'>S / N</div>
+      <div class='dich-title' data-i18n='d.sn.t'>Sensazione vs Intuizione — Come raccogli informazioni</div>
+      <div class='dich-poles'>
+        <div class='dich-pole'><h4 data-i18n='d.sn.sh'>S — Sensazione</h4><p data-i18n='d.sn.sp'>Ti fidi dei fatti concreti, dei dettagli e dell'esperienza diretta. Vivi nel presente.</p></div>
+        <div class='dich-pole'><h4 data-i18n='d.sn.nh'>N — Intuizione</h4><p data-i18n='d.sn.np'>Cerchi significati, schemi e possibilità. Pensi al quadro generale e al futuro.</p></div>
+      </div>
+    </div>
+
+    <div class='dich-card'>
+      <div class='dich-letters'>T / F</div>
+      <div class='dich-title' data-i18n='d.tf.t'>Pensiero vs Sentimento — Come prendi decisioni</div>
+      <div class='dich-poles'>
+        <div class='dich-pole'><h4 data-i18n='d.tf.th'>T — Pensiero</h4><p data-i18n='d.tf.tp'>Decidi con logica e obiettività. Dai priorità alla coerenza e all'equità.</p></div>
+        <div class='dich-pole'><h4 data-i18n='d.tf.fh'>F — Sentimento</h4><p data-i18n='d.tf.fp'>Decidi considerando valori e persone. Dai priorità all'armonia e all'empatia.</p></div>
+      </div>
+    </div>
+
+    <div class='dich-card'>
+      <div class='dich-letters'>J / P</div>
+      <div class='dich-title' data-i18n='d.jp.t'>Giudizio vs Percezione — Come ti rapporti al mondo</div>
+      <div class='dich-poles'>
+        <div class='dich-pole'><h4 data-i18n='d.jp.jh'>J — Giudizio</h4><p data-i18n='d.jp.jp'>Ami pianificare, organizzare e decidere. Preferisci struttura e chiusura.</p></div>
+        <div class='dich-pole'><h4 data-i18n='d.jp.ph'>P — Percezione</h4><p data-i18n='d.jp.pp'>Ami la flessibilità e la spontaneità. Preferisci tenere le opzioni aperte.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class='section'>
+    <h2 data-i18n='types.h'>I 16 Tipi</h2>
+    <p data-i18n='types.p'>Ogni tipo combina le quattro preferenze. Sul sito Phoenix, ogni tipo è associato a un elemento.</p>
+    <h3 data-i18n='types.analysts'>Analisti (NT)</h3>
+    <div class='types-grid'>
+      <div class='type-chip'><b>INTJ</b><span>Architetto</span><i>Fulmine</i></div>
+      <div class='type-chip'><b>INTP</b><span>Logico</span><i>Aria</i></div>
+      <div class='type-chip'><b>ENTJ</b><span>Comandante</span><i>Fuoco</i></div>
+      <div class='type-chip'><b>ENTP</b><span>Dibattitore</span><i>Fulmine</i></div>
+    </div>
+    <h3 data-i18n='types.diplomats'>Diplomatici (NF)</h3>
+    <div class='types-grid'>
+      <div class='type-chip'><b>INFJ</b><span>Avvocato</span><i>Luce</i></div>
+      <div class='type-chip'><b>INFP</b><span>Mediatore</span><i>Ombra</i></div>
+      <div class='type-chip'><b>ENFJ</b><span>Protagonista</span><i>Luce</i></div>
+      <div class='type-chip'><b>ENFP</b><span>Sognatore</span><i>Aria</i></div>
+    </div>
+    <h3 data-i18n='types.sentinels'>Sentinelle (SJ)</h3>
+    <div class='types-grid'>
+      <div class='type-chip'><b>ISTJ</b><span>Logista</span><i>Terra</i></div>
+      <div class='type-chip'><b>ISFJ</b><span>Difensore</span><i>Acqua</i></div>
+      <div class='type-chip'><b>ESTJ</b><span>Dirigente</span><i>Terra</i></div>
+      <div class='type-chip'><b>ESFJ</b><span>Console</span><i>Acqua</i></div>
+    </div>
+    <h3 data-i18n='types.explorers'>Esploratori (SP)</h3>
+    <div class='types-grid'>
+      <div class='type-chip'><b>ISTP</b><span>Virtuoso</span><i>Aria</i></div>
+      <div class='type-chip'><b>ISFP</b><span>Avventuriero</span><i>Fuoco</i></div>
+      <div class='type-chip'><b>ESTP</b><span>Imprenditore</span><i>Fulmine</i></div>
+      <div class='type-chip'><b>ESFP</b><span>Intrattenitore</span><i>Fuoco</i></div>
+    </div>
+  </section>
+
+  <section class='section'>
+    <h2 data-i18n='hist.h'>Una breve storia</h2>
+    <div class='timeline'>
+      <div class='timeline-item'><h4 data-i18n='hist.h1'>1921 — Jung e i tipi psicologici</h4><p data-i18n='hist.p1'>Carl Gustav Jung pubblica "Tipi Psicologici", introducendo i concetti di introversione/estroversione e le funzioni psichiche.</p></div>
+      <div class='timeline-item'><h4 data-i18n='hist.h2'>1944 — Briggs e Myers</h4><p data-i18n='hist.p2'>Katharine Cook Briggs e sua figlia Isabel Briggs Myers sviluppano un indicatore basato sulle teorie di Jung, durante la Seconda Guerra Mondiale.</p></div>
+      <div class='timeline-item'><h4 data-i18n='hist.h3'>1962 — Pubblicazione ufficiale</h4><p data-i18n='hist.p3'>Viene pubblicato il primo manuale MBTI. Negli anni diventa uno degli strumenti di personalità più usati nelle aziende.</p></div>
+      <div class='timeline-item'><h4 data-i18n='hist.h4'>Oggi — Popolarità globale</h4><p data-i18n='hist.p4'>Milioni di persone fanno il test ogni anno. Pur molto popolare, gli psicologi lo considerano più un linguaggio comune che uno strumento scientifico rigoroso.</p></div>
+    </div>
+  </section>
+
+  <section class='section'>
+    <h2 data-i18n='valid.h'>Validità e limiti</h2>
+    <p data-i18n='valid.p1'>L'MBTI è amato per la sua intuitività, ma è importante conoscerne i limiti:</p>
+    <ul>
+      <li data-i18n='valid.li1'><strong>Categorie nette.</strong> L'MBTI ti assegna a un lato di ogni dicotomia, ma molte persone sono vicine al centro. Un punteggio 51/49 ti dà una lettera, ma la differenza è minima.</li>
+      <li data-i18n='valid.li2'><strong>Stabilità nel tempo.</strong> Studi mostrano che fino al 50% delle persone ottiene un tipo diverso rifacendo il test dopo alcune settimane.</li>
+      <li data-i18n='valid.li3'><strong>Nessun tipo è migliore.</strong> Tutti i 16 tipi hanno punti di forza e debolezze. L'MBTI non misura abilità o intelligenza.</li>
+      <li data-i18n='valid.li4'><strong>Ottimo per l'autoriflessione.</strong> Anche se non è uno strumento clinico, è un linguaggio utile per parlare di differenze individuali e per conoscersi meglio.</li>
+    </ul>
+    <div class='quote' data-i18n='quote'>«L'MBTI è un eccellente punto di partenza per l'autoconoscenza. Prendilo come uno specchio divertente, non come una sentenza definitiva sul tuo carattere.»</div>
+  </section>
+
+  <section class='section'>
+    <h2 data-i18n='vs.h'>MBTI vs. Big Five</h2>
+    <div class='grid-2'>
+      <div>
+        <h3 data-i18n='vs.mbti.h'>MBTI</h3>
+        <p data-i18n='vs.mbti.p'>Assegna un <strong>tipo categorico</strong> (16 tipi). È intuitivo, memorabile e ottimo per la comunicazione, ma scientificamente meno robusto. Ideale per l'autoriflessione e il divertimento.</p>
+      </div>
+      <div>
+        <h3 data-i18n='vs.bf.h'>Big Five</h3>
+        <p data-i18n='vs.bf.p'>Usa <strong>cinque spettri continui</strong>. È il gold standard della ricerca psicologica, più preciso ma meno "tipizzante". <a href='big-five-info.html' class='link-inline'>Scopri il Big Five →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class='section' style='text-align:center'>
+    <h2 data-i18n='cta.h'>Pronti a scoprire il vostro tipo?</h2>
+    <p data-i18n='cta.p'>Rispondete a 70 domande in ~10 minuti e scoprite quale dei 16 tipi vi rappresenta, con il vostro elemento Phoenix e i personaggi famosi che condividono il vostro tipo.</p>
+    <a href='mbti-test.html' class='btn-test' data-i18n='cta.btn'>Fai il test MBTI →</a>
+  </section>
+</div>
+
+<footer class='footer'>&copy; 2026 Phoenix Academy · <span data-i18n='foot'>Risorgi attraverso la conoscenza.</span></footer>
+
+<script>
+let lang='it';
+const I18N={
+  it:{
+    'h.eyebrow':'Il modello dei tipi','h.title':'MBTI',
+    'h.subtitle':'Il Myers-Briggs Type Indicator descrive la personalità tramite quattro dicotomie che si combinano in 16 tipi distinti.',
+    'intro.h':'Cos\'è l\'MBTI?',
+    'intro.p1':'Il Myers-Briggs Type Indicator (MBTI) è uno dei sistemi di personalità più diffusi al mondo. Si basa sulle teorie dello psichiatra svizzero Carl Gustav Jung sui "tipi psicologici" e classifica le persone in 16 tipi, ognuno indicato da quattro lettere.',
+    'intro.p2':'Ogni tipo nasce dalla combinazione di quattro dicotomie: dove prendi energia (E/I), come raccogli informazioni (S/N), come prendi decisioni (T/F) e come ti rapporti al mondo esterno (J/P).',
+    'intro.p3':'A differenza del Big Five, che usa spettri continui, l\'MBTI assegna un "tipo" categorico. È molto popolare e intuitivo, anche se la comunità scientifica lo considera meno rigoroso del Big Five.',
+    'dich.h':'Le Quattro Dicotomie',
+    'd.ei.t':'Estroversione vs Introversione — Dove prendi energia',
+    'd.ei.eh':'E — Estroversione','d.ei.ep':'Ti ricarichi stando con gli altri. Pensi parlando, ami stimoli e attività sociali.',
+    'd.ei.ih':'I — Introversione','d.ei.ip':'Ti ricarichi nella quiete. Rifletti prima di parlare, preferisci pochi rapporti profondi.',
+    'd.sn.t':'Sensazione vs Intuizione — Come raccogli informazioni',
+    'd.sn.sh':'S — Sensazione','d.sn.sp':'Ti fidi dei fatti concreti, dei dettagli e dell\'esperienza diretta. Vivi nel presente.',
+    'd.sn.nh':'N — Intuizione','d.sn.np':'Cerchi significati, schemi e possibilità. Pensi al quadro generale e al futuro.',
+    'd.tf.t':'Pensiero vs Sentimento — Come prendi decisioni',
+    'd.tf.th':'T — Pensiero','d.tf.tp':'Decidi con logica e obiettività. Dai priorità alla coerenza e all\'equità.',
+    'd.tf.fh':'F — Sentimento','d.tf.fp':'Decidi considerando valori e persone. Dai priorità all\'armonia e all\'empatia.',
+    'd.jp.t':'Giudizio vs Percezione — Come ti rapporti al mondo',
+    'd.jp.jh':'J — Giudizio','d.jp.jp':'Ami pianificare, organizzare e decidere. Preferisci struttura e chiusura.',
+    'd.jp.ph':'P — Percezione','d.jp.pp':'Ami la flessibilità e la spontaneità. Preferisci tenere le opzioni aperte.',
+    'types.h':'I 16 Tipi','types.p':'Ogni tipo combina le quattro preferenze. Sul sito Phoenix, ogni tipo è associato a un elemento.',
+    'types.analysts':'Analisti (NT)','types.diplomats':'Diplomatici (NF)','types.sentinels':'Sentinelle (SJ)','types.explorers':'Esploratori (SP)',
+    'hist.h':'Una breve storia',
+    'hist.h1':'1921 — Jung e i tipi psicologici','hist.p1':'Carl Gustav Jung pubblica "Tipi Psicologici", introducendo i concetti di introversione/estroversione e le funzioni psichiche.',
+    'hist.h2':'1944 — Briggs e Myers','hist.p2':'Katharine Cook Briggs e sua figlia Isabel Briggs Myers sviluppano un indicatore basato sulle teorie di Jung, durante la Seconda Guerra Mondiale.',
+    'hist.h3':'1962 — Pubblicazione ufficiale','hist.p3':'Viene pubblicato il primo manuale MBTI. Negli anni diventa uno degli strumenti di personalità più usati nelle aziende.',
+    'hist.h4':'Oggi — Popolarità globale','hist.p4':'Milioni di persone fanno il test ogni anno. Pur molto popolare, gli psicologi lo considerano più un linguaggio comune che uno strumento scientifico rigoroso.',
+    'valid.h':'Validità e limiti','valid.p1':'L\'MBTI è amato per la sua intuitività, ma è importante conoscerne i limiti:',
+    'valid.li1':'<strong>Categorie nette.</strong> L\'MBTI ti assegna a un lato di ogni dicotomia, ma molte persone sono vicine al centro. Un punteggio 51/49 ti dà una lettera, ma la differenza è minima.',
+    'valid.li2':'<strong>Stabilità nel tempo.</strong> Studi mostrano che fino al 50% delle persone ottiene un tipo diverso rifacendo il test dopo alcune settimane.',
+    'valid.li3':'<strong>Nessun tipo è migliore.</strong> Tutti i 16 tipi hanno punti di forza e debolezze. L\'MBTI non misura abilità o intelligenza.',
+    'valid.li4':'<strong>Ottimo per l\'autoriflessione.</strong> Anche se non è uno strumento clinico, è un linguaggio utile per parlare di differenze individuali e per conoscersi meglio.',
+    'quote':'«L\'MBTI è un eccellente punto di partenza per l\'autoconoscenza. Prendilo come uno specchio divertente, non come una sentenza definitiva sul tuo carattere.»',
+    'vs.h':'MBTI vs. Big Five','vs.mbti.h':'MBTI',
+    'vs.mbti.p':'Assegna un <strong>tipo categorico</strong> (16 tipi). È intuitivo, memorabile e ottimo per la comunicazione, ma scientificamente meno robusto. Ideale per l\'autoriflessione e il divertimento.',
+    'vs.bf.h':'Big Five','vs.bf.p':'Usa <strong>cinque spettri continui</strong>. È il gold standard della ricerca psicologica, più preciso ma meno "tipizzante". <a href="big-five-info.html" class="link-inline">Scopri il Big Five →</a>',
+    'cta.h':'Pronti a scoprire il vostro tipo?',
+    'cta.p':'Rispondete a 70 domande in ~10 minuti e scoprite quale dei 16 tipi vi rappresenta, con il vostro elemento Phoenix e i personaggi famosi che condividono il vostro tipo.',
+    'cta.btn':'Fai il test MBTI →','nav.test':'← Al test','foot':'Risorgi attraverso la conoscenza.'
+  },
+  en:{
+    'h.eyebrow':'The type model','h.title':'MBTI',
+    'h.subtitle':'The Myers-Briggs Type Indicator describes personality through four dichotomies that combine into 16 distinct types.',
+    'intro.h':'What is the MBTI?',
+    'intro.p1':'The Myers-Briggs Type Indicator (MBTI) is one of the most widespread personality systems in the world. It is based on Swiss psychiatrist Carl Gustav Jung\'s theories of "psychological types" and classifies people into 16 types, each indicated by four letters.',
+    'intro.p2':'Each type arises from the combination of four dichotomies: where you draw energy (E/I), how you gather information (S/N), how you make decisions (T/F), and how you relate to the outer world (J/P).',
+    'intro.p3':'Unlike the Big Five, which uses continuous spectra, the MBTI assigns a categorical "type." It is very popular and intuitive, though the scientific community considers it less rigorous than the Big Five.',
+    'dich.h':'The Four Dichotomies',
+    'd.ei.t':'Extraversion vs Introversion — Where you draw energy',
+    'd.ei.eh':'E — Extraversion','d.ei.ep':'You recharge by being with others. You think out loud, love stimulation and social activity.',
+    'd.ei.ih':'I — Introversion','d.ei.ip':'You recharge in quiet. You reflect before speaking, prefer a few deep relationships.',
+    'd.sn.t':'Sensing vs Intuition — How you gather information',
+    'd.sn.sh':'S — Sensing','d.sn.sp':'You trust concrete facts, details, and direct experience. You live in the present.',
+    'd.sn.nh':'N — Intuition','d.sn.np':'You seek meanings, patterns, and possibilities. You think about the big picture and the future.',
+    'd.tf.t':'Thinking vs Feeling — How you make decisions',
+    'd.tf.th':'T — Thinking','d.tf.tp':'You decide with logic and objectivity. You prioritize consistency and fairness.',
+    'd.tf.fh':'F — Feeling','d.tf.fp':'You decide considering values and people. You prioritize harmony and empathy.',
+    'd.jp.t':'Judging vs Perceiving — How you relate to the world',
+    'd.jp.jh':'J — Judging','d.jp.jp':'You love planning, organizing, and deciding. You prefer structure and closure.',
+    'd.jp.ph':'P — Perceiving','d.jp.pp':'You love flexibility and spontaneity. You prefer keeping options open.',
+    'types.h':'The 16 Types','types.p':'Each type combines the four preferences. On the Phoenix site, each type is associated with an element.',
+    'types.analysts':'Analysts (NT)','types.diplomats':'Diplomats (NF)','types.sentinels':'Sentinels (SJ)','types.explorers':'Explorers (SP)',
+    'hist.h':'A brief history',
+    'hist.h1':'1921 — Jung and psychological types','hist.p1':'Carl Gustav Jung publishes "Psychological Types," introducing the concepts of introversion/extraversion and the psychic functions.',
+    'hist.h2':'1944 — Briggs and Myers','hist.p2':'Katharine Cook Briggs and her daughter Isabel Briggs Myers develop an indicator based on Jung\'s theories, during World War II.',
+    'hist.h3':'1962 — Official publication','hist.p3':'The first MBTI manual is published. Over the years it becomes one of the most used personality tools in companies.',
+    'hist.h4':'Today — Global popularity','hist.p4':'Millions of people take the test every year. Though very popular, psychologists consider it more a common language than a rigorous scientific tool.',
+    'valid.h':'Validity and limits','valid.p1':'The MBTI is loved for its intuitiveness, but it\'s important to know its limits:',
+    'valid.li1':'<strong>Sharp categories.</strong> The MBTI assigns you to one side of each dichotomy, but many people are near the center. A 51/49 score gives you a letter, but the difference is minimal.',
+    'valid.li2':'<strong>Stability over time.</strong> Studies show that up to 50% of people get a different type when retaking the test after a few weeks.',
+    'valid.li3':'<strong>No type is better.</strong> All 16 types have strengths and weaknesses. The MBTI doesn\'t measure ability or intelligence.',
+    'valid.li4':'<strong>Great for self-reflection.</strong> Although it\'s not a clinical tool, it\'s a useful language to talk about individual differences and to know yourself better.',
+    'quote':'\"The MBTI is an excellent starting point for self-knowledge. Take it as a fun mirror, not a final verdict on your character.\"',
+    'vs.h':'MBTI vs. Big Five','vs.mbti.h':'MBTI',
+    'vs.mbti.p':'Assigns a <strong>categorical type</strong> (16 types). It\'s intuitive, memorable, and great for communication, but scientifically less robust. Ideal for self-reflection and fun.',
+    'vs.bf.h':'Big Five','vs.bf.p':'Uses <strong>five continuous spectra</strong>. It\'s the gold standard of psychological research, more precise but less "typing." <a href="big-five-info.html" class="link-inline">Discover the Big Five →</a>',
+    'cta.h':'Ready to discover your type?',
+    'cta.p':'Answer 70 questions in ~10 minutes and discover which of the 16 types represents you, with your Phoenix element and the famous people who share your type.',
+    'cta.btn':'Take the MBTI test →','nav.test':'← To test','foot':'Rise through knowledge.'
+  }
+};
+const ELEM={it:{Fulmine:'Fulmine',Aria:'Aria',Fuoco:'Fuoco',Luce:'Luce',Ombra:'Ombra',Terra:'Terra',Acqua:'Acqua'},en:{Fulmine:'Lightning',Aria:'Air',Fuoco:'Fire',Luce:'Light',Ombra:'Shadow',Terra:'Earth',Acqua:'Water'}};
+const TYPENAMES={
+  INTJ:{it:'Architetto',en:'Architect'},INTP:{it:'Logico',en:'Logician'},ENTJ:{it:'Comandante',en:'Commander'},ENTP:{it:'Dibattitore',en:'Debater'},
+  INFJ:{it:'Avvocato',en:'Advocate'},INFP:{it:'Mediatore',en:'Mediator'},ENFJ:{it:'Protagonista',en:'Protagonist'},ENFP:{it:'Sognatore',en:'Campaigner'},
+  ISTJ:{it:'Logista',en:'Logistician'},ISFJ:{it:'Difensore',en:'Defender'},ESTJ:{it:'Dirigente',en:'Executive'},ESFJ:{it:'Console',en:'Consul'},
+  ISTP:{it:'Virtuoso',en:'Virtuoso'},ISFP:{it:'Avventuriero',en:'Adventurer'},ESTP:{it:'Imprenditore',en:'Entrepreneur'},ESFP:{it:'Intrattenitore',en:'Entertainer'}
+};
+function applyI18n(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(I18N[lang][k]!=null)el.innerHTML=I18N[lang][k];});
+  // update type chips name + element to current language
+  document.querySelectorAll('.type-chip').forEach(chip=>{
+    const code=chip.querySelector('b').textContent.trim();
+    if(TYPENAMES[code])chip.querySelector('span').textContent=TYPENAMES[code][lang];
+    const iEl=chip.querySelector('i'); if(iEl){const cur=iEl.getAttribute('data-el')||iEl.textContent.trim(); iEl.setAttribute('data-el',cur); iEl.textContent=ELEM[lang][cur]||cur;}
+  });
+}
+document.querySelectorAll('.lang-switch button').forEach(b=>{b.onclick=()=>{document.querySelectorAll('.lang-switch button').forEach(x=>x.classList.remove('active'));b.classList.add('active');lang=b.dataset.lang;applyI18n();};});
+applyI18n();
+/* FLAME */
+(function(){var c=document.getElementById('flame');var x=c.getContext('2d');var ps=[];var m={x:-100,y:-100,active:false};var dpr=window.devicePixelRatio||1;function rs(){dpr=window.devicePixelRatio||1;c.width=innerWidth*dpr;c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';x.setTransform(dpr,0,0,dpr,0,0)}rs();addEventListener('resize',rs);addEventListener('mousemove',function(e){m.x=e.clientX;m.y=e.clientY;m.active=true;for(var i=0;i<3;i++){ps.push({x:e.clientX+(Math.random()-.5)*6,y:e.clientY+(Math.random()-.5)*6,vx:(Math.random()-.5)*.6,vy:-Math.random()*1.4-.4,life:0,maxLife:28+Math.random()*20,size:6+Math.random()*8})}if(ps.length>220)ps.splice(0,ps.length-220)});addEventListener('mouseleave',function(){m.active=false});function tick(){x.globalCompositeOperation='destination-out';x.fillStyle='rgba(0,0,0,0.18)';x.fillRect(0,0,c.width/dpr,c.height/dpr);x.globalCompositeOperation='lighter';for(var i=ps.length-1;i>=0;i--){var p=ps[i];p.life++;if(p.life>=p.maxLife){ps.splice(i,1);continue}p.x+=p.vx;p.y+=p.vy;p.vy-=.05;p.vx*=.96;var t=p.life/p.maxLife;var r=p.size*(1-t*.4);var al=(1-t)*.9;var g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,r);if(t<.45){g.addColorStop(0,'rgba(255,60,70,'+al+')');g.addColorStop(.35,'rgba(200,25,40,'+al*.85+')');g.addColorStop(.7,'rgba(130,10,25,'+al*.5+')');g.addColorStop(1,'rgba(60,0,10,0)')}else{var sm=(t-.45)/.55;var a2=al*(1-sm*.5);g.addColorStop(0,'rgba(160,20,35,'+a2*.75+')');g.addColorStop(.5,'rgba(90,8,20,'+a2*.4+')');g.addColorStop(1,'rgba(30,0,5,0)')}x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,r,0,Math.PI*2);x.fill()}if(m.active){var br=14;var cg=x.createRadialGradient(m.x,m.y,0,m.x,m.y,br);cg.addColorStop(0,'rgba(255,80,90,0.95)');cg.addColorStop(.35,'rgba(220,30,45,.8)');cg.addColorStop(.7,'rgba(140,12,28,0.5)');cg.addColorStop(1,'rgba(60,0,10,0)');x.fillStyle=cg;x.beginPath();x.arc(m.x,m.y,br,0,Math.PI*2);x.fill()}requestAnimationFrame(tick)}requestAnimationFrame(tick)})();
+</script>
+</body></html>
