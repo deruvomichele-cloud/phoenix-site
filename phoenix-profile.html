@@ -1,0 +1,284 @@
+<!doctype html><html lang='it'><head><meta charset='UTF-8'/><meta name='viewport' content='width=device-width,initial-scale=1.0'/><title>Phoenix — Il tuo profilo</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;color:#f0e8ea;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;overflow-x:hidden;cursor:none;min-height:100%}
+a{text-decoration:none;color:inherit}
+@media(hover:none){html,body{cursor:auto}}
+.header{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.5rem;border-bottom:1px solid rgba(192,34,62,.18);position:sticky;top:0;background:#000;z-index:50}
+.brand{display:flex;align-items:center;gap:.4rem;flex-shrink:0}
+.brand img{width:52px;height:52px;object-fit:contain;mix-blend-mode:screen}
+.brand span{font-weight:900;letter-spacing:.06em;font-size:1.2rem;color:#fff;text-shadow:0 0 8px rgba(227,65,89,.9),0 0 18px rgba(192,34,62,.7)}
+.spacer{flex:1}
+.lang-switch{display:flex;gap:.3rem}
+.lang-switch button{background:transparent;border:2px solid transparent;padding:.2rem;border-radius:4px;cursor:none;transition:transform .2s,border-color .2s;line-height:0}
+.lang-switch button img{width:26px;height:19px;display:block;border-radius:2px}
+.lang-switch button:hover{transform:scale(1.15)}
+.lang-switch button.active{border-color:rgba(227,65,89,.8);transform:scale(1.15)}
+.btn-back{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:.55rem 1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:8px;cursor:none;font-size:.78rem;white-space:nowrap;margin-left:.6rem;transition:box-shadow .2s}
+.btn-back:hover{box-shadow:0 0 18px rgba(227,65,89,.6)}
+@media(hover:none){.lang-switch button,.btn-back{cursor:auto}}
+#flame{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:1000}
+.wrap{max-width:820px;margin:0 auto;padding:2.5rem 1.2rem 5rem;position:relative;z-index:2}
+.hero{text-align:center;padding-top:1rem;margin-bottom:2.8rem}
+.eyebrow{font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(227,65,89,.75);font-weight:700;margin-bottom:1rem}
+.title{font-size:clamp(2.2rem,6vw,3.2rem);font-weight:900;line-height:.95;letter-spacing:-.02em;text-transform:uppercase;background:linear-gradient(180deg,#ff5f6e,#7a1228);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.4rem}
+.subtitle{font-size:1rem;color:rgba(240,232,234,.65);max-width:620px;margin:0 auto 1.4rem;line-height:1.6}
+.section{margin-bottom:3rem;padding:2rem 1.4rem;border:1px solid rgba(192,34,62,.12);border-radius:14px;background:rgba(20,0,5,.5)}
+.input-group{margin-bottom:1.6rem}
+.input-group label{display:block;font-weight:700;font-size:.9rem;color:#ff8a9c;margin-bottom:.5rem;letter-spacing:.05em;text-transform:uppercase}
+input[type="number"]{width:100%;padding:.8rem;background:rgba(30,0,8,.6);border:1px solid rgba(192,34,62,.22);border-radius:10px;color:#fff;font-size:.95rem;font-family:inherit}
+input[type="number"]:focus{outline:none;border-color:#ff5f6e;box-shadow:0 0 12px rgba(192,34,62,.25)}
+input[type="text"]{width:100%;padding:.8rem;background:rgba(30,0,8,.6);border:1px solid rgba(192,34,62,.22);border-radius:10px;color:#fff;font-size:.95rem;font-family:inherit}
+input[type="text"]:focus{outline:none;border-color:#ff5f6e;box-shadow:0 0 12px rgba(192,34,62,.25)}
+.btn{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:1rem 2.4rem;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;border-radius:12px;cursor:none;box-shadow:0 0 24px rgba(192,34,62,.4);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 0 34px rgba(227,65,89,.6)}
+@media(hover:none){.btn{cursor:auto}}
+.phoenix-badge{font-size:clamp(3.5rem,12vw,6rem);font-weight:900;letter-spacing:.05em;background:linear-gradient(180deg,#ff5f6e,#7a1228);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin:1rem 0 .3rem}
+.element-name{font-size:2rem;font-weight:900;color:#fff;margin-bottom:.5rem;letter-spacing:-.01em}
+.element-symbol{display:inline-block;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:#ff8a9c;border:1px solid rgba(227,65,89,.4);border-radius:99px;padding:.4rem 1.2rem;margin-bottom:1.4rem}
+.profile-desc{font-size:1rem;color:rgba(240,232,234,.7);max-width:540px;margin:0 auto 2.4rem;line-height:1.7}
+.dual-chart{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;max-width:560px;margin:0 auto 2.4rem}
+@media(max-width:640px){.dual-chart{grid-template-columns:1fr;gap:1rem}}
+.chart-box h3{font-size:.95rem;font-weight:800;color:#ff8a9c;margin-bottom:1rem;letter-spacing:.05em;text-transform:uppercase}
+.scale-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem}
+.scale-label{font-size:.75rem;font-weight:700;color:rgba(240,232,234,.55);min-width:50px;text-align:right}
+.scale-bar{flex:1;height:10px;background:rgba(192,34,62,.13);border-radius:99px;overflow:hidden}
+.scale-fill{height:100%;background:linear-gradient(90deg,#ff5f6e,#c0223e);transition:width .8s ease}
+.scale-val{font-size:.75rem;color:rgba(240,232,234,.6);font-weight:700}
+.nav-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem}
+.btn-secondary{background:transparent;border:1px solid rgba(227,65,89,.4);color:#ff8a9c;padding:1rem 1.8rem;border-radius:12px;font-weight:700;font-size:.9rem;text-transform:uppercase;cursor:none;transition:border-color .2s,color .2s}
+.btn-secondary:hover{border-color:#ff5f6e;color:#fff}
+@media(hover:none){.btn-secondary{cursor:auto}}
+.hidden{display:none!important}
+.footer{border-top:1px solid rgba(192,34,62,.12);padding:1.6rem;text-align:center;color:rgba(240,232,234,.3);font-size:.75rem;position:relative;z-index:2}
+</style></head>
+<body>
+<canvas id='flame'></canvas>
+<header class='header'>
+  <a href='index.html' class='brand'>
+    <img src='https://i.ibb.co/chkW0mST/fenice-sfondo-completamente-nero-c499a262.png' alt='Phoenix'/>
+    <span>PHOENIX</span>
+  </a>
+  <div class='spacer'></div>
+  <div class='lang-switch'>
+    <button class='active' data-lang='it'><img src='https://flagcdn.com/24x18/it.png' alt='IT'/></button>
+    <button data-lang='en'><img src='https://flagcdn.com/24x18/gb.png' alt='EN'/></button>
+  </div>
+  <a href='index.html' class='btn-back' data-i18n='back'>← Home</a>
+</header>
+
+<div class='wrap'>
+  <section id='intro' class='hero'>
+    <div class='eyebrow' data-i18n='intro.eyebrow'>Big Five + MBTI</div>
+    <h1 class='title' data-i18n='intro.title'>Il tuo Profilo Phoenix</h1>
+    <p class='subtitle' data-i18n='intro.subtitle'>Combina i risultati dei due test di personalità per scoprire quale elemento Phoenix incarna veramente il tuo profilo.</p>
+  </section>
+
+  <section id='input' class='section'>
+    <h2 data-i18n='input.h'>Inserisci i tuoi risultati</h2>
+    <p style='font-size:.95rem;color:rgba(240,232,234,.65);margin-bottom:1.6rem' data-i18n='input.p'>Completa i campi con i punteggi Big Five (0-100) e il tipo MBTI (es. INTJ, ENFP).</p>
+    
+    <h3 style='font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:1rem;margin-top:1.6rem' data-i18n='input.b5'>Big Five (Percentili)</h3>
+    <div class='input-group'><label data-i18n='input.o'>Openness (Apertura)</label><input type='number' id='o' min='0' max='100' value='50'/></div>
+    <div class='input-group'><label data-i18n='input.c'>Conscientiousness (Coscienziosità)</label><input type='number' id='c' min='0' max='100' value='50'/></div>
+    <div class='input-group'><label data-i18n='input.e'>Extraversion (Estroversione)</label><input type='number' id='e' min='0' max='100' value='50'/></div>
+    <div class='input-group'><label data-i18n='input.a'>Agreeableness (Gradevolezza)</label><input type='number' id='a' min='0' max='100' value='50'/></div>
+    <div class='input-group'><label data-i18n='input.n'>Neuroticism (Nevroticismo)</label><input type='number' id='n' min='0' max='100' value='50'/></div>
+    
+    <h3 style='font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:1rem;margin-top:1.6rem' data-i18n='input.mbti'>MBTI (4 lettere)</h3>
+    <div class='input-group'><label data-i18n='input.type'>Tipo MBTI</label><input type='text' id='type' placeholder='es. INTJ, ENFP, ISTJ' maxlength='4'/></div>
+    
+    <button class='btn' id='submitBtn' data-i18n='input.submit'>Genera il profilo Phoenix</button>
+  </section>
+
+  <section id='result' class='section hidden'>
+    <div style='text-align:center;margin-bottom:2.4rem'>
+      <div class='phoenix-badge' id='elementIcon'>🔥</div>
+      <div class='element-name' id='elementName'></div>
+      <div class='element-symbol' id='elementLabel'></div>
+    </div>
+    <p class='profile-desc' id='profileDesc'></p>
+    
+    <div class='dual-chart'>
+      <div class='chart-box'>
+        <h3 data-i18n='res.b5'>Big Five</h3>
+        <div id='b5Chart'></div>
+      </div>
+      <div class='chart-box'>
+        <h3 data-i18n='res.mbti'>MBTI</h3>
+        <div id='mbtiChart'></div>
+      </div>
+    </div>
+    
+    <div class='nav-btns'>
+      <button class='btn-secondary' id='newBtn' data-i18n='res.new'>Nuovo profilo</button>
+      <a href='big-five-info.html' class='btn-secondary' data-i18n='res.b5Info'>📖 Big Five</a>
+      <a href='mbti-info.html' class='btn-secondary' data-i18n='res.mbtiInfo'>📖 MBTI</a>
+    </div>
+  </section>
+</div>
+
+<footer class='footer'>&copy; 2026 Phoenix Academy · <span data-i18n='foot'>Risorgi attraverso la conoscenza.</span></footer>
+
+<script>
+/* ============ ELEMENT LOGIC ============ */
+const ELEMENTS = {
+  Fulmine: {color:'#ff5f6e', it:{n:'Fulmine', d:'Strategico, veloce, ambizioso. Colpisce con precisione mirata. La tua energia è diretta verso il successo.'}, en:{n:'Lightning', d:'Strategic, fast, ambitious. Strikes with targeted precision. Your energy is directed toward success.'}},
+  Aria: {color:'#ffd24a', it:{n:'Aria', d:'Libero, curioso, adattabile. Soffia leggero e trasforma tutto. La tua mente esplora infiniti orizzonti.'}, en:{n:'Air', d:'Free, curious, adaptable. Blows light and transforms everything. Your mind explores infinite horizons.'}},
+  Fuoco: {color:'#ff8a3d', it:{n:'Fuoco', d:'Passione, spontaneità, calore. Ardi di energia contagiosa. La tua presenza scalda ogni ambiente.'}, en:{n:'Fire', d:'Passion, spontaneity, warmth. Burn with infectious energy. Your presence warms every room.'}},
+  Luce: {color:'#4ad6a0', it:{n:'Luce', d:'Visione, principi, ispirazione. Illumina la strada agli altri. La tua lucidità guida verso l\'alto.'}, en:{n:'Light', d:'Vision, principles, inspiration. Light the way for others. Your clarity guides upward.'}},
+  Ombra: {color:'#5fa8ff', it:{n:'Ombra', d:'Profondità, introspettivo, misterioso. Scorre dove gli altri non guardano. La tua forza risiede nel silenzio.'}, en:{n:'Shadow', d:'Depth, introspective, mysterious. Flow where others don\'t look. Your strength lies in silence.'}},
+  Acqua: {color:'#67b7a8', it:{n:'Acqua', d:'Empatico, protettivo, fluido. Scorre verso chi ha bisogno. La tua dedizione unisce le persone.'}, en:{n:'Water', d:'Empathetic, protective, fluid. Flow toward those in need. Your dedication brings people together.'}},
+  Terra: {color:'#8b7355', it:{n:'Terra', d:'Solido, affidabile, radicato. Fermo come la montagna. La tua stabilità è fondazione per tutti.'}, en:{n:'Earth', d:'Solid, reliable, grounded. Steady as the mountain. Your stability is foundation for all.'}}
+};
+
+function computeElement(b5, mbti){
+  // b5 = {O, C, E, A, N} percentili
+  // mbti = tipo a 4 lettere
+  const O=b5.O, C=b5.C, E=b5.E, A=b5.A, N=b5.N;
+  const E_letter=mbti[0], S_letter=mbti[1], T_letter=mbti[2], J_letter=mbti[3];
+  
+  // Logica di assegnazione elemento:
+  // FULMINE: T alto + E estroverso + N intuitivo + idea veloce (C e N bassi?)
+  if(T_letter==='T' && E_letter==='E' && S_letter==='N' && (C>50 || O>60)){
+    return 'Fulmine'; // ENTJ, ENTP leader rapidi
+  }
+  
+  // ARIA: N alto + P (percezione) + apertura altissima
+  if(S_letter==='N' && J_letter==='P' && O>70){
+    return 'Aria'; // ENFP, ENTP, INTP esploratori
+  }
+  
+  // FUOCO: E alto + F o S (presente) + estroversione conscia
+  if(E_letter==='E' && (T_letter==='F' || S_letter==='S') && E>65){
+    return 'Fuoco'; // ESFP, ENFJ, ISFP carismatici
+  }
+  
+  // LUCE: N + F + J (visionario + principiato + organizzato)
+  if(S_letter==='N' && T_letter==='F' && J_letter==='J' && O>55){
+    return 'Luce'; // INFJ, ENFJ idealisti
+  }
+  
+  // OMBRA: I + F + N + apertura moderata (introspettivo sensibile)
+  if(E_letter==='I' && T_letter==='F' && S_letter==='N' && N>40){
+    return 'Ombra'; // INFP introspettivi
+  }
+  
+  // ACQUA: F + J + gradevolezza altissima
+  if(T_letter==='F' && J_letter==='J' && A>70){
+    return 'Acqua'; // ISFJ, ESFJ protettori
+  }
+  
+  // TERRA: J + S + coscienziosità altissima
+  if(J_letter==='J' && S_letter==='S' && C>75){
+    return 'Terra'; // ISTJ, ESTJ fondamenta
+  }
+  
+  // Default: basato su E/I + A
+  if(E>50 && A>60) return 'Fuoco';
+  if(E<50 && A>65) return 'Acqua';
+  if(E>60 && O>65) return 'Aria';
+  if(O>70 && A>50) return 'Luce';
+  if(E<45 && A<55) return 'Ombra';
+  if(C>70) return 'Terra';
+  return 'Aria'; // fallback
+}
+
+function generateProfile(){
+  const o=parseInt(document.getElementById('o').value)||50;
+  const c=parseInt(document.getElementById('c').value)||50;
+  const e=parseInt(document.getElementById('e').value)||50;
+  const a=parseInt(document.getElementById('a').value)||50;
+  const n=parseInt(document.getElementById('n').value)||50;
+  const type=(document.getElementById('type').value||'INTJ').toUpperCase().trim();
+  
+  if(!/^[EI][SN][TF][JP]$/.test(type)){alert(lang==='it'?'Tipo MBTI non valido (es. INTJ)':'Invalid MBTI type (e.g. INTJ)');return;}
+  
+  const elem=computeElement({O:o,C:c,E:e,A:a,N:n}, type);
+  const elData=ELEMENTS[elem];
+  
+  // Mostra risultato
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('input').classList.add('hidden');
+  document.getElementById('result').classList.remove('hidden');
+  
+  document.getElementById('elementIcon').textContent=elemEmoji[elem];
+  document.getElementById('elementName').textContent=elData[lang].n;
+  document.getElementById('elementLabel').textContent=elem+' · '+type;
+  document.getElementById('profileDesc').textContent=elData[lang].d;
+  
+  // Big Five chart
+  const b5Chart=document.getElementById('b5Chart'); b5Chart.innerHTML='';
+  [['O',o],['C',c],['E',e],['A',a],['N',n]].forEach(([k,v])=>{
+    const lbl=lang==='it'?{O:'Apertura',C:'Coscienziosità',E:'Estroversione',A:'Gradevolezza',N:'Nevroticismo'}[k]:{O:'Openness',C:'Consci.',E:'Extrav.',A:'Agreebl.',N:'Neurot.'}[k];
+    const row=document.createElement('div'); row.className='scale-row';
+    row.innerHTML="<div class='scale-label'>"+lbl+"</div><div class='scale-bar'><div class='scale-fill' style='width:0'></div></div><div class='scale-val'>"+v+"%</div>";
+    b5Chart.appendChild(row);
+    requestAnimationFrame(()=>{setTimeout(()=>{row.querySelector('.scale-fill').style.width=v+'%';},50);});
+  });
+  
+  // MBTI chart
+  const mbtiChart=document.getElementById('mbtiChart'); mbtiChart.innerHTML='';
+  const axes=[['E/I',type[0]],['S/N',type[1]],['T/F',type[2]],['J/P',type[3]]];
+  axes.forEach(([axis,chosen])=>{
+    const row=document.createElement('div'); row.className='scale-row';
+    const isFirst=axis[0]===chosen;
+    const pct=isFirst?75:25;
+    const val=isFirst?chosen:axis[axis.length-1];
+    row.innerHTML="<div class='scale-label'>"+axis+"</div><div class='scale-bar'><div class='scale-fill' style='width:0'></div></div><div class='scale-val'>"+val+"</div>";
+    mbtiChart.appendChild(row);
+    requestAnimationFrame(()=>{setTimeout(()=>{row.querySelector('.scale-fill').style.width=pct+'%';},50);});
+  });
+  
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+const elemEmoji={Fulmine:'⚡',Aria:'💨',Fuoco:'🔥',Luce:'✨',Ombra:'🌑',Acqua:'💧',Terra:'🪨'};
+let lang='it';
+
+const I18N={
+  it:{back:'← Home',foot:'Risorgi attraverso la conoscenza.',
+    'intro.eyebrow':'Big Five + MBTI','intro.title':'Il tuo Profilo Phoenix',
+    'intro.subtitle':'Combina i risultati dei due test di personalità per scoprire quale elemento Phoenix incarna veramente il tuo profilo.',
+    'input.h':'Inserisci i tuoi risultati','input.p':'Completa i campi con i punteggi Big Five (0-100) e il tipo MBTI (es. INTJ, ENFP).',
+    'input.b5':'Big Five (Percentili)','input.o':'Openness (Apertura)','input.c':'Conscientiousness (Coscienziosità)',
+    'input.e':'Extraversion (Estroversione)','input.a':'Agreeableness (Gradevolezza)','input.n':'Neuroticism (Nevroticismo)',
+    'input.mbti':'MBTI (4 lettere)','input.type':'Tipo MBTI','input.submit':'Genera il profilo Phoenix',
+    'res.b5':'Big Five','res.mbti':'MBTI','res.new':'Nuovo profilo','res.b5Info':'📖 Big Five','res.mbtiInfo':'📖 MBTI'},
+  en:{back:'← Home',foot:'Rise through knowledge.',
+    'intro.eyebrow':'Big Five + MBTI','intro.title':'Your Phoenix Profile',
+    'intro.subtitle':'Combine the results of both personality tests to discover which Phoenix element truly embodies your profile.',
+    'input.h':'Enter your results','input.p':'Fill in the Big Five scores (0-100) and MBTI type (e.g., INTJ, ENFP).',
+    'input.b5':'Big Five (Percentiles)','input.o':'Openness','input.c':'Conscientiousness',
+    'input.e':'Extraversion','input.a':'Agreeableness','input.n':'Neuroticism',
+    'input.mbti':'MBTI (4 letters)','input.type':'MBTI Type','input.submit':'Generate Phoenix Profile',
+    'res.b5':'Big Five','res.mbti':'MBTI','res.new':'New profile','res.b5Info':'📖 Big Five','res.mbtiInfo':'📖 MBTI'}
+};
+
+function applyI18n(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(I18N[lang][k])el.textContent=I18N[lang][k];});
+}
+
+document.getElementById('submitBtn').onclick=generateProfile;
+document.getElementById('newBtn').onclick=()=>{
+  document.getElementById('input').classList.remove('hidden');
+  document.getElementById('intro').classList.remove('hidden');
+  document.getElementById('result').classList.add('hidden');
+  document.getElementById('o').value=50;document.getElementById('c').value=50;document.getElementById('e').value=50;
+  document.getElementById('a').value=50;document.getElementById('n').value=50;document.getElementById('type').value='';
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+document.querySelectorAll('.lang-switch button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('.lang-switch button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');lang=b.dataset.lang;applyI18n();
+  };
+});
+
+applyI18n();
+
+/* FLAME */
+(function(){var c=document.getElementById('flame');var x=c.getContext('2d');var ps=[];var m={x:-100,y:-100,active:false};var dpr=window.devicePixelRatio||1;function rs(){dpr=window.devicePixelRatio||1;c.width=innerWidth*dpr;c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';x.setTransform(dpr,0,0,dpr,0,0)}rs();addEventListener('resize',rs);addEventListener('mousemove',function(e){m.x=e.clientX;m.y=e.clientY;m.active=true;for(var i=0;i<3;i++){ps.push({x:e.clientX+(Math.random()-.5)*6,y:e.clientY+(Math.random()-.5)*6,vx:(Math.random()-.5)*.6,vy:-Math.random()*1.4-.4,life:0,maxLife:28+Math.random()*20,size:6+Math.random()*8})}if(ps.length>220)ps.splice(0,ps.length-220)});addEventListener('mouseleave',function(){m.active=false});function tick(){x.globalCompositeOperation='destination-out';x.fillStyle='rgba(0,0,0,0.18)';x.fillRect(0,0,c.width/dpr,c.height/dpr);x.globalCompositeOperation='lighter';for(var i=ps.length-1;i>=0;i--){var p=ps[i];p.life++;if(p.life>=p.maxLife){ps.splice(i,1);continue}p.x+=p.vx;p.y+=p.vy;p.vy-=.05;p.vx*=.96;var t=p.life/p.maxLife;var r=p.size*(1-t*.4);var al=(1-t)*.9;var g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,r);if(t<.45){g.addColorStop(0,'rgba(255,60,70,'+al+')');g.addColorStop(.35,'rgba(200,25,40,'+al*.85+')');g.addColorStop(.7,'rgba(130,10,25,'+al*.5+')');g.addColorStop(1,'rgba(60,0,10,0)')}else{var sm=(t-.45)/.55;var a2=al*(1-sm*.5);g.addColorStop(0,'rgba(160,20,35,'+a2*.75+')');g.addColorStop(.5,'rgba(90,8,20,'+a2*.4+')');g.addColorStop(1,'rgba(30,0,5,0)')}x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,r,0,Math.PI*2);x.fill()}if(m.active){var br=14;var cg=x.createRadialGradient(m.x,m.y,0,m.x,m.y,br);cg.addColorStop(0,'rgba(255,80,90,0.95)');cg.addColorStop(.35,'rgba(220,30,45,.8)');cg.addColorStop(.7,'rgba(140,12,28,0.5)');cg.addColorStop(1,'rgba(60,0,10,0)');x.fillStyle=cg;x.beginPath();x.arc(m.x,m.y,br,0,Math.PI*2);x.fill()}requestAnimationFrame(tick)}requestAnimationFrame(tick)})();
+</script>
+</body></html>
