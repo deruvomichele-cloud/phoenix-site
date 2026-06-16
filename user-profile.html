@@ -1,0 +1,340 @@
+<!doctype html><html lang='it'><head><meta charset='UTF-8'/><meta name='viewport' content='width=device-width,initial-scale=1.0'/><title>Phoenix — Il tuo profilo</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;color:#f0e8ea;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;overflow-x:hidden;cursor:none;min-height:100%}
+a{text-decoration:none;color:inherit}
+@media(hover:none){html,body{cursor:auto}}
+.header{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.5rem;border-bottom:1px solid rgba(192,34,62,.18);position:sticky;top:0;background:#000;z-index:50}
+.brand{display:flex;align-items:center;gap:.4rem;flex-shrink:0}
+.brand img{width:52px;height:52px;object-fit:contain;mix-blend-mode:screen}
+.brand span{font-weight:900;letter-spacing:.06em;font-size:1.2rem;color:#fff;text-shadow:0 0 8px rgba(227,65,89,.9),0 0 18px rgba(192,34,62,.7)}
+.spacer{flex:1}
+.lang-switch{display:flex;gap:.3rem}
+.lang-switch button{background:transparent;border:2px solid transparent;padding:.2rem;border-radius:4px;cursor:none;transition:transform .2s,border-color .2s;line-height:0}
+.lang-switch button img{width:26px;height:19px;display:block;border-radius:2px}
+.lang-switch button:hover{transform:scale(1.15)}
+.lang-switch button.active{border-color:rgba(227,65,89,.8);transform:scale(1.15)}
+.btn-back{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:.55rem 1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:8px;cursor:none;font-size:.78rem;white-space:nowrap;margin-left:.6rem;transition:box-shadow .2s}
+.btn-back:hover{box-shadow:0 0 18px rgba(227,65,89,.6)}
+@media(hover:none){.lang-switch button,.btn-back{cursor:auto}}
+#flame{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:1000}
+.wrap{max-width:900px;margin:0 auto;padding:2.5rem 1.2rem 5rem;position:relative;z-index:2}
+.hero{text-align:center;padding:2rem 1.4rem;background:linear-gradient(135deg,rgba(192,34,62,.1),rgba(122,18,40,.1));border:1px solid rgba(192,34,62,.15);border-radius:16px;margin-bottom:2.8rem}
+.phoenix-name{font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(227,65,89,.7);font-weight:700;margin-bottom:1rem}
+.phoenix-title{font-size:clamp(2rem,6vw,3.2rem);font-weight:900;line-height:.95;letter-spacing:-.02em;background:linear-gradient(180deg,#ff5f6e,#7a1228);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem}
+.element-badge{display:inline-block;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:#ff8a9c;border:1px solid rgba(227,65,89,.4);border-radius:99px;padding:.4rem 1rem;margin-bottom:1.5rem}
+.phoenix-visual{width:240px;height:240px;margin:1.5rem auto;background:rgba(20,0,5,.6);border:2px solid rgba(192,34,62,.22);border-radius:16px;display:flex;align-items:center;justify-content:center;color:rgba(240,232,234,.4);font-size:.95rem;position:relative;overflow:hidden}
+.phoenix-visual.loading::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(227,65,89,.3),transparent);animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin-top:1.8rem}
+@media(max-width:640px){.stats-grid{grid-template-columns:1fr}}
+.stat-box{background:rgba(30,0,8,.6);border:1px solid rgba(192,34,62,.15);border-radius:12px;padding:1rem;text-align:center}
+.stat-label{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(240,232,234,.5);margin-bottom:.4rem}
+.stat-value{font-size:2rem;font-weight:900;color:#ff8a9c;line-height:1}
+.stat-subtext{font-size:.78rem;color:rgba(240,232,234,.4);margin-top:.3rem}
+.section{margin-bottom:2.8rem;padding:1.8rem;border:1px solid rgba(192,34,62,.12);border-radius:14px;background:rgba(20,0,5,.5)}
+.section h2{font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:1.2rem;letter-spacing:-.01em}
+.bar-chart{margin-bottom:1.6rem}
+.bar-label{display:flex;justify-content:space-between;align-items:baseline;font-size:.9rem;margin-bottom:.4rem}
+.bar-label-text{font-weight:700;color:#fff}
+.bar-label-pct{font-size:.8rem;color:#ff8a9c;font-weight:700}
+.bar-track{height:12px;background:rgba(192,34,62,.13);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,#ff5f6e,#c0223e);transition:width 1s ease;border-radius:99px}
+.boost-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.2rem;margin-top:1.4rem}
+.boost-card{background:rgba(30,0,8,.6);border:1px solid rgba(192,34,62,.15);border-radius:12px;padding:1rem}
+.boost-title{font-size:.9rem;font-weight:800;color:#fff;margin-bottom:.8rem}
+.boost-slider{width:100%;height:6px;border-radius:99px;background:rgba(192,34,62,.2);-webkit-appearance:none;appearance:none;cursor:pointer}
+.boost-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:#ff5f6e;cursor:pointer;border:2px solid #c0223e}
+.boost-slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#ff5f6e;cursor:pointer;border:2px solid #c0223e}
+.boost-cost{font-size:.8rem;color:rgba(240,232,234,.5);margin-top:.5rem}
+.timeline{position:relative;padding:1.5rem;background:rgba(30,0,8,.6);border:1px solid rgba(192,34,62,.15);border-radius:12px}
+.timeline-row{display:flex;justify-content:space-between;align-items:center;padding:.8rem 0;border-bottom:1px solid rgba(192,34,62,.08)}
+.timeline-row:last-child{border-bottom:none}
+.timeline-label{font-size:.9rem;font-weight:700;color:#fff}
+.timeline-value{font-size:.9rem;color:#ff8a9c;font-weight:700}
+.countdown{font-size:1.3rem;font-weight:900;color:#ff5f6e}
+.collection{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-top:1.4rem}
+.collection-card{background:rgba(30,0,8,.6);border:1px solid rgba(192,34,62,.15);border-radius:12px;padding:1rem;text-align:center;position:relative;overflow:hidden}
+.collection-card.active::before{content:'';position:absolute;inset:0;border:2px solid #ff5f6e;border-radius:12px;pointer-events:none}
+.collection-gen{font-size:1.3rem;font-weight:900;color:#ff5f6e;margin-bottom:.3rem}
+.collection-element{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:#ff8a9c;margin-bottom:.5rem}
+.collection-date{font-size:.75rem;color:rgba(240,232,234,.4);margin-bottom:.5rem}
+.collection-status{display:inline-block;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:.3rem .6rem;border-radius:99px;background:rgba(192,34,62,.2);border:1px solid rgba(227,65,89,.3);color:#ff8a9c}
+.collection-card.archived{opacity:.6}
+.hidden{display:none!important}
+.footer{border-top:1px solid rgba(192,34,62,.12);padding:1.6rem;text-align:center;color:rgba(240,232,234,.3);font-size:.75rem;position:relative;z-index:2}
+</style></head>
+<body>
+<canvas id='flame'></canvas>
+<header class='header'>
+  <a href='index.html' class='brand'>
+    <img src='https://i.ibb.co/chkW0mST/fenice-sfondo-completamente-nero-c499a262.png' alt='Phoenix'/>
+    <span>PHOENIX</span>
+  </a>
+  <div class='spacer'></div>
+  <div class='lang-switch'>
+    <button class='active' data-lang='it'><img src='https://flagcdn.com/24x18/it.png' alt='IT'/></button>
+    <button data-lang='en'><img src='https://flagcdn.com/24x18/gb.png' alt='EN'/></button>
+  </div>
+  <a href='index.html' class='btn-back' data-i18n='back'>← Home</a>
+</header>
+
+<div class='wrap'>
+  <section class='hero'>
+    <div class='phoenix-name' data-i18n='hero.label'>La tua Fenice</div>
+    <h1 class='phoenix-title' id='phoenixName'>Phoenix</h1>
+    <div class='element-badge' id='elementName'>Elemento</div>
+    <div class='phoenix-visual loading' id='phoenixVisual' data-i18n='hero.loading'>Animazione in caricamento...</div>
+    <div class='stats-grid'>
+      <div class='stat-box'>
+        <div class='stat-label' data-i18n='stat.power'>Potenza Lunare</div>
+        <div class='stat-value' id='moonPower'>0%</div>
+        <div class='stat-subtext' id='moonPhase'>Luna Nuova</div>
+      </div>
+      <div class='stat-box'>
+        <div class='stat-label' data-i18n='stat.boost'>Bonus Elemento</div>
+        <div class='stat-value' id='elemBoost'>0%</div>
+        <div class='stat-subtext' data-i18n='stat.boostSub'>Cresce ogni giorno</div>
+      </div>
+      <div class='stat-box'>
+        <div class='stat-label' data-i18n='stat.gen'>Generazione</div>
+        <div class='stat-value' id='generation'>#1</div>
+        <div class='stat-subtext' id='genDate'>Gen 1, 2026</div>
+      </div>
+      <div class='stat-box'>
+        <div class='stat-label' data-i18n='stat.age'>Età</div>
+        <div class='stat-value' id='ageDisplay'>0g</div>
+        <div class='stat-subtext' data-i18n='stat.ageSub'>giorni</div>
+      </div>
+    </div>
+  </section>
+
+  <section class='section'>
+    <h2 data-i18n='moon.h'>Influenza Lunare</h2>
+    <div class='bar-chart'>
+      <div class='bar-label'>
+        <span class='bar-label-text' data-i18n='moon.power'>Potenza (0-100%)</span>
+        <span class='bar-label-pct' id='moonPowerPct'>0%</span>
+      </div>
+      <div class='bar-track'><div class='bar-fill' id='moonPowerBar' style='width:0'></div></div>
+    </div>
+    <div style='margin-top:1rem;font-size:.9rem;color:rgba(240,232,234,.65);line-height:1.6'>
+      <p data-i18n='moon.desc'>La potenza della fenice cresce al crescere della luna e raggiunge il massimo durante il plenilunio. Influisce su tutti i tuoi quiz.</p>
+    </div>
+  </section>
+
+  <section class='section'>
+    <h2 data-i18n='boost.h'>Potenzia le Statistiche</h2>
+    <p style='font-size:.9rem;color:rgba(240,232,234,.65);margin-bottom:1.4rem' data-i18n='boost.desc'>Spendi ASH per potenziare le statistiche della fenice (fino a fine mese). Effetti reset a ogni rigenerazione.</p>
+    <div class='boost-controls' id='boostControls'></div>
+  </section>
+
+  <section class='section'>
+    <h2 data-i18n='regen.h'>Timeline Rigenerazione</h2>
+    <div class='timeline'>
+      <div class='timeline-row'>
+        <span class='timeline-label' data-i18n='regen.born'>Nata il</span>
+        <span class='timeline-value' id='bornDate'>—</span>
+      </div>
+      <div class='timeline-row'>
+        <span class='timeline-label' data-i18n='regen.next'>Rinascerà il</span>
+        <span class='timeline-value' id='nextRebirth'>—</span>
+      </div>
+      <div class='timeline-row'>
+        <span class='timeline-label' data-i18n='regen.countdown'>Giorni rimanenti</span>
+        <span class='countdown' id='daysLeft'>28</span>
+      </div>
+      <div style='margin-top:1rem;font-size:.85rem;color:rgba(240,232,234,.55);line-height:1.5'>
+        <p data-i18n='regen.info'>Ogni mese la fenice rinasce con statistiche nuove casuali. Le precedenti restano nella collezione storica.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class='section'>
+    <h2 data-i18n='coll.h'>Collezione Storica</h2>
+    <p style='font-size:.9rem;color:rgba(240,232,234,.65);margin-bottom:1.4rem' data-i18n='coll.desc'>Le tue fenici precedenti. Non influiscono su quiz, ma rimangono nella collezione finché non vengono cancellate dalla blockchain.</p>
+    <div class='collection' id='collection'></div>
+    <div style='margin-top:1.4rem;text-align:center;font-size:.8rem;color:rgba(240,232,234,.4)' data-i18n='coll.blockchain'>💾 Gestite dalla blockchain — cancellazione permanente possibile</div>
+  </section>
+</div>
+
+<footer class='footer'>&copy; 2026 Phoenix Academy · <span data-i18n='foot'>Risorgi attraverso la conoscenza.</span></footer>
+
+<script>
+let lang='it';
+const I18N={
+  it:{back:'← Home',foot:'Risorgi attraverso la conoscenza.',
+    'hero.label':'La tua Fenice','hero.loading':'Animazione in caricamento...',
+    'stat.power':'Potenza Lunare','stat.boost':'Bonus Elemento','stat.boostSub':'Cresce ogni giorno',
+    'stat.gen':'Generazione','stat.age':'Età','stat.ageSub':'giorni',
+    'moon.h':'Influenza Lunare','moon.power':'Potenza (0-100%)','moon.desc':'La potenza della fenice cresce al crescere della luna e raggiunge il massimo durante il plenilunio. Influisce su tutti i tuoi quiz.',
+    'boost.h':'Potenzia le Statistiche','boost.desc':'Spendi ASH per potenziare le statistiche della fenice (fino a fine mese). Effetti reset a ogni rigenerazione.',
+    'regen.h':'Timeline Rigenerazione','regen.born':'Nata il','regen.next':'Rinascerà il','regen.countdown':'Giorni rimanenti',
+    'regen.info':'Ogni mese la fenice rinasce con statistiche nuove casuali. Le precedenti restano nella collezione storica.',
+    'coll.h':'Collezione Storica','coll.desc':'Le tue fenici precedenti. Non influiscono su quiz, ma rimangono nella collezione finché non vengono cancellate dalla blockchain.',
+    'coll.blockchain':'💾 Gestite dalla blockchain — cancellazione permanente possibile'},
+  en:{back:'← Home',foot:'Rise through knowledge.',
+    'hero.label':'Your Phoenix','hero.loading':'Animation loading...',
+    'stat.power':'Lunar Power','stat.boost':'Element Bonus','stat.boostSub':'Grows each day',
+    'stat.gen':'Generation','stat.age':'Age','stat.ageSub':'days',
+    'moon.h':'Lunar Influence','moon.power':'Power (0-100%)','moon.desc':'Your phoenix\'s power grows with the moon and peaks at full moon. It affects all your quizzes.',
+    'boost.h':'Boost Statistics','boost.desc':'Spend ASH to boost your phoenix\'s stats (until month-end). Effects reset at each rebirth.',
+    'regen.h':'Rebirth Timeline','regen.born':'Born on','regen.next':'Will be reborn on','regen.countdown':'Days remaining',
+    'regen.info':'Each month your phoenix is reborn with new random stats. Previous ones remain in historic collection.',
+    'coll.h':'Historic Collection','coll.desc':'Your previous phoenixes. They don\'t affect quizzes but remain in collection until blockchain deletion.',
+    'coll.blockchain':'💾 Managed by blockchain — permanent deletion possible'}
+};
+
+// Dati demo utente
+const userData={
+  phoenixName:'Ignis',
+  element:'Fuoco',
+  generation:1,
+  bornDate:new Date(2026,5,1), // 1 giugno 2026
+  stats:{O:65,C:72,E:58,A:55,N:42}, // Big Five
+  mbti:'ISFP',
+  boosts:{power:0,speed:0,resistance:0,magic:0}
+};
+
+function applyI18n(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(I18N[lang][k])el.textContent=I18N[lang][k];});
+}
+
+function getMoonPhase(date){
+  // Calcolo fase lunare (semplificato: ciclo 29.53 giorni)
+  const knownNewMoon=new Date(2000,0,6); // Luna nuova nota
+  const diff=Math.floor((date-knownNewMoon)/(24*3600*1000));
+  const cycle=diff%29.53;
+  return cycle;
+}
+
+function updateMoonStats(){
+  const now=new Date();
+  const phase=getMoonPhase(now); // 0-29.53
+  const progress=(phase/29.53)*100;
+  const power=Math.round(Math.sin((phase/29.53)*Math.PI)*100); // 0-100 durante ciclo
+  
+  const phases=['Luna Nuova','Crescente','Primo Quarto','Gibbosa Crescente','Luna Piena','Gibbosa Calante','Ultimo Quarto','Calante'];
+  const phaseIdx=Math.floor((phase/29.53)*8)%8;
+  const phaseName=lang==='it'?phases[phaseIdx]:['New Moon','Waxing','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning'][phaseIdx];
+  
+  document.getElementById('moonPower').textContent=power+'%';
+  document.getElementById('moonPhase').textContent=phaseName;
+  document.getElementById('moonPowerPct').textContent=power+'%';
+  document.getElementById('moonPowerBar').style.width=power+'%';
+  return power;
+}
+
+function updateElementBoost(){
+  const bornDate=userData.bornDate;
+  const now=new Date();
+  const dayOfMonth=now.getDate();
+  // Boost cresce ogni giorno da inizio mese a luna piena (approssimato)
+  const boost=Math.min(dayOfMonth*3.3, 100); // 0-100% in ~30 giorni
+  document.getElementById('elemBoost').textContent=Math.round(boost)+'%';
+  return boost;
+}
+
+function updateAge(){
+  const born=userData.bornDate;
+  const now=new Date();
+  const days=Math.floor((now-born)/(24*3600*1000));
+  document.getElementById('ageDisplay').textContent=days+'g';
+}
+
+function updateTimeline(){
+  const born=userData.bornDate;
+  const rebirth=new Date(born.getTime()+28*24*3600*1000);
+  const now=new Date();
+  const daysLeft=Math.max(0,Math.ceil((rebirth-now)/(24*3600*1000)));
+  
+  document.getElementById('bornDate').textContent=born.toLocaleDateString(lang==='it'?'it-IT':'en-US');
+  document.getElementById('nextRebirth').textContent=rebirth.toLocaleDateString(lang==='it'?'it-IT':'en-US');
+  document.getElementById('daysLeft').textContent=daysLeft;
+}
+
+function buildBoostControls(){
+  const stats=[['Potenza','Power','power'],['Velocità','Speed','speed'],['Resistenza','Resistance','resistance'],['Magia','Magic','magic']];
+  const html=stats.map(([it,en,key])=>{
+    const label=lang==='it'?it:en;
+    const cost=5; // 5 ASH per punto
+    return `<div class='boost-card'>
+      <div class='boost-title'>${label}</div>
+      <input type='range' class='boost-slider' min='0' max='20' value='0' data-stat='${key}'/>
+      <div class='boost-cost'>${cost} ASH/pt</div>
+    </div>`;
+  }).join('');
+  document.getElementById('boostControls').innerHTML=html;
+  document.querySelectorAll('.boost-slider').forEach(slider=>{
+    slider.addEventListener('input',(e)=>{
+      userData.boosts[e.target.dataset.stat]=parseInt(e.target.value);
+      console.log('Boost updated:',userData.boosts);
+    });
+  });
+}
+
+function buildCollection(){
+  // Demo: 3 generazioni precedenti
+  const prevPhoenixes=[
+    {gen:0,element:'Aria',born:new Date(2026,4,4),status:'archived'},
+    {gen:-1,element:'Ombra',born:new Date(2026,3,7),status:'archived'},
+    {gen:-2,element:'Luce',born:new Date(2026,2,9),status:'archived'}
+  ];
+  const html=prevPhoenixes.map(p=>{
+    const statusLabel=lang==='it'?'Archivio':'Archive';
+    return `<div class='collection-card archived'>
+      <div class='collection-gen'>#${userData.generation+p.gen}</div>
+      <div class='collection-element'>${p.element}</div>
+      <div class='collection-date'>${p.born.toLocaleDateString(lang==='it'?'it-IT':'en-US')}</div>
+      <div class='collection-status'>${statusLabel}</div>
+    </div>`;
+  }).join('');
+  
+  // Aggiungi quella attiva
+  const current=`<div class='collection-card active'>
+    <div class='collection-gen'>#${userData.generation}</div>
+    <div class='collection-element'>${userData.element}</div>
+    <div class='collection-date'>${userData.bornDate.toLocaleDateString(lang==='it'?'it-IT':'en-US')}</div>
+    <div class='collection-status' style='background:rgba(74,214,160,.2);border-color:rgba(74,214,160,.3);color:#4ad6a0'>${lang==='it'?'Attiva':'Active'}</div>
+  </div>`;
+  
+  document.getElementById('collection').innerHTML=current+html;
+}
+
+function init(){
+  document.getElementById('phoenixName').textContent=userData.phoenixName+' · Gen #'+userData.generation;
+  document.getElementById('elementName').textContent=userData.element;
+  document.getElementById('generation').textContent='#'+userData.generation;
+  document.getElementById('genDate').textContent=`Gen ${userData.generation}, ${userData.bornDate.getFullYear()}`;
+  
+  updateMoonStats();
+  updateElementBoost();
+  updateAge();
+  updateTimeline();
+  buildBoostControls();
+  buildCollection();
+  
+  setInterval(()=>{
+    updateMoonStats();
+    updateElementBoost();
+    updateAge();
+    updateTimeline();
+  },10000); // Aggiorna ogni 10 secondi
+}
+
+document.querySelectorAll('.lang-switch button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('.lang-switch button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    lang=b.dataset.lang;
+    applyI18n();
+  };
+});
+
+applyI18n();
+init();
+
+/* FLAME */
+(function(){var c=document.getElementById('flame');var x=c.getContext('2d');var ps=[];var m={x:-100,y:-100,active:false};var dpr=window.devicePixelRatio||1;function rs(){dpr=window.devicePixelRatio||1;c.width=innerWidth*dpr;c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';x.setTransform(dpr,0,0,dpr,0,0)}rs();addEventListener('resize',rs);addEventListener('mousemove',function(e){m.x=e.clientX;m.y=e.clientY;m.active=true;for(var i=0;i<3;i++){ps.push({x:e.clientX+(Math.random()-.5)*6,y:e.clientY+(Math.random()-.5)*6,vx:(Math.random()-.5)*.6,vy:-Math.random()*1.4-.4,life:0,maxLife:28+Math.random()*20,size:6+Math.random()*8})}if(ps.length>220)ps.splice(0,ps.length-220)});addEventListener('mouseleave',function(){m.active=false});function tick(){x.globalCompositeOperation='destination-out';x.fillStyle='rgba(0,0,0,0.18)';x.fillRect(0,0,c.width/dpr,c.height/dpr);x.globalCompositeOperation='lighter';for(var i=ps.length-1;i>=0;i--){var p=ps[i];p.life++;if(p.life>=p.maxLife){ps.splice(i,1);continue}p.x+=p.vx;p.y+=p.vy;p.vy-=.05;p.vx*=.96;var t=p.life/p.maxLife;var r=p.size*(1-t*.4);var al=(1-t)*.9;var g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,r);if(t<.45){g.addColorStop(0,'rgba(255,60,70,'+al+')');g.addColorStop(.35,'rgba(200,25,40,'+al*.85+')');g.addColorStop(.7,'rgba(130,10,25,'+al*.5+')');g.addColorStop(1,'rgba(60,0,10,0)')}else{var sm=(t-.45)/.55;var a2=al*(1-sm*.5);g.addColorStop(0,'rgba(160,20,35,'+a2*.75+')');g.addColorStop(.5,'rgba(90,8,20,'+a2*.4+')');g.addColorStop(1,'rgba(30,0,5,0)')}x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,r,0,Math.PI*2);x.fill()}if(m.active){var br=14;var cg=x.createRadialGradient(m.x,m.y,0,m.x,m.y,br);cg.addColorStop(0,'rgba(255,80,90,0.95)');cg.addColorStop(.35,'rgba(220,30,45,.8)');cg.addColorStop(.7,'rgba(140,12,28,0.5)');cg.addColorStop(1,'rgba(60,0,10,0)');x.fillStyle=cg;x.beginPath();x.arc(m.x,m.y,br,0,Math.PI*2);x.fill()}requestAnimationFrame(tick)}requestAnimationFrame(tick)})();
+</script>
+</body></html>
