@@ -39,13 +39,25 @@ a{text-decoration:none;color:inherit}
 .bar-label-pct{font-size:.8rem;color:#ff8a9c;font-weight:700}
 .bar-track{height:12px;background:rgba(192,34,62,.13);border-radius:99px;overflow:hidden}
 .bar-fill{height:100%;background:linear-gradient(90deg,#ff5f6e,#c0223e);transition:width 1s ease;border-radius:99px}
-.boost-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.2rem;margin-top:1.4rem}
-.boost-card{background:rgba(30,0,8,.6);border:1px solid rgba(192,34,62,.15);border-radius:12px;padding:1rem}
-.boost-title{font-size:.9rem;font-weight:800;color:#fff;margin-bottom:.8rem}
-.boost-slider{width:100%;height:6px;border-radius:99px;background:rgba(192,34,62,.2);-webkit-appearance:none;appearance:none;cursor:pointer}
-.boost-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:#ff5f6e;cursor:pointer;border:2px solid #c0223e}
-.boost-slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#ff5f6e;cursor:pointer;border:2px solid #c0223e}
-.boost-cost{font-size:.8rem;color:rgba(240,232,234,.5);margin-top:.5rem}
+.ashes-counter{text-align:center;padding:1.6rem;background:rgba(192,34,62,.1);border-radius:12px;margin-bottom:1.6rem}
+.ashes-amount-label{font-size:.9rem;color:rgba(240,232,234,.6);margin-bottom:.5rem}
+.ashes-amount{font-size:2.4rem;font-weight:900;color:#ff8a9c;line-height:1}
+.ashes-note{font-size:.8rem;color:rgba(240,232,234,.4);margin-top:.5rem}
+.rebirth-options{margin-top:1.4rem}
+.rebirth-title{font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:1.2rem}
+.rebirth-card{border:1px solid rgba(74,214,160,.3);padding:1.4rem;border-radius:12px;margin-bottom:1.2rem;background:rgba(74,214,160,.05)}
+.rebirth-card.premium{border-color:rgba(227,65,89,.3);background:rgba(227,65,89,.05)}
+.rebirth-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1rem}
+.rebirth-name{font-size:1rem;font-weight:800;color:#4ad6a0}
+.rebirth-name.premium{color:#ff5f6e}
+.rebirth-cost{font-size:.9rem;font-weight:700;color:#4ad6a0}
+.rebirth-cost.premium{color:#ff5f6e}
+.rebirth-desc{font-size:.9rem;color:rgba(240,232,234,.7);line-height:1.6;margin-bottom:1rem}
+.rebirth-btn{background:linear-gradient(180deg,#4ad6a0,#2d8a7a);color:#000;border:none;padding:.85rem 1.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;border-radius:12px;cursor:none;font-size:.9rem;transition:transform .15s,box-shadow .15s}
+.rebirth-btn:hover{transform:translateY(-2px);box-shadow:0 0 24px rgba(74,214,160,.4)}
+.rebirth-btn.premium{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;box-shadow:0 0 24px rgba(192,34,62,.4)}
+.rebirth-btn.premium:hover{box-shadow:0 0 34px rgba(227,65,89,.6)}
+@media(hover:none){.rebirth-btn{cursor:auto}}
 .timeline{position:relative;padding:1.5rem;background:rgba(30,0,8,.6);border:1px solid rgba(192,34,62,.15);border-radius:12px}
 .timeline-row{display:flex;justify-content:space-between;align-items:center;padding:.8rem 0;border-bottom:1px solid rgba(192,34,62,.08)}
 .timeline-row:last-child{border-bottom:none}
@@ -123,9 +135,34 @@ a{text-decoration:none;color:inherit}
   </section>
 
   <section class='section'>
-    <h2 data-i18n='boost.h'>Potenzia le Statistiche</h2>
-    <p style='font-size:.9rem;color:rgba(240,232,234,.65);margin-bottom:1.4rem' data-i18n='boost.desc'>Spendi ASH per potenziare le statistiche della fenice (fino a fine mese). Effetti reset a ogni rigenerazione.</p>
-    <div class='boost-controls' id='boostControls'></div>
+    <h2 data-i18n='ashes.h'>Ceneri della Fenice</h2>
+    <div class='ashes-counter'>
+      <div class='ashes-amount-label' data-i18n='ashes.amount'>Ceneri disponibili</div>
+      <div class='ashes-amount' id='ashesAmount'>342</div>
+      <div class='ashes-note' data-i18n='ashes.note'>Accumulate dalla rinascita precedente</div>
+    </div>
+    
+    <div class='rebirth-options'>
+      <h3 class='rebirth-title' data-i18n='rebirth.title'>Scegli la modalità di rinascita</h3>
+      
+      <div class='rebirth-card'>
+        <div class='rebirth-header'>
+          <h4 class='rebirth-name' data-i18n='rebirth.standard'>Rinascita Standard</h4>
+          <div class='rebirth-cost'>80 ASH</div>
+        </div>
+        <p class='rebirth-desc' data-i18n='rebirth.standardDesc'>La fenice rinasce con caratteristiche legate alla tua personalità (Big Five + MBTI). Statistiche casuali ma coerenti con il tuo profilo.</p>
+        <button class='rebirth-btn' id='rebirthStandard' data-i18n='rebirth.btn'>Rinascita Standard →</button>
+      </div>
+      
+      <div class='rebirth-card premium'>
+        <div class='rebirth-header'>
+          <h4 class='rebirth-name premium' data-i18n='rebirth.custom'>Rinascita Personalizzata</h4>
+          <div class='rebirth-cost premium'>250 ASH</div>
+        </div>
+        <p class='rebirth-desc' data-i18n='rebirth.customDesc'>Tu scegli gli elementi dominanti della nuova fenice. Crea il tuo profilo ideale e personalizza completamente l\'aspetto.</p>
+        <button class='rebirth-btn premium' id='rebirthCustom' data-i18n='rebirth.btnCustom'>Rinascita Personalizzata →</button>
+      </div>
+    </div>
   </section>
 
   <section class='section'>
@@ -167,7 +204,10 @@ const I18N={
     'stat.power':'Potenza Lunare','stat.boost':'Bonus Elemento','stat.boostSub':'Cresce ogni giorno',
     'stat.gen':'Generazione','stat.age':'Età','stat.ageSub':'giorni',
     'moon.h':'Influenza Lunare','moon.power':'Potenza (0-100%)','moon.desc':'La potenza della fenice cresce al crescere della luna e raggiunge il massimo durante il plenilunio. Influisce su tutti i tuoi quiz.',
-    'boost.h':'Potenzia le Statistiche','boost.desc':'Spendi ASH per potenziare le statistiche della fenice (fino a fine mese). Effetti reset a ogni rigenerazione.',
+    'ashes.h':'Ceneri della Fenice','ashes.amount':'Ceneri disponibili','ashes.note':'Accumulate dalla rinascita precedente',
+    'rebirth.title':'Scegli la modalità di rinascita','rebirth.standard':'Rinascita Standard','rebirth.standardDesc':'La fenice rinasce con caratteristiche legate alla tua personalità (Big Five + MBTI). Statistiche casuali ma coerenti con il tuo profilo.',
+    'rebirth.btn':'Rinascita Standard →','rebirth.custom':'Rinascita Personalizzata','rebirth.customDesc':'Tu scegli gli elementi dominanti della nuova fenice. Crea il tuo profilo ideale e personalizza completamente l\'aspetto.',
+    'rebirth.btnCustom':'Rinascita Personalizzata →',
     'regen.h':'Timeline Rigenerazione','regen.born':'Nata il','regen.next':'Rinascerà il','regen.countdown':'Giorni rimanenti',
     'regen.info':'Ogni mese la fenice rinasce con statistiche nuove casuali. Le precedenti restano nella collezione storica.',
     'coll.h':'Collezione Storica','coll.desc':'Le tue fenici precedenti. Non influiscono su quiz, ma rimangono nella collezione finché non vengono cancellate dalla blockchain.',
@@ -177,22 +217,25 @@ const I18N={
     'stat.power':'Lunar Power','stat.boost':'Element Bonus','stat.boostSub':'Grows each day',
     'stat.gen':'Generation','stat.age':'Age','stat.ageSub':'days',
     'moon.h':'Lunar Influence','moon.power':'Power (0-100%)','moon.desc':'Your phoenix\'s power grows with the moon and peaks at full moon. It affects all your quizzes.',
-    'boost.h':'Boost Statistics','boost.desc':'Spend ASH to boost your phoenix\'s stats (until month-end). Effects reset at each rebirth.',
+    'ashes.h':'Phoenix Ashes','ashes.amount':'Ashes available','ashes.note':'Accumulated from previous rebirth',
+    'rebirth.title':'Choose rebirth mode','rebirth.standard':'Standard Rebirth','rebirth.standardDesc':'Your phoenix is reborn with traits linked to your personality (Big Five + MBTI). Random stats but consistent with your profile.',
+    'rebirth.btn':'Standard Rebirth →','rebirth.custom':'Personalized Rebirth','rebirth.customDesc':'You choose the dominant elements of your new phoenix. Create your ideal profile and fully customize its appearance.',
+    'rebirth.btnCustom':'Personalized Rebirth →',
     'regen.h':'Rebirth Timeline','regen.born':'Born on','regen.next':'Will be reborn on','regen.countdown':'Days remaining',
     'regen.info':'Each month your phoenix is reborn with new random stats. Previous ones remain in historic collection.',
     'coll.h':'Historic Collection','coll.desc':'Your previous phoenixes. They don\'t affect quizzes but remain in collection until blockchain deletion.',
     'coll.blockchain':'💾 Managed by blockchain — permanent deletion possible'}
 };
 
-// Dati demo utente
+// Demo user data
 const userData={
   phoenixName:'Ignis',
   element:'Fuoco',
   generation:1,
-  bornDate:new Date(2026,5,1), // 1 giugno 2026
-  stats:{O:65,C:72,E:58,A:55,N:42}, // Big Five
+  bornDate:new Date(2026,5,1),
+  stats:{O:65,C:72,E:58,A:55,N:42},
   mbti:'ISFP',
-  boosts:{power:0,speed:0,resistance:0,magic:0}
+  ashes:342
 };
 
 function applyI18n(){
@@ -201,8 +244,7 @@ function applyI18n(){
 }
 
 function getMoonPhase(date){
-  // Calcolo fase lunare (semplificato: ciclo 29.53 giorni)
-  const knownNewMoon=new Date(2000,0,6); // Luna nuova nota
+  const knownNewMoon=new Date(2000,0,6);
   const diff=Math.floor((date-knownNewMoon)/(24*3600*1000));
   const cycle=diff%29.53;
   return cycle;
@@ -210,10 +252,8 @@ function getMoonPhase(date){
 
 function updateMoonStats(){
   const now=new Date();
-  const phase=getMoonPhase(now); // 0-29.53
-  const progress=(phase/29.53)*100;
-  const power=Math.round(Math.sin((phase/29.53)*Math.PI)*100); // 0-100 durante ciclo
-  
+  const phase=getMoonPhase(now);
+  const power=Math.round(Math.sin((phase/29.53)*Math.PI)*100);
   const phases=['Luna Nuova','Crescente','Primo Quarto','Gibbosa Crescente','Luna Piena','Gibbosa Calante','Ultimo Quarto','Calante'];
   const phaseIdx=Math.floor((phase/29.53)*8)%8;
   const phaseName=lang==='it'?phases[phaseIdx]:['New Moon','Waxing','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning'][phaseIdx];
@@ -226,11 +266,9 @@ function updateMoonStats(){
 }
 
 function updateElementBoost(){
-  const bornDate=userData.bornDate;
   const now=new Date();
   const dayOfMonth=now.getDate();
-  // Boost cresce ogni giorno da inizio mese a luna piena (approssimato)
-  const boost=Math.min(dayOfMonth*3.3, 100); // 0-100% in ~30 giorni
+  const boost=Math.min(dayOfMonth*3.3, 100);
   document.getElementById('elemBoost').textContent=Math.round(boost)+'%';
   return boost;
 }
@@ -253,28 +291,7 @@ function updateTimeline(){
   document.getElementById('daysLeft').textContent=daysLeft;
 }
 
-function buildBoostControls(){
-  const stats=[['Potenza','Power','power'],['Velocità','Speed','speed'],['Resistenza','Resistance','resistance'],['Magia','Magic','magic']];
-  const html=stats.map(([it,en,key])=>{
-    const label=lang==='it'?it:en;
-    const cost=5; // 5 ASH per punto
-    return `<div class='boost-card'>
-      <div class='boost-title'>${label}</div>
-      <input type='range' class='boost-slider' min='0' max='20' value='0' data-stat='${key}'/>
-      <div class='boost-cost'>${cost} ASH/pt</div>
-    </div>`;
-  }).join('');
-  document.getElementById('boostControls').innerHTML=html;
-  document.querySelectorAll('.boost-slider').forEach(slider=>{
-    slider.addEventListener('input',(e)=>{
-      userData.boosts[e.target.dataset.stat]=parseInt(e.target.value);
-      console.log('Boost updated:',userData.boosts);
-    });
-  });
-}
-
 function buildCollection(){
-  // Demo: 3 generazioni precedenti
   const prevPhoenixes=[
     {gen:0,element:'Aria',born:new Date(2026,4,4),status:'archived'},
     {gen:-1,element:'Ombra',born:new Date(2026,3,7),status:'archived'},
@@ -290,7 +307,6 @@ function buildCollection(){
     </div>`;
   }).join('');
   
-  // Aggiungi quella attiva
   const current=`<div class='collection-card active'>
     <div class='collection-gen'>#${userData.generation}</div>
     <div class='collection-element'>${userData.element}</div>
@@ -306,20 +322,24 @@ function init(){
   document.getElementById('elementName').textContent=userData.element;
   document.getElementById('generation').textContent='#'+userData.generation;
   document.getElementById('genDate').textContent=`Gen ${userData.generation}, ${userData.bornDate.getFullYear()}`;
+  document.getElementById('ashesAmount').textContent=userData.ashes;
   
   updateMoonStats();
   updateElementBoost();
   updateAge();
   updateTimeline();
-  buildBoostControls();
   buildCollection();
+  
+  // Click handlers
+  document.getElementById('rebirthStandard').onclick=()=>alert(lang==='it'?'Rinascita Standard: 80 ASH\n(Da implementare con blockchain)':'Standard Rebirth: 80 ASH\n(To be implemented with blockchain)');
+  document.getElementById('rebirthCustom').onclick=()=>alert(lang==='it'?'Rinascita Personalizzata: 250 ASH\n(Da implementare con blockchain)':'Personalized Rebirth: 250 ASH\n(To be implemented with blockchain)');
   
   setInterval(()=>{
     updateMoonStats();
     updateElementBoost();
     updateAge();
     updateTimeline();
-  },10000); // Aggiorna ogni 10 secondi
+  },10000);
 }
 
 document.querySelectorAll('.lang-switch button').forEach(b=>{
