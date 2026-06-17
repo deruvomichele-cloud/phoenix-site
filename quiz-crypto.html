@@ -1,0 +1,227 @@
+<!doctype html><html lang='it'><head><meta charset='UTF-8'/><meta name='viewport' content='width=device-width,initial-scale=1.0'/><title>Phoenix — Quiz Crypto</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;color:#f0e8ea;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;overflow-x:hidden;cursor:none;min-height:100%}
+a{text-decoration:none;color:inherit}
+@media(hover:none){html,body{cursor:auto}}
+.header{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.5rem;border-bottom:1px solid rgba(192,34,62,.18);position:sticky;top:0;background:#000;z-index:50}
+.brand{display:flex;align-items:center;gap:.4rem;flex-shrink:0}
+.brand img{width:52px;height:52px;object-fit:contain;mix-blend-mode:screen}
+.brand span{font-weight:900;letter-spacing:.06em;font-size:1.2rem;color:#fff;text-shadow:0 0 8px rgba(227,65,89,.9),0 0 18px rgba(192,34,62,.7)}
+.spacer{flex:1}
+.lang-switch{display:flex;gap:.3rem}
+.lang-switch button{background:transparent;border:2px solid transparent;padding:.2rem;border-radius:4px;cursor:none;transition:transform .2s,border-color .2s;line-height:0}
+.lang-switch button img{width:26px;height:19px;display:block;border-radius:2px}
+.lang-switch button:hover{transform:scale(1.15)}
+.lang-switch button.active{border-color:rgba(227,65,89,.8);transform:scale(1.15)}
+.btn-back{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:.55rem 1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:8px;cursor:none;font-size:.78rem;white-space:nowrap;margin-left:.6rem;transition:box-shadow .2s}
+.btn-back:hover{box-shadow:0 0 18px rgba(227,65,89,.6)}
+@media(hover:none){.lang-switch button,.btn-back{cursor:auto}}
+#flame{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:1000}
+.wrap{max-width:760px;margin:0 auto;padding:2.5rem 1.2rem 5rem;position:relative;z-index:2}
+.intro{text-align:center;padding-top:1rem}
+.eyebrow{font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(227,65,89,.75);font-weight:700;margin-bottom:1rem}
+.title{font-size:clamp(2.4rem,7vw,4rem);font-weight:900;line-height:.95;letter-spacing:-.02em;text-transform:uppercase;background:linear-gradient(180deg,#ff5f6e,#7a1228);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.4rem}
+.subtitle{font-size:1.05rem;color:rgba(240,232,234,.65);max-width:520px;margin:0 auto 2rem;line-height:1.6}
+.meta-row{display:flex;justify-content:center;gap:2.4rem;margin:0 auto 2.4rem;flex-wrap:wrap}
+.meta{text-align:center}
+.meta b{display:block;font-size:1.9rem;font-weight:900;color:#fff;line-height:1}
+.meta small{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(240,232,234,.45)}
+.start-btn,.nav-btn{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:1rem 2.4rem;font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;border-radius:12px;cursor:none;box-shadow:0 0 24px rgba(192,34,62,.4);transition:transform .15s,box-shadow .15s}
+.start-btn:hover,.nav-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 0 34px rgba(227,65,89,.6)}
+.nav-btn:disabled{opacity:.4}
+@media(hover:none){.start-btn,.nav-btn{cursor:auto}}
+.progress-head{position:sticky;top:67px;background:#000;padding:1.1rem 0 .9rem;z-index:20;border-bottom:1px solid rgba(192,34,62,.1)}
+.pbar{height:6px;background:rgba(192,34,62,.15);border-radius:99px;overflow:hidden}
+.pfill{height:100%;width:0;background:linear-gradient(90deg,#7a1228,#ff5f6e);border-radius:99px;transition:width .35s}
+.pmeta{display:flex;justify-content:space-between;margin-top:.5rem;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,232,234,.5)}
+.qcard{padding-top:2.4rem}
+.badge{display:inline-block;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;font-weight:800;padding:.3rem .7rem;border-radius:99px;margin-bottom:1rem}
+.b-easy{background:rgba(40,180,99,.16);color:#3ed47e;border:1px solid rgba(62,212,126,.4)}
+.b-med{background:rgba(227,150,30,.16);color:#ffb454;border:1px solid rgba(255,180,84,.4)}
+.b-hard{background:rgba(227,65,89,.16);color:#ff6b7e;border:1px solid rgba(255,107,126,.4)}
+.qtext{font-size:1.5rem;font-weight:800;line-height:1.3;margin-bottom:1.8rem;color:#fff}
+.opts{display:flex;flex-direction:column;gap:.8rem}
+.opt{text-align:left;padding:1.05rem 1.2rem;border:1.5px solid rgba(192,34,62,.25);border-radius:12px;background:rgba(20,0,5,.5);color:#f0e8ea;font-size:1rem;font-weight:600;cursor:none;transition:border-color .18s,background .18s,transform .12s;display:flex;align-items:center;gap:.9rem}
+.opt:hover:not(.locked){border-color:rgba(227,65,89,.7);background:rgba(40,5,12,.7);transform:translateX(4px)}
+.opt .k{width:30px;height:30px;border-radius:8px;background:rgba(192,34,62,.2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;flex-shrink:0}
+.opt.correct{border-color:#3ed47e;background:rgba(40,180,99,.14)}
+.opt.correct .k{background:#3ed47e;color:#001b0a}
+.opt.wrong{border-color:#ff6b7e;background:rgba(227,65,89,.14)}
+.opt.wrong .k{background:#ff6b7e;color:#1b0005}
+.opt.locked{cursor:default}
+@media(hover:none){.opt{cursor:auto}}
+.feedback{margin-top:1.5rem;padding:1.1rem 1.2rem;border-radius:12px;font-size:.95rem;line-height:1.5;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:rgba(40,180,99,.12);border:1px solid rgba(62,212,126,.35);color:#bff0d2}
+.feedback.no{background:rgba(227,65,89,.12);border:1px solid rgba(255,107,126,.35);color:#ffd2d8}
+.feedback b{color:#fff}
+.qnav{display:flex;justify-content:flex-end;margin-top:2rem}
+.result{text-align:center;padding-top:1.5rem;display:none}
+.result.show{display:block}
+.score-ring{font-size:clamp(3.5rem,12vw,6rem);font-weight:900;line-height:1;background:linear-gradient(180deg,#ff5f6e,#7a1228);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.rlabel{font-size:.75rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(240,232,234,.5);margin-bottom:1.6rem}
+.ash-box{display:inline-flex;align-items:center;gap:.7rem;padding:1rem 1.8rem;border:1px solid rgba(227,65,89,.4);border-radius:14px;background:rgba(20,0,5,.6);margin:1.4rem 0;font-size:1.3rem;font-weight:800;color:#fff}
+.ash-box small{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(240,232,234,.5);font-weight:700}
+.rgrid{display:flex;justify-content:center;gap:2.6rem;margin:1.4rem 0 2.2rem;flex-wrap:wrap}
+.rgrid .meta b{font-size:1.6rem}
+.rbtns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.note{font-size:.78rem;color:rgba(240,232,234,.4);margin-top:1.8rem;line-height:1.5}
+</style></head><body>
+<canvas id='flame'></canvas>
+<header class='header'>
+  <a href='index.html' class='brand'><img src='https://i.ibb.co/chkW0mST/fenice-sfondo-completamente-nero-c499a262.png' alt='Phoenix'/><span>PHOENIX</span></a>
+  <div class='spacer'></div>
+  <div class='lang-switch'>
+    <button class='active' data-lang='it'><img src='https://flagcdn.com/24x18/it.png' alt='IT'/></button>
+    <button data-lang='en'><img src='https://flagcdn.com/24x18/gb.png' alt='EN'/></button>
+  </div>
+  <a href='index.html' class='btn-back' data-i18n='back'>← Home</a>
+</header>
+<div class='wrap'>
+  <!-- INTRO -->
+  <section id='intro' class='intro'>
+    <div class='eyebrow' data-i18n='eyebrow'>Crypto Academy</div>
+    <h1 class='title' data-i18n='title'>Quiz Crypto</h1>
+    <p class='subtitle' data-i18n='sub'>Dalla base alla DeFi avanzata. Rispondi e trasforma la conoscenza in ceneri.</p>
+    <div class='meta-row'>
+      <div class='meta'><b id='qcount'>12</b><small data-i18n='m_q'>Domande</small></div>
+      <div class='meta'><b>3</b><small data-i18n='m_lvl'>Livelli</small></div>
+      <div class='meta'><b id='maxash'>24</b><small data-i18n='m_ash'>ASH max</small></div>
+    </div>
+    <button class='start-btn' id='startBtn' data-i18n='start'>Inizia →</button>
+    <p class='note' data-i18n='note'>Punteggio: Facile 10pt · Medio 20pt · Difficile 30pt. Le ceneri guadagnate alimentano la tua fenice.</p>
+  </section>
+  <!-- QUIZ -->
+  <section id='quiz' style='display:none'>
+    <div class='progress-head'>
+      <div class='pbar'><div class='pfill' id='pfill'></div></div>
+      <div class='pmeta'><span id='pnum'>1 / 12</span><span id='pscore'>0 pt</span></div>
+    </div>
+    <div class='qcard'>
+      <span class='badge' id='qbadge'>Facile</span>
+      <h2 class='qtext' id='qtext'>...</h2>
+      <div class='opts' id='opts'></div>
+      <div class='feedback' id='feedback'></div>
+      <div class='qnav'><button class='nav-btn' id='nextBtn' disabled data-i18n='next'>Avanti →</button></div>
+    </div>
+  </section>
+  <!-- RESULT -->
+  <section id='result' class='result'>
+    <div class='eyebrow' data-i18n='r_eyebrow'>Risultato</div>
+    <div class='score-ring'><span id='rScore'>0</span><span style='font-size:.4em;color:rgba(240,232,234,.4)'>/240</span></div>
+    <div class='rlabel'><span id='rPct'>0</span>% — <span id='rGrade'>—</span></div>
+    <div class='ash-box'>🔥 <span id='rAsh'>0</span> ASH <small data-i18n='r_earned'>guadagnate</small></div>
+    <div class='rgrid'>
+      <div class='meta'><b id='rCorrect'>0</b><small data-i18n='r_ok'>Corrette</small></div>
+      <div class='meta'><b id='rBest'>0</b><small data-i18n='r_best'>Record</small></div>
+    </div>
+    <div class='rbtns'>
+      <button class='nav-btn' id='retryBtn' data-i18n='retry'>Riprova</button>
+      <a href='index.html' class='nav-btn' style='display:inline-block;text-decoration:none' data-i18n='home'>Home</a>
+    </div>
+    <p class='note' data-i18n='r_note'>Le ceneri guadagnate vengono accumulate. L'integrazione on-chain con il token ASH arriverà a breve.</p>
+  </section>
+</div>
+<script>
+var QUESTIONS=[{"diff": "easy", "q": {"it": "Con quale pseudonimo è conosciuto il creatore di Bitcoin?", "en": "By what pseudonym is the creator of Bitcoin known?"}, "opts": [{"it": "Satoshi Nakamoto", "en": "Satoshi Nakamoto"}, {"it": "Vitalik Buterin", "en": "Vitalik Buterin"}, {"it": "Elon Musk", "en": "Elon Musk"}, {"it": "Craig Wright", "en": "Craig Wright"}], "answer": 0, "exp": {"it": "Bitcoin fu presentato nel 2008 nel whitepaper firmato Satoshi Nakamoto, identità tuttora sconosciuta.", "en": "Bitcoin was introduced in the 2008 whitepaper signed Satoshi Nakamoto, an identity still unknown."}}, {"diff": "easy", "q": {"it": "A cosa serve un wallet crypto?", "en": "What is a crypto wallet for?"}, "opts": [{"it": "A conservare le chiavi e gestire le criptovalute", "en": "To store keys and manage cryptocurrencies"}, {"it": "A minare Bitcoin più velocemente", "en": "To mine Bitcoin faster"}, {"it": "A creare nuove blockchain", "en": "To create new blockchains"}, {"it": "A pagare le tasse automaticamente", "en": "To pay taxes automatically"}], "answer": 0, "exp": {"it": "Un wallet custodisce le chiavi private/pubbliche che ti danno accesso ai tuoi fondi on-chain.", "en": "A wallet holds the private/public keys that give you access to your on-chain funds."}}, {"diff": "easy", "q": {"it": "Cosa significa lo slang 'HODL'?", "en": "What does the slang 'HODL' mean?"}, "opts": [{"it": "Tenere le crypto a lungo termine senza vendere", "en": "Hold crypto long-term without selling"}, {"it": "Vendere tutto subito", "en": "Sell everything immediately"}, {"it": "Un tipo di hardware wallet", "en": "A type of hardware wallet"}, {"it": "Una commissione di rete", "en": "A network fee"}], "answer": 0, "exp": {"it": "Nato da un errore di battitura di 'hold', indica la strategia di mantenere le crypto nel tempo.", "en": "Born from a typo of 'hold', it refers to the strategy of keeping crypto over time."}}, {"diff": "easy", "q": {"it": "Quale di questi è uno scambio decentralizzato (DEX)?", "en": "Which of these is a decentralized exchange (DEX)?"}, "opts": [{"it": "Uniswap", "en": "Uniswap"}, {"it": "Una banca tradizionale", "en": "A traditional bank"}, {"it": "PayPal", "en": "PayPal"}, {"it": "Western Union", "en": "Western Union"}], "answer": 0, "exp": {"it": "Uniswap è un DEX: scambi token direttamente da wallet, senza intermediario centrale.", "en": "Uniswap is a DEX: you swap tokens directly from your wallet, with no central intermediary."}}, {"diff": "medium", "q": {"it": "Cos'è essenzialmente una blockchain?", "en": "What is a blockchain essentially?"}, "opts": [{"it": "Un registro distribuito e immutabile di transazioni", "en": "A distributed, immutable ledger of transactions"}, {"it": "Un singolo server centrale", "en": "A single central server"}, {"it": "Un foglio Excel su un PC", "en": "An Excel sheet on one PC"}, {"it": "Un browser web", "en": "A web browser"}], "answer": 0, "exp": {"it": "È un registro replicato su molti nodi: una volta scritto, un blocco è praticamente immutabile.", "en": "It's a ledger replicated across many nodes: once written, a block is practically immutable."}}, {"diff": "medium", "q": {"it": "Cosa significa l'acronimo DeFi?", "en": "What does the acronym DeFi stand for?"}, "opts": [{"it": "Finanza Decentralizzata", "en": "Decentralized Finance"}, {"it": "Finanza Differita", "en": "Deferred Finance"}, {"it": "Deposito Fisso", "en": "Definite Fund"}, {"it": "Valuta Digitale", "en": "Digital Finance"}], "answer": 0, "exp": {"it": "DeFi = Decentralized Finance: servizi finanziari (prestiti, scambi) senza intermediari, via smart contract.", "en": "DeFi = Decentralized Finance: financial services (lending, swaps) with no intermediaries, via smart contracts."}}, {"diff": "medium", "q": {"it": "Cos'è una 'gas fee'?", "en": "What is a 'gas fee'?"}, "opts": [{"it": "La commissione per eseguire un'operazione su una blockchain", "en": "The fee to execute an operation on a blockchain"}, {"it": "Il prezzo del Bitcoin", "en": "The price of Bitcoin"}, {"it": "Un bonus per chi fa staking", "en": "A bonus for stakers"}, {"it": "Una penale per vendere", "en": "A penalty for selling"}], "answer": 0, "exp": {"it": "Il 'gas' è il costo computazionale di una transazione, pagato ai validatori della rete.", "en": "'Gas' is the computational cost of a transaction, paid to the network's validators."}}, {"diff": "medium", "q": {"it": "Storicamente, quale rete è la più usata per gli smart contract?", "en": "Historically, which network is most used for smart contracts?"}, "opts": [{"it": "Ethereum", "en": "Ethereum"}, {"it": "Bitcoin", "en": "Bitcoin"}, {"it": "Dogecoin", "en": "Dogecoin"}, {"it": "Litecoin", "en": "Litecoin"}], "answer": 0, "exp": {"it": "Ethereum (2015) ha reso popolari gli smart contract programmabili e l'ecosistema DeFi/NFT.", "en": "Ethereum (2015) popularized programmable smart contracts and the DeFi/NFT ecosystem."}}, {"diff": "hard", "q": {"it": "Quale meccanismo di consenso usa Ethereum dopo 'The Merge' (2022)?", "en": "Which consensus mechanism does Ethereum use after 'The Merge' (2022)?"}, "opts": [{"it": "Proof of Stake", "en": "Proof of Stake"}, {"it": "Proof of Work", "en": "Proof of Work"}, {"it": "Proof of Authority", "en": "Proof of Authority"}, {"it": "Proof of Burn", "en": "Proof of Burn"}], "answer": 0, "exp": {"it": "Con The Merge (set. 2022) Ethereum è passato da Proof of Work a Proof of Stake, tagliando i consumi ~99%.", "en": "With The Merge (Sep 2022) Ethereum switched from Proof of Work to Proof of Stake, cutting energy use ~99%."}}, {"diff": "hard", "q": {"it": "Cos'è un 'Layer 2' come Base o Arbitrum?", "en": "What is a 'Layer 2' like Base or Arbitrum?"}, "opts": [{"it": "Una rete sopra una blockchain principale per ridurre costi e aumentare velocità", "en": "A network on top of a main chain to cut costs and boost speed"}, {"it": "Un nuovo tipo di wallet hardware", "en": "A new kind of hardware wallet"}, {"it": "Una moneta meme", "en": "A meme coin"}, {"it": "Un exchange centralizzato", "en": "A centralized exchange"}], "answer": 0, "exp": {"it": "I Layer 2 elaborano le transazioni fuori dalla L1 e poi le ancorano ad essa, abbassando le fee. Base è la L2 di Coinbase.", "en": "Layer 2s process transactions off the L1 then anchor them to it, lowering fees. Base is Coinbase's L2."}}, {"diff": "hard", "q": {"it": "A cosa è ancorata una stablecoin come USDC?", "en": "What is a stablecoin like USDC pegged to?"}, "opts": [{"it": "Al valore di una valuta fiat (es. dollaro USA)", "en": "To the value of a fiat currency (e.g. US dollar)"}, {"it": "Al prezzo dell'oro fisico custodito da te", "en": "To physical gold you hold yourself"}, {"it": "Al numero di follower del progetto", "en": "To the project's follower count"}, {"it": "A nulla, fluttua liberamente", "en": "To nothing, it floats freely"}], "answer": 0, "exp": {"it": "USDC mira a mantenere 1:1 col dollaro, garantito da riserve. È usata come 'contante' on-chain.", "en": "USDC aims to hold 1:1 with the dollar, backed by reserves. It's used as on-chain 'cash'."}}, {"diff": "hard", "q": {"it": "In un DEX, cos'è una 'liquidity pool'?", "en": "In a DEX, what is a 'liquidity pool'?"}, "opts": [{"it": "Token bloccati in uno smart contract che permettono gli scambi", "en": "Tokens locked in a smart contract that enable swaps"}, {"it": "Una chat di trader", "en": "A traders' chat room"}, {"it": "Il portafoglio personale del fondatore", "en": "The founder's personal wallet"}, {"it": "Una lista di prezzi statici", "en": "A static price list"}], "answer": 0, "exp": {"it": "I fornitori depositano coppie di token in un pool; gli scambi avvengono contro il pool e i fornitori guadagnano fee.", "en": "Providers deposit token pairs into a pool; swaps happen against the pool and providers earn fees."}}];
+var I18N={"it": {"back": "← Home", "eyebrow": "Crypto Academy", "title": "Quiz Crypto", "sub": "Dalla base alla DeFi avanzata. Rispondi e trasforma la conoscenza in ceneri.", "m_q": "Domande", "m_lvl": "Livelli", "m_ash": "ASH max", "start": "Inizia →", "note": "Punteggio: Facile 10pt · Medio 20pt · Difficile 30pt. Le ceneri guadagnate alimentano la tua fenice.", "next": "Avanti →", "r_eyebrow": "Risultato", "r_earned": "guadagnate", "r_ok": "Corrette", "r_best": "Record", "retry": "Riprova", "home": "Home", "r_note": "Le ceneri guadagnate vengono accumulate. L'integrazione on-chain con il token ASH arriverà a breve."}, "en": {"back": "← Home", "eyebrow": "Crypto Academy", "title": "Crypto Quiz", "sub": "From the basics to advanced DeFi. Answer and turn knowledge into ashes.", "m_q": "Questions", "m_lvl": "Levels", "m_ash": "Max ASH", "start": "Start →", "note": "Scoring: Easy 10pt · Medium 20pt · Hard 30pt. Earned ashes feed your phoenix.", "next": "Next →", "r_eyebrow": "Result", "r_earned": "earned", "r_ok": "Correct", "r_best": "Best", "retry": "Retry", "home": "Home", "r_note": "Earned ashes are accumulated. On-chain integration with the ASH token is coming soon."}};
+var STORE_KEY='phoenixQuizCryptoBest';
+var lang='it';
+function applyI18n(){document.querySelectorAll('[data-i18n]').forEach(function(el){var k=el.getAttribute('data-i18n');if(I18N[lang]&&I18N[lang][k]!=null)el.textContent=I18N[lang][k];});document.documentElement.lang=lang;if(typeof render==='function'&&document.getElementById('quiz').style.display!=='none')render();}
+document.querySelectorAll('.lang-switch button').forEach(function(b){b.onclick=function(){document.querySelectorAll('.lang-switch button').forEach(function(x){x.classList.remove('active')});b.classList.add('active');lang=b.dataset.lang;applyI18n();};});
+
+var idx=0,score=0,correctCount=0,answered=false;
+var BADGE={easy:['b-easy','Facile','Easy'],medium:['b-med','Medio','Medium'],hard:['b-hard','Difficile','Hard']};
+var PTS={easy:10,medium:20,hard:30};
+var MAXSCORE=QUESTIONS.reduce(function(s,q){return s+PTS[q.diff]},0);
+
+function L(o){return (o&&o[lang]!=null)?o[lang]:(o&&o.it!=null?o.it:o)}
+
+function render(){
+  var q=QUESTIONS[idx];
+  document.getElementById('pnum').textContent=(idx+1)+' / '+QUESTIONS.length;
+  document.getElementById('pscore').textContent=score+' pt';
+  document.getElementById('pfill').style.width=((idx)/QUESTIONS.length*100)+'%';
+  var bd=BADGE[q.diff];
+  var bel=document.getElementById('qbadge');
+  bel.className='badge '+bd[0];
+  bel.textContent=(lang==='it'?bd[1]:bd[2]);
+  document.getElementById('qtext').textContent=L(q.q);
+  var fb=document.getElementById('feedback');fb.className='feedback';fb.textContent='';
+  var nb=document.getElementById('nextBtn');nb.disabled=true;
+  nb.textContent=(idx===QUESTIONS.length-1)?(lang==='it'?'Vedi risultato →':'See result →'):(lang==='it'?'Avanti →':'Next →');
+  answered=false;
+  var box=document.getElementById('opts');box.innerHTML='';
+  var keys=['A','B','C','D'];
+  q.opts.forEach(function(o,i){
+    var btn=document.createElement('button');btn.className='opt';
+    btn.innerHTML="<span class='k'>"+keys[i]+"</span><span>"+L(o)+"</span>";
+    btn.onclick=function(){choose(i,btn)};
+    box.appendChild(btn);
+  });
+}
+
+function choose(i,btn){
+  if(answered)return;answered=true;
+  var q=QUESTIONS[idx];
+  var opts=document.querySelectorAll('.opt');
+  opts.forEach(function(o){o.classList.add('locked')});
+  var fb=document.getElementById('feedback');
+  if(i===q.answer){
+    btn.classList.add('correct');
+    score+=PTS[q.diff];correctCount++;
+    fb.className='feedback show ok';
+    fb.innerHTML='<b>'+(lang==='it'?'Esatto! ':'Correct! ')+'</b>'+L(q.exp);
+  }else{
+    btn.classList.add('wrong');
+    opts[q.answer].classList.add('correct');
+    fb.className='feedback show no';
+    fb.innerHTML='<b>'+(lang==='it'?'Sbagliato. ':'Wrong. ')+'</b>'+L(q.exp);
+  }
+  document.getElementById('pscore').textContent=score+' pt';
+  document.getElementById('nextBtn').disabled=false;
+}
+
+document.getElementById('startBtn').onclick=function(){
+  document.getElementById('intro').style.display='none';
+  document.getElementById('quiz').style.display='block';
+  idx=0;score=0;correctCount=0;render();
+};
+document.getElementById('nextBtn').onclick=function(){
+  if(!answered)return;
+  if(idx<QUESTIONS.length-1){idx++;render();window.scrollTo({top:0,behavior:'smooth'});}
+  else finish();
+};
+document.getElementById('retryBtn').onclick=function(){
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('quiz').style.display='block';
+  idx=0;score=0;correctCount=0;render();window.scrollTo({top:0,behavior:'smooth'});
+};
+
+function finish(){
+  document.getElementById('quiz').style.display='none';
+  var pct=Math.round(score/MAXSCORE*100);
+  var ash=Math.floor(score/10);
+  var best=0;try{best=parseInt(localStorage.getItem(STORE_KEY)||'0',10)||0}catch(e){}
+  if(score>best){best=score;try{localStorage.setItem(STORE_KEY,String(best))}catch(e){}}
+  // accumulate total ashes from quizzes
+  try{var tot=parseInt(localStorage.getItem('phoenixQuizAsh')||'0',10)||0;localStorage.setItem('phoenixQuizAsh',String(tot+ash));}catch(e){}
+  document.getElementById('rScore').textContent=score;
+  document.getElementById('rPct').textContent=pct;
+  document.getElementById('rCorrect').textContent=correctCount+'/'+QUESTIONS.length;
+  document.getElementById('rBest').textContent=best;
+  document.getElementById('rAsh').textContent=ash;
+  var g;
+  if(pct>=90)g=lang==='it'?'Maestro della Fenice':'Phoenix Master';
+  else if(pct>=70)g=lang==='it'?'Esperto':'Expert';
+  else if(pct>=50)g=lang==='it'?'Apprendista':'Apprentice';
+  else g=lang==='it'?'Novizio':'Novice';
+  document.getElementById('rGrade').textContent=g;
+  document.getElementById('pfill').style.width='100%';
+  document.getElementById('result').classList.add('show');
+}
+
+applyI18n();
+(function(){var c=document.getElementById('flame');var x=c.getContext('2d');var ps=[];var m={x:-100,y:-100,active:false};var dpr=window.devicePixelRatio||1;function rs(){dpr=window.devicePixelRatio||1;c.width=innerWidth*dpr;c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';x.setTransform(dpr,0,0,dpr,0,0)}rs();addEventListener('resize',rs);addEventListener('mousemove',function(e){m.x=e.clientX;m.y=e.clientY;m.active=true;for(var i=0;i<3;i++){ps.push({x:e.clientX+(Math.random()-.5)*6,y:e.clientY+(Math.random()-.5)*6,vx:(Math.random()-.5)*.6,vy:-Math.random()*1.4-.4,life:0,maxLife:28+Math.random()*20,size:6+Math.random()*8})}if(ps.length>220)ps.splice(0,ps.length-220)});addEventListener('mouseleave',function(){m.active=false});function tick(){x.globalCompositeOperation='destination-out';x.fillStyle='rgba(0,0,0,0.18)';x.fillRect(0,0,c.width/dpr,c.height/dpr);x.globalCompositeOperation='lighter';for(var i=ps.length-1;i>=0;i--){var p=ps[i];p.life++;if(p.life>=p.maxLife){ps.splice(i,1);continue}p.x+=p.vx;p.y+=p.vy;p.vy-=.05;p.vx*=.96;var t=p.life/p.maxLife;var r=p.size*(1-t*.4);var al=(1-t)*.9;var g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,r);if(t<.45){g.addColorStop(0,'rgba(255,60,70,'+al+')');g.addColorStop(.35,'rgba(200,25,40,'+al*.85+')');g.addColorStop(.7,'rgba(130,10,25,'+al*.5+')');g.addColorStop(1,'rgba(60,0,10,0)')}else{var sm=(t-.45)/.55;var a2=al*(1-sm*.5);g.addColorStop(0,'rgba(160,20,35,'+a2*.75+')');g.addColorStop(.5,'rgba(90,8,20,'+a2*.4+')');g.addColorStop(1,'rgba(30,0,5,0)')}x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,r,0,Math.PI*2);x.fill()}if(m.active){var br=14;var cg=x.createRadialGradient(m.x,m.y,0,m.x,m.y,br);cg.addColorStop(0,'rgba(255,80,90,0.95)');cg.addColorStop(.35,'rgba(220,30,45,.8)');cg.addColorStop(.7,'rgba(140,12,28,0.5)');cg.addColorStop(1,'rgba(60,0,10,0)');x.fillStyle=cg;x.beginPath();x.arc(m.x,m.y,br,0,Math.PI*2);x.fill()}requestAnimationFrame(tick)}requestAnimationFrame(tick)})();
+</script>
+</body></html>
