@@ -1,0 +1,209 @@
+<!doctype html><html lang='it'><head><meta charset='UTF-8'/><meta name='viewport' content='width=device-width,initial-scale=1.0'/><title>Phoenix — Ritira Premi</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;color:#f0e8ea;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;overflow-x:hidden;cursor:none;min-height:100%}
+a{text-decoration:none;color:inherit}
+@media(hover:none){html,body{cursor:auto}}
+.header{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.5rem;border-bottom:1px solid rgba(192,34,62,.18);position:sticky;top:0;background:#000;z-index:50}
+.brand{display:flex;align-items:center;gap:.4rem;flex-shrink:0}
+.brand img{width:52px;height:52px;object-fit:contain;mix-blend-mode:screen}
+.brand span{font-weight:900;letter-spacing:.06em;font-size:1.2rem;color:#fff;text-shadow:0 0 8px rgba(227,65,89,.9),0 0 18px rgba(192,34,62,.7)}
+.spacer{flex:1}
+.lang-switch{display:flex;gap:.3rem}
+.lang-switch button{background:transparent;border:2px solid transparent;padding:.2rem;border-radius:4px;cursor:none;transition:transform .2s,border-color .2s;line-height:0}
+.lang-switch button img{width:26px;height:19px;display:block;border-radius:2px}
+.lang-switch button:hover{transform:scale(1.15)}
+.lang-switch button.active{border-color:rgba(227,65,89,.8);transform:scale(1.15)}
+.btn-back{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:.55rem 1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:8px;cursor:none;font-size:.78rem;white-space:nowrap;margin-left:.6rem;transition:box-shadow .2s}
+.btn-back:hover{box-shadow:0 0 18px rgba(227,65,89,.6)}
+@media(hover:none){.lang-switch button,.btn-back{cursor:auto}}
+#flame{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:1000}
+.wrap{max-width:760px;margin:0 auto;padding:2.5rem 1.2rem 5rem;position:relative;z-index:2}
+.intro{text-align:center;padding-top:1rem}
+.eyebrow{font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;color:rgba(227,65,89,.75);font-weight:700;margin-bottom:1rem}
+.title{font-size:clamp(2.4rem,7vw,4rem);font-weight:900;line-height:.95;letter-spacing:-.02em;text-transform:uppercase;background:linear-gradient(180deg,#ff5f6e,#7a1228);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.4rem}
+.subtitle{font-size:1.05rem;color:rgba(240,232,234,.65);max-width:520px;margin:0 auto 2rem;line-height:1.6}
+.box{padding:1.8rem;border:1px solid rgba(227,65,89,.25);border-radius:14px;background:rgba(20,0,5,.5);margin:2rem 0}
+.box h3{font-size:1.1rem;font-weight:800;margin-bottom:1rem;color:#fff}
+.box p{font-size:.95rem;line-height:1.6;color:rgba(240,232,234,.7);margin-bottom:1rem}
+.kyc-status{display:flex;align-items:center;gap:.8rem;padding:1.2rem;border-radius:12px;margin-bottom:1.5rem;font-weight:700}
+.kyc-status.pending{background:rgba(255,180,84,.12);border:1px solid rgba(255,180,84,.3);color:#ffb454}
+.kyc-status.verified{background:rgba(62,212,126,.12);border:1px solid rgba(62,212,126,.3);color:#3ed47e}
+.kyc-status.rejected{background:rgba(227,65,89,.12);border:1px solid rgba(227,65,89,.3);color:#ff6b7e}
+.kyc-icon{font-size:1.3rem}
+.btn-kyc{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:1rem 2rem;font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;border-radius:12px;cursor:none;box-shadow:0 0 24px rgba(192,34,62,.4);transition:transform .15s,box-shadow .15s;width:100%;max-width:400px;display:block;margin:0 auto}
+.btn-kyc:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 0 34px rgba(227,65,89,.6)}
+.btn-kyc:disabled{opacity:.4;cursor:default}
+.note{font-size:.78rem;color:rgba(240,232,234,.4);margin-top:1.5rem;line-height:1.5}
+#sumsub-container{margin:1.5rem 0;min-height:600px;border-radius:12px;overflow:hidden;border:1px solid rgba(227,65,89,.2)}
+.rewards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin:2rem 0}
+.reward-card{padding:1.3rem;border:1px solid rgba(192,34,62,.25);border-radius:12px;background:rgba(20,0,5,.5);text-align:center;transition:border-color .2s}
+.reward-card:hover{border-color:rgba(227,65,89,.7)}
+.reward-card .amount{font-size:1.6rem;font-weight:900;color:#ff6b7e;margin-bottom:.5rem}
+.reward-card .desc{font-size:.85rem;color:rgba(240,232,234,.6)}
+</style></head><body>
+<canvas id='flame'></canvas>
+<header class='header'>
+  <a href='index.html' class='brand'><img src='https://i.ibb.co/chkW0mST/fenice-sfondo-completamente-nero-c499a262.png' alt='Phoenix'/><span>PHOENIX</span></a>
+  <div class='spacer'></div>
+  <div class='lang-switch'>
+    <button class='active' data-lang='it'><img src='https://flagcdn.com/24x18/it.png' alt='IT'/></button>
+    <button data-lang='en'><img src='https://flagcdn.com/24x18/gb.png' alt='EN'/></button>
+  </div>
+  <a href='index.html' class='btn-back' data-i18n='back'>← Home</a>
+</header>
+<div class='wrap'>
+  <section class='intro'>
+    <div class='eyebrow' data-i18n='eyebrow'>Ritira Premi</div>
+    <h1 class='title' data-i18n='title'>Ritira i Tuoi Premi</h1>
+    <p class='subtitle' data-i18n='sub'>Verifica istantanea con AI. Completa la KYC in 2 secondi e accedi ai tuoi guadagni.</p>
+  </section>
+
+  <div class='box'>
+    <h3 data-i18n='rewards_title'>Premi Disponibili</h3>
+    <div class='rewards-grid'>
+      <div class='reward-card'><div class='amount'>$150</div><div class='desc' data-i18n='r1'>Phoenix Crown</div></div>
+      <div class='reward-card'><div class='amount'>$80</div><div class='desc' data-i18n='r2'>Embers Cup</div></div>
+      <div class='reward-card'><div class='amount'>$45</div><div class='desc' data-i18n='r3'>Ash Run</div></div>
+      <div class='reward-card'><div class='amount'>∞ ASH</div><div class='desc' data-i18n='r4'>Quiz Earnings</div></div>
+    </div>
+  </div>
+
+  <div class='box'>
+    <h3 data-i18n='kyc_title'>Verifica Identità (KYC)</h3>
+    <p data-i18n='kyc_desc'>Per ritirare i premi è richiesta una verifica d'identità rapida. Selfie + documento, verificati in tempo reale dall'AI. Nessun dato personale viene conservato oltre la verifica.</p>
+    
+    <div id='kyc-status-area'>
+      <div class='kyc-status pending' id='status-text'>
+        <span class='kyc-icon'>⏳</span>
+        <span data-i18n='status_pending'>Non verificato</span>
+      </div>
+    </div>
+
+    <button class='btn-kyc' id='kycBtn' data-i18n='btn_start'>Inizia Verifica KYC</button>
+    <div id='sumsub-container' style='display:none'></div>
+
+    <p class='note' data-i18n='note'>
+      ⏱️ Verifica in 1-2 secondi · 🔒 Dati sicuri e crittografati · ✅ Conforme AML/KYC · 🌍 Supporto globale
+    </p>
+  </div>
+
+  <div class='box' style='background:rgba(62,212,126,.08);border-color:rgba(62,212,126,.2)'>
+    <h3 style='color:#3ed47e' data-i18n='secure_title'>Sicurezza Garantita</h3>
+    <p data-i18n='secure_desc'>La verifica KYC è gestita da Sumsub, leader globale nella verifica d'identità con AI. I tuoi dati non vengono conservati da Phoenix Academy dopo la verifica — solo lo stato "verificato/non verificato" rimane nel nostro sistema.</p>
+  </div>
+</div>
+
+<script>
+var I18N={
+  it:{
+    back:'← Home',
+    eyebrow:'Ritira Premi',
+    title:'Ritira i Tuoi Premi',
+    sub:'Verifica istantanea con AI. Completa la KYC in 2 secondi e accedi ai tuoi guadagni.',
+    rewards_title:'Premi Disponibili',
+    r1:'Phoenix Crown',
+    r2:'Embers Cup',
+    r3:'Ash Run',
+    r4:'Quiz Earnings',
+    kyc_title:'Verifica Identità (KYC)',
+    kyc_desc:'Per ritirare i premi è richiesta una verifica d\'identità rapida. Selfie + documento, verificati in tempo reale dall\'AI. Nessun dato personale viene conservato oltre la verifica.',
+    status_pending:'Non verificato',
+    status_verified:'✅ Verificato — Pronto per ritirare!',
+    status_rejected:'❌ Verifica non riuscita',
+    btn_start:'Inizia Verifica KYC',
+    btn_done:'Verifica Completata',
+    note:'⏱️ Verifica in 1-2 secondi · 🔒 Dati sicuri e crittografati · ✅ Conforme AML/KYC · 🌍 Supporto globale',
+    secure_title:'Sicurezza Garantita',
+    secure_desc:'La verifica KYC è gestita da Sumsub, leader globale nella verifica d\'identità con AI. I tuoi dati non vengono conservati da Phoenix Academy dopo la verifica — solo lo stato "verificato/non verificato" rimane nel nostro sistema.'
+  },
+  en:{
+    back:'← Home',
+    eyebrow:'Withdraw Rewards',
+    title:'Claim Your Rewards',
+    sub:'Instant AI verification. Complete KYC in 2 seconds and access your earnings.',
+    rewards_title:'Available Rewards',
+    r1:'Phoenix Crown',
+    r2:'Embers Cup',
+    r3:'Ash Run',
+    r4:'Quiz Earnings',
+    kyc_title:'Identity Verification (KYC)',
+    kyc_desc:'To withdraw prizes, a quick identity verification is required. Selfie + document, verified in real-time by AI. No personal data is retained by Phoenix Academy after verification.',
+    status_pending:'Not verified',
+    status_verified:'✅ Verified — Ready to withdraw!',
+    status_rejected:'❌ Verification failed',
+    btn_start:'Start KYC Verification',
+    btn_done:'Verification Complete',
+    note:'⏱️ Verification in 1-2 seconds · 🔒 Secure encrypted data · ✅ AML/KYC compliant · 🌍 Global support',
+    secure_title:'Security Guaranteed',
+    secure_desc:'KYC verification is handled by Sumsub, the global leader in AI-powered identity verification. Your data is not retained by Phoenix Academy after verification — only the "verified/not verified" status remains in our system.'
+  }
+};
+
+var lang='it';
+function applyI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k=el.getAttribute('data-i18n');
+    if(I18N[lang]&&I18N[lang][k])el.textContent=I18N[lang][k];
+  });
+}
+document.querySelectorAll('.lang-switch button').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.lang-switch button').forEach(function(x){x.classList.remove('active')});
+    b.classList.add('active');
+    lang=b.dataset.lang;
+    applyI18n();
+  };
+});
+
+// Sumsub integration (TEST MODE - no real API key)
+var kycVerified=localStorage.getItem('phoenixKycVerified')==='true';
+var kycBtn=document.getElementById('kycBtn');
+var statusEl=document.getElementById('kyc-status-area');
+var container=document.getElementById('sumsub-container');
+
+function updateKycStatus(){
+  statusEl.innerHTML='';
+  if(kycVerified){
+    var el=document.createElement('div');
+    el.className='kyc-status verified';
+    el.innerHTML="<span class='kyc-icon'>✅</span><span data-i18n='status_verified'>"+I18N[lang].status_verified+"</span>";
+    statusEl.appendChild(el);
+    kycBtn.textContent=I18N[lang].btn_done;
+    kycBtn.disabled=true;
+    container.style.display='none';
+  }else{
+    var el=document.createElement('div');
+    el.className='kyc-status pending';
+    el.innerHTML="<span class='kyc-icon'>⏳</span><span data-i18n='status_pending'>"+I18N[lang].status_pending+"</span>";
+    statusEl.appendChild(el);
+    kycBtn.textContent=I18N[lang].btn_start;
+    kycBtn.disabled=false;
+  }
+}
+
+kycBtn.onclick=function(){
+  if(kycVerified)return;
+  // DEMO: In real scenario, questo aprirebbe il Sumsub SDK
+  // Per il test, simuliamo una verifica di successo dopo 2 secondi
+  container.style.display='block';
+  container.innerHTML='<div style="padding:2rem;text-align:center;color:rgba(240,232,234,.6)"><p style="margin-bottom:1rem">🎥 Sumsub Widget caricherebbe qui (TEST DEMO)</p><p style="font-size:.85rem;margin-bottom:1.5rem">In produzione: selfie + foto documento → AI verifica istantanea</p><button id="simulateBtn" style="background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:.8rem 1.6rem;border-radius:8px;font-weight:700;text-transform:uppercase;cursor:none;font-size:.8rem">Simula Verifica Riuscita (2 sec)</button></div>';
+  var simBtn=document.getElementById('simulateBtn');
+  simBtn.onclick=function(){
+    simBtn.textContent='Verificando...';
+    simBtn.disabled=true;
+    setTimeout(function(){
+      kycVerified=true;
+      localStorage.setItem('phoenixKycVerified','true');
+      updateKycStatus();
+      container.style.display='none';
+    },2000);
+  };
+};
+
+updateKycStatus();
+applyI18n();
+
+/* FLAME */
+(function(){var c=document.getElementById('flame');var x=c.getContext('2d');var ps=[];var m={x:-100,y:-100,active:false};var dpr=window.devicePixelRatio||1;function rs(){dpr=window.devicePixelRatio||1;c.width=innerWidth*dpr;c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';x.setTransform(dpr,0,0,dpr,0,0)}rs();addEventListener('resize',rs);addEventListener('mousemove',function(e){m.x=e.clientX;m.y=e.clientY;m.active=true;for(var i=0;i<3;i++){ps.push({x:e.clientX+(Math.random()-.5)*6,y:e.clientY+(Math.random()-.5)*6,vx:(Math.random()-.5)*.6,vy:-Math.random()*1.4-.4,life:0,maxLife:28+Math.random()*20,size:6+Math.random()*8})}if(ps.length>220)ps.splice(0,ps.length-220)});addEventListener('mouseleave',function(){m.active=false});function tick(){x.globalCompositeOperation='destination-out';x.fillStyle='rgba(0,0,0,0.18)';x.fillRect(0,0,c.width/dpr,c.height/dpr);x.globalCompositeOperation='lighter';for(var i=ps.length-1;i>=0;i--){var p=ps[i];p.life++;if(p.life>=p.maxLife){ps.splice(i,1);continue}p.x+=p.vx;p.y+=p.vy;p.vy-=.05;p.vx*=.96;var t=p.life/p.maxLife;var r=p.size*(1-t*.4);var al=(1-t)*.9;var g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,r);if(t<.45){g.addColorStop(0,'rgba(255,60,70,'+al+')');g.addColorStop(.35,'rgba(200,25,40,'+al*.85+')');g.addColorStop(.7,'rgba(130,10,25,'+al*.5+')');g.addColorStop(1,'rgba(60,0,10,0)')}else{var sm=(t-.45)/.55;var a2=al*(1-sm*.5);g.addColorStop(0,'rgba(160,20,35,'+a2*.75+')');g.addColorStop(.5,'rgba(90,8,20,'+a2*.4+')');g.addColorStop(1,'rgba(30,0,5,0)')}x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,r,0,Math.PI*2);x.fill()}if(m.active){var br=14;var cg=x.createRadialGradient(m.x,m.y,0,m.x,m.y,br);cg.addColorStop(0,'rgba(255,80,90,0.95)');cg.addColorStop(.35,'rgba(220,30,45,.8)');cg.addColorStop(.7,'rgba(140,12,28,0.5)');cg.addColorStop(1,'rgba(60,0,10,0)');x.fillStyle=cg;x.beginPath();x.arc(m.x,m.y,br,0,Math.PI*2);x.fill()}requestAnimationFrame(tick)}requestAnimationFrame(tick)})();
+</script>
+</body></html>
