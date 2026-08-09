@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Phoenix Admin</title>
+  <script src="admin-config.js"></script>
+  <style>
+    :root{--bg:#050305;--panel:#0c0709;--panel2:#12090c;--line:#3f151e;--muted:#a59498;--text:#f8f2f4;--red:#e33b52;--red2:#8f152a;--green:#50d890;--amber:#f0b95b;--blue:#6eb6ff;--danger:#ff6578}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button,a{cursor:pointer}.hidden{display:none!important}
+    body{background:radial-gradient(circle at 80% -20%,rgba(163,21,48,.2),transparent 34%),#050305}
+    .shell{display:grid;grid-template-columns:245px 1fr;min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;padding:1.4rem 1rem;background:#070405;border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:5}.brand{display:flex;align-items:center;gap:.75rem;padding:.45rem .55rem 1.5rem}.brand img{width:44px;height:44px;object-fit:contain}.brand strong{display:block;letter-spacing:.12em}.brand small{color:var(--red);font-weight:800;letter-spacing:.18em}.nav{display:grid;gap:.3rem}.nav button{border:0;background:transparent;color:#c9bcc0;text-align:left;padding:.78rem .85rem;border-radius:9px;font-weight:700}.nav button:hover,.nav button.active{color:#fff;background:linear-gradient(90deg,rgba(227,59,82,.23),rgba(227,59,82,.04));box-shadow:inset 3px 0 var(--red)}.nav .ico{display:inline-grid;width:1.7rem;color:#ff6d80}.side-bottom{margin-top:auto;border-top:1px solid var(--line);padding:.95rem .65rem 0;color:var(--muted);font-size:.78rem;line-height:1.5}.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--amber);margin-right:.4rem;box-shadow:0 0 8px currentColor}
+    .content{min-width:0}.topbar{position:sticky;top:0;z-index:4;display:flex;align-items:center;gap:1rem;justify-content:space-between;padding:1rem 1.4rem;background:rgba(5,3,5,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.topbar h1{font-size:1.05rem;margin:0}.top-actions{display:flex;align-items:center;gap:.65rem}.field,.select,.btn{border:1px solid #51202b;background:#0c0709;color:#eee;padding:.62rem .78rem;border-radius:8px}.field{min-width:220px}.btn{font-weight:750}.btn:hover{border-color:#a62b42;background:#160a0d}.btn-primary{background:linear-gradient(180deg,#d8324c,#8f152a);border-color:#ec5268;color:white}.btn-danger{color:#ff8d9b}.mode{display:flex;align-items:center;gap:.5rem;background:#251505;color:#ffd28a;border:1px solid #63461a;padding:.45rem .65rem;border-radius:999px;font-size:.73rem;font-weight:850;white-space:nowrap}
+    main{padding:1.4rem}.notice{display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:1rem 1.1rem;margin-bottom:1rem;border:1px solid #62471b;background:#1b1207;border-radius:11px;color:#f6d7a0}.notice strong{display:block;color:#ffe2ae}.notice small{color:#cbb68f}.view{display:none}.view.active{display:block}.section-head{display:flex;align-items:end;justify-content:space-between;gap:1rem;margin-bottom:1rem}.section-head h2{margin:0;font-size:1.45rem}.section-head p{margin:.25rem 0 0;color:var(--muted)}
+    .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.85rem;margin-bottom:.85rem}.kpi{background:linear-gradient(145deg,#10090b,#090506);border:1px solid var(--line);border-radius:12px;padding:1rem;min-width:0}.kpi .label{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}.kpi .value{font-size:1.65rem;font-weight:850;margin-top:.4rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.kpi .trend{font-size:.75rem;color:var(--green);margin-top:.3rem}.kpi .trend.down{color:var(--danger)}
+    .grid{display:grid;grid-template-columns:1.55fr 1fr;gap:.85rem;margin-bottom:.85rem}.grid.equal{grid-template-columns:1fr 1fr}.panel{background:linear-gradient(145deg,#0e080a,#080506);border:1px solid var(--line);border-radius:12px;padding:1rem;min-width:0}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:.7rem;margin-bottom:.9rem}.panel h3{margin:0;font-size:.92rem}.subtle{color:var(--muted);font-size:.75rem}.bars{display:flex;align-items:end;gap:6px;height:190px;padding-top:8px;border-bottom:1px solid #39131c}.bar{flex:1;min-width:4px;background:linear-gradient(180deg,#f24c64,#6d0d20);border-radius:4px 4px 0 0;position:relative}.bar:hover{filter:brightness(1.25)}.bar:hover::after{content:attr(data-value);position:absolute;left:50%;bottom:calc(100% + 6px);transform:translateX(-50%);font-size:.68rem;background:#210b11;border:1px solid #6e2231;padding:.25rem .35rem;border-radius:5px;white-space:nowrap;z-index:2}.donut-wrap{display:flex;align-items:center;gap:1.2rem}.donut{width:132px;aspect-ratio:1;border-radius:50%;background:conic-gradient(var(--red) 0 48%,#ad263d 48% 67%,#6a2331 67% 82%,#352229 82%);position:relative}.donut::after{content:"";position:absolute;inset:24px;border-radius:50%;background:#0b0708}.legend{display:grid;gap:.55rem;font-size:.8rem}.legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;background:var(--c);margin-right:.45rem}
+    .filters{display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:.85rem}.filters .field{min-width:180px}.filters .select{min-width:145px}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:11px;background:#090607}table{width:100%;border-collapse:collapse;min-width:900px}th,td{text-align:left;padding:.78rem .8rem;border-bottom:1px solid #2c1118;font-size:.78rem;white-space:nowrap}th{position:sticky;top:0;background:#14090c;color:#c6b3b8;text-transform:uppercase;letter-spacing:.06em;font-size:.66rem}tr:hover td{background:#10080a}.wallet{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#ff9eaa}.badge{display:inline-flex;align-items:center;padding:.26rem .48rem;border-radius:999px;font-size:.68rem;font-weight:800;border:1px solid #61303a;background:#211015}.badge.ok{color:#7ce8aa;border-color:#226a43;background:#0d291b}.badge.warn{color:#ffd078;border-color:#6e4b13;background:#2a1c07}.badge.bad{color:#ff8998;border-color:#7a2835;background:#2c0d13}.badge.info{color:#8ecaff;border-color:#29587d;background:#0d2130}.action{border:0;background:transparent;color:#ff8796;font-weight:800}.action:hover{color:#fff}.empty{text-align:center;padding:2.5rem;color:var(--muted)}
+    .progress{height:8px;background:#241016;border-radius:99px;overflow:hidden}.progress span{display:block;height:100%;background:linear-gradient(90deg,#a71931,#ef465e);border-radius:inherit}.metric-list{display:grid;gap:.72rem}.metric-row{display:grid;grid-template-columns:130px 1fr 70px;gap:.65rem;align-items:center;font-size:.78rem}.metric-row b{text-align:right}.funnel{display:grid;gap:.4rem;align-items:center}.funnel div{height:34px;margin:auto;background:linear-gradient(90deg,#7a1125,#e14158);border:1px solid #f0586d;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:850}.pool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}.pool-card{padding:.95rem;border:1px solid #3f1720;border-radius:10px;background:#0b0708}.pool-card small{color:var(--muted)}.pool-card strong{display:block;font-size:1.2rem;margin-top:.35rem}.ledger-positive{color:var(--green)}.ledger-negative{color:#ff8494}
+    dialog{width:min(720px,calc(100% - 2rem));border:1px solid #6f2434;border-radius:14px;background:#0b0708;color:#fff;padding:0;box-shadow:0 25px 80px rgba(0,0,0,.72)}dialog::backdrop{background:rgba(0,0,0,.72);backdrop-filter:blur(4px)}.dialog-head{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.2rem;border-bottom:1px solid #3b151e}.dialog-head h3{margin:0}.dialog-body{padding:1.2rem}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}.form-row{display:grid;gap:.35rem}.form-row.full{grid-column:1/-1}.form-row label{font-size:.72rem;color:#cdbbc0;font-weight:800}.form-row input,.form-row select,.form-row textarea{width:100%;border:1px solid #52202b;background:#080506;color:#fff;padding:.7rem;border-radius:8px}.form-row textarea{min-height:120px;resize:vertical}.dialog-actions{display:flex;justify-content:flex-end;gap:.6rem;margin-top:1rem}.close{border:0;background:transparent;color:#aaa;font-size:1.4rem}
+    @media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}.grid,.grid.equal{grid-template-columns:1fr}.pool-grid{grid-template-columns:1fr 1fr}.topbar{align-items:flex-start}.top-actions{flex-wrap:wrap;justify-content:flex-end}.field{min-width:160px}}
+    @media(max-width:760px){.shell{grid-template-columns:1fr}.sidebar{position:static;height:auto}.nav{grid-template-columns:repeat(3,1fr)}.nav button{text-align:center}.side-bottom{display:none}.topbar{position:static;display:block}.top-actions{margin-top:.8rem;justify-content:flex-start}.kpis{grid-template-columns:1fr}.pool-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.form-row.full{grid-column:auto}.notice{display:block}.mode{margin-bottom:.5rem;width:max-content}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><img src="ash-logo-256.png" alt="Phoenix"><div><strong>PHOENIX</strong><small>ADMIN</small></div></div>
+      <nav class="nav" aria-label="Sezioni amministrazione">
+        <button class="active" data-view="overview"><span class="ico">◆</span>Panoramica</button>
+        <button data-view="users"><span class="ico">●</span>Utenti</button>
+        <button data-view="quizzes"><span class="ico">?</span>Quiz</button>
+        <button data-view="analytics"><span class="ico">▥</span>Analytics</button>
+        <button data-view="finance"><span class="ico">$</span>Finanze</button>
+        <button data-view="pool"><span class="ico">≈</span>Pool ASH</button>
+        <button data-view="audit"><span class="ico">☷</span>Registro</button>
+      </nav>
+      <div class="side-bottom"><div><span class="status-dot"></span><span id="sourceStatus">Dati dimostrativi</span></div><div id="lastSync">Ultimo aggiornamento: ora</div></div>
+    </aside>
+
+    <div class="content">
+      <header class="topbar">
+        <h1 id="pageTitle">Panoramica operativa</h1>
+        <div class="top-actions">
+          <div class="mode" id="modeBadge">MODALITÀ PROTOTIPO</div>
+          <select class="select" id="period" aria-label="Intervallo"><option value="7">Ultimi 7 giorni</option><option value="30" selected>Ultimi 30 giorni</option><option value="90">Ultimi 90 giorni</option><option value="365">Ultimo anno</option></select>
+          <button class="btn" id="refreshBtn">Aggiorna</button>
+          <button class="btn" id="exportBtn">Esporta CSV</button>
+          <a class="btn" href="index.html">Torna al sito</a>
+        </div>
+      </header>
+
+      <main>
+        <div class="notice" id="demoNotice"><div><strong>Interfaccia pronta, dati dimostrativi</strong><small>GitHub Pages non può proteggere un pannello admin né raccogliere dati globali. Collega un backend autenticato in admin-config.js per passare ai dati reali.</small></div><span class="badge warn">BACKEND NON COLLEGATO</span></div>
+
+        <section class="view active" id="view-overview">
+          <div class="section-head"><div><h2>Panoramica</h2><p>Traffico, conversioni, attività utenti e flussi economici.</p></div></div>
+          <div class="kpis" id="overviewKpis"></div>
+          <div class="grid">
+            <article class="panel"><div class="panel-head"><h3>Visitatori e wallet collegati</h3><span class="subtle">30 giorni</span></div><div class="bars" id="trafficBars"></div></article>
+            <article class="panel"><div class="panel-head"><h3>Origine traffico</h3><span class="subtle">Sessioni</span></div><div class="donut-wrap"><div class="donut"></div><div class="legend"><span style="--c:#e33b52">Diretto · 48%</span><span style="--c:#ad263d">Social · 19%</span><span style="--c:#6a2331">Ricerca · 15%</span><span style="--c:#352229">Referral · 18%</span></div></div></article>
+          </div>
+          <div class="grid equal">
+            <article class="panel"><div class="panel-head"><h3>Funnel principale</h3><span class="subtle">Visitatori → giocatori</span></div><div class="funnel" id="funnel"></div></article>
+            <article class="panel"><div class="panel-head"><h3>Stato operativo</h3><span class="subtle">Aggiornamento simulato</span></div><div class="metric-list" id="opsMetrics"></div></article>
+          </div>
+        </section>
+
+        <section class="view" id="view-users">
+          <div class="section-head"><div><h2>Utenti iscritti</h2><p>Ogni wallet collegato viene registrato come utente.</p></div><span class="badge info" id="userCountBadge"></span></div>
+          <div class="filters"><input class="field" id="userSearch" placeholder="Cerca wallet, paese, elemento…"><select class="select" id="kycFilter"><option value="">Tutti i KYC</option><option>Verificato</option><option>In revisione</option><option>Non avviato</option><option>Rifiutato</option></select><select class="select" id="nftFilter"><option value="">NFT: tutti</option><option value="yes">Con NFT</option><option value="no">Senza NFT</option></select><select class="select" id="statusFilter"><option value="">Stato: tutti</option><option>Attivo</option><option>Sospeso</option><option>Rischio</option></select></div>
+          <div class="table-wrap"><table><thead><tr><th>Wallet</th><th>Iscrizione</th><th>Ultima attività</th><th>KYC</th><th>NFT</th><th>Test</th><th>Quiz</th><th>ASH erogate</th><th>USDC</th><th>Stato</th><th></th></tr></thead><tbody id="usersBody"></tbody></table></div>
+        </section>
+
+        <section class="view" id="view-quizzes">
+          <div class="section-head"><div><h2>Gestione quiz</h2><p>Crea, modifica, pubblica o archivia i quiz.</p></div><button class="btn btn-primary" id="newQuizBtn">+ Nuovo quiz</button></div>
+          <div class="filters"><input class="field" id="quizSearch" placeholder="Cerca quiz…"><select class="select" id="quizStatus"><option value="">Tutti gli stati</option><option>Pubblicato</option><option>Bozza</option><option>Archiviato</option></select><select class="select" id="quizCategory"><option value="">Tutte le categorie</option><option>Crypto</option><option>Gaming</option><option>DeFi</option><option>Blockchain</option></select></div>
+          <div class="table-wrap"><table><thead><tr><th>Titolo</th><th>Categoria</th><th>Difficoltà</th><th>Domande</th><th>Premio ASH</th><th>Completamenti</th><th>Successo</th><th>Stato</th><th>Azioni</th></tr></thead><tbody id="quizBody"></tbody></table></div>
+        </section>
+
+        <section class="view" id="view-analytics">
+          <div class="section-head"><div><h2>Analytics visitatori</h2><p>Acquisizione, comportamento, tecnologia e conversione.</p></div></div>
+          <div class="kpis" id="analyticsKpis"></div>
+          <div class="grid equal"><article class="panel"><div class="panel-head"><h3>Pagine più visitate</h3><span class="subtle">Visualizzazioni</span></div><div class="metric-list" id="pagesMetrics"></div></article><article class="panel"><div class="panel-head"><h3>Dispositivi e browser</h3><span class="subtle">Sessioni</span></div><div class="metric-list" id="deviceMetrics"></div></article></div>
+          <div class="grid equal"><article class="panel"><div class="panel-head"><h3>Paesi principali</h3><span class="subtle">Utenti unici</span></div><div class="metric-list" id="countryMetrics"></div></article><article class="panel"><div class="panel-head"><h3>Eventi principali</h3><span class="subtle">Occorrenze</span></div><div class="metric-list" id="eventMetrics"></div></article></div>
+        </section>
+
+        <section class="view" id="view-finance">
+          <div class="section-head"><div><h2>Finanze e ricompense</h2><p>USDC incassati, montepremi, ASH erogate e passività.</p></div></div>
+          <div class="kpis" id="financeKpis"></div>
+          <div class="table-wrap"><table><thead><tr><th>Data</th><th>Evento</th><th>Tipo</th><th>Wallet / Tx</th><th>USDC</th><th>ASH</th><th>Stato</th></tr></thead><tbody id="financeBody"></tbody></table></div>
+        </section>
+
+        <section class="view" id="view-pool">
+          <div class="section-head"><div><h2>Pool ASH</h2><p>Liquidità, riserve, volumi, commissioni e salute della pool.</p></div><span class="badge warn" id="poolStatus">Dati blockchain simulati</span></div>
+          <div class="pool-grid" id="poolCards"></div>
+          <div class="grid equal" style="margin-top:.85rem"><article class="panel"><div class="panel-head"><h3>Composizione riserve</h3><span class="subtle">ASH / USDC</span></div><div class="metric-list" id="reserveMetrics"></div></article><article class="panel"><div class="panel-head"><h3>Rischi e soglie</h3><span class="subtle">Monitoraggio</span></div><div class="metric-list" id="riskMetrics"></div></article></div>
+        </section>
+
+        <section class="view" id="view-audit">
+          <div class="section-head"><div><h2>Registro attività</h2><p>Azioni amministrative, eventi wallet e modifiche ai dati.</p></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Data e ora</th><th>Attore</th><th>Azione</th><th>Risorsa</th><th>Esito</th><th>Dettagli</th></tr></thead><tbody id="auditBody"></tbody></table></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <dialog id="quizDialog">
+    <form id="quizForm" method="dialog">
+      <div class="dialog-head"><h3 id="quizDialogTitle">Nuovo quiz</h3><button class="close" type="button" data-close="quizDialog" aria-label="Chiudi">×</button></div>
+      <div class="dialog-body"><input type="hidden" id="quizId"><div class="form-grid">
+        <div class="form-row full"><label for="quizTitle">Titolo</label><input id="quizTitle" required maxlength="100"></div>
+        <div class="form-row"><label for="quizCat">Categoria</label><select id="quizCat"><option>Crypto</option><option>Gaming</option><option>DeFi</option><option>Blockchain</option></select></div>
+        <div class="form-row"><label for="quizDifficulty">Difficoltà</label><select id="quizDifficulty"><option>Facile</option><option>Media</option><option>Difficile</option></select></div>
+        <div class="form-row"><label for="quizReward">Premio ASH</label><input id="quizReward" type="number" min="0" step="1" value="25"></div>
+        <div class="form-row"><label for="quizState">Stato</label><select id="quizState"><option>Bozza</option><option>Pubblicato</option><option>Archiviato</option></select></div>
+        <div class="form-row full"><label for="quizQuestions">Domande — una per riga</label><textarea id="quizQuestions" placeholder="Che cos’è Bitcoin?&#10;Cos’è una blockchain?" required></textarea></div>
+      </div><div class="dialog-actions"><button class="btn" type="button" data-close="quizDialog">Annulla</button><button class="btn btn-primary" type="submit">Salva quiz</button></div></div>
+    </form>
+  </dialog>
+
+  <dialog id="userDialog"><div class="dialog-head"><h3>Profilo utente</h3><button class="close" type="button" data-close="userDialog" aria-label="Chiudi">×</button></div><div class="dialog-body" id="userDetail"></div></dialog>
+
+  <script>
+  (()=>{
+    const apiBase=(window.PHOENIX_ADMIN_API_URL||'').replace(/\/$/,'');
+    const liveMode=Boolean(apiBase);
+    const localMembers=(()=>{try{return JSON.parse(localStorage.getItem('phoenixLocalMembers')||'[]')}catch{return[]}})();
+    const demoUsers=[
+      {wallet:'0x8B21f9E2202A345940cE4A5e53bB91D8A6A2C011',joined:'2026-08-08',last:'2 min fa',country:'Italia',kyc:'Verificato',nfts:3,element:'Fuoco',tests:'Big Five, MBTI',quizzes:42,ash:1280,usdc:85,status:'Attivo',risk:'Basso'},
+      {wallet:'0xA14C2275C76580F4bDA1098463455B16dB2D9231',joined:'2026-08-08',last:'18 min fa',country:'Francia',kyc:'In revisione',nfts:1,element:'Acqua',tests:'MBTI',quizzes:18,ash:510,usdc:25,status:'Attivo',risk:'Medio'},
+      {wallet:'0x41F07CA184a7E1146237892e56e681274f7E55f0',joined:'2026-08-07',last:'1 ora fa',country:'Germania',kyc:'Non avviato',nfts:0,element:'—',tests:'Nessuno',quizzes:4,ash:75,usdc:0,status:'Attivo',risk:'Basso'},
+      {wallet:'0xD7E15A033A8C64697146D353E51bE78a341Da071',joined:'2026-08-06',last:'4 ore fa',country:'Spagna',kyc:'Verificato',nfts:5,element:'Ombra',tests:'Big Five, MBTI',quizzes:77,ash:3420,usdc:210,status:'Attivo',risk:'Basso'},
+      {wallet:'0x715F14f45e872057eF429233b0758B80B9d0A225',joined:'2026-08-04',last:'1 giorno fa',country:'Italia',kyc:'Rifiutato',nfts:0,element:'Terra',tests:'Big Five',quizzes:11,ash:260,usdc:10,status:'Rischio',risk:'Alto'},
+      {wallet:'0xCC5e8e15e32925C874c30688Eec2Db6e12aA3380',joined:'2026-08-02',last:'2 giorni fa',country:'Regno Unito',kyc:'Verificato',nfts:2,element:'Aria',tests:'MBTI',quizzes:29,ash:920,usdc:55,status:'Attivo',risk:'Basso'},
+      {wallet:'0x28A9d7D1a2090737898290690207d49158AeF105',joined:'2026-07-29',last:'6 giorni fa',country:'USA',kyc:'In revisione',nfts:1,element:'Fulmine',tests:'Big Five',quizzes:15,ash:440,usdc:35,status:'Sospeso',risk:'Medio'}
+    ];
+    const normalizedLocal=localMembers.map((m,i)=>({wallet:m.wallet||m.address,joined:(m.joinedAt||new Date()).slice(0,10),last:'Wallet locale',country:'—',kyc:'Non avviato',nfts:0,element:'—',tests:'Nessuno',quizzes:0,ash:0,usdc:0,status:'Attivo',risk:'Basso',local:true}));
+    let users=[...normalizedLocal,...demoUsers.filter(d=>!normalizedLocal.some(l=>l.wallet.toLowerCase()===d.wallet.toLowerCase()))];
+    const seedQuizzes=[
+      {id:'q1',title:'Bitcoin: dalle origini a oggi',category:'Crypto',difficulty:'Media',questions:['Chi ha creato Bitcoin?','Qual è il limite massimo di BTC?','Cos’è l’halving?'],reward:35,status:'Pubblicato',completions:1842,passRate:78},
+      {id:'q2',title:'Fondamenti della DeFi',category:'DeFi',difficulty:'Difficile',questions:['Cos’è un AMM?','Come funziona una liquidity pool?'],reward:50,status:'Pubblicato',completions:934,passRate:61},
+      {id:'q3',title:'Gaming: storia delle console',category:'Gaming',difficulty:'Facile',questions:['Quale console uscì nel 1994?','Chi ha creato Mario?'],reward:20,status:'Pubblicato',completions:2301,passRate:86},
+      {id:'q4',title:'Layer 2 e rollup',category:'Blockchain',difficulty:'Difficile',questions:['Cos’è un optimistic rollup?','Cos’è una prova ZK?'],reward:60,status:'Bozza',completions:0,passRate:0}
+    ];
+    let quizzes=(()=>{try{return JSON.parse(localStorage.getItem('phoenixAdminQuizzes')||'null')||seedQuizzes}catch{return seedQuizzes}})();
+    const ledger=[
+      {date:'2026-08-09 14:18',event:'Phoenix Crown #12',type:'Iscrizione torneo',wallet:'0x8B21…C011',usdc:25,ash:0,status:'Confermato'},
+      {date:'2026-08-09 13:42',event:'Quiz Bitcoin',type:'Premio quiz',wallet:'0xA14C…9231',usdc:0,ash:-35,status:'Erogato'},
+      {date:'2026-08-09 11:05',event:'Embers Cup #31',type:'Iscrizione torneo',wallet:'0xD7E1…A071',usdc:10,ash:0,status:'Confermato'},
+      {date:'2026-08-08 22:16',event:'Phoenix Crown #11',type:'Premio torneo',wallet:'0xCC5e…3380',usdc:-180,ash:0,status:'Erogato'},
+      {date:'2026-08-08 19:33',event:'Quiz DeFi',type:'Premio quiz',wallet:'0x715F…A225',usdc:0,ash:-50,status:'Erogato'}
+    ];
+    const audit=[
+      ['2026-08-09 14:20','Sistema','Wallet registrato','Utente 0x8B21…C011','OK','Connessione Base'],
+      ['2026-08-09 13:44','Admin demo','Quiz modificato','Bitcoin: dalle origini','OK','Ricompensa 35 ASH'],
+      ['2026-08-09 12:02','KYC provider','Verifica completata','0xD7E1…A071','OK','Livello 2'],
+      ['2026-08-09 11:08','Sistema','USDC ricevuti','Embers Cup #31','OK','10 USDC'],
+      ['2026-08-08 22:19','Sistema','Premio erogato','Phoenix Crown #11','OK','180 USDC']
+    ];
+    const titles={overview:'Panoramica operativa',users:'Utenti iscritti',quizzes:'Gestione quiz',analytics:'Analytics visitatori',finance:'Finanze e ricompense',pool:'Pool ASH',audit:'Registro attività'};
+    const fmt=n=>new Intl.NumberFormat('it-IT').format(n); const usd=n=>new Intl.NumberFormat('it-IT',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(n); const short=w=>w?w.slice(0,6)+'…'+w.slice(-4):'—';
+    const badge=s=>{const c=/Verificato|Attivo|Confermato|Erogato|Pubblicato|OK/.test(s)?'ok':/Rifiutato|Rischio|Alto|Errore/.test(s)?'bad':/revisione|Bozza|Medio|Sospeso/.test(s)?'warn':'info';return `<span class="badge ${c}">${s}</span>`};
+    const setKpis=(id,items)=>document.getElementById(id).innerHTML=items.map(x=>`<article class="kpi"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="trend ${x[3]||''}">${x[2]}</div></article>`).join('');
+    const metricRows=(id,items)=>document.getElementById(id).innerHTML=items.map(x=>`<div class="metric-row"><span>${x[0]}</span><div class="progress"><span style="width:${x[1]}%"></span></div><b>${x[2]}</b></div>`).join('');
+    function renderOverview(){
+      setKpis('overviewKpis',[['Visitatori unici','18.420','+12,8% vs periodo precedente'],['Wallet iscritti',fmt(12408+normalizedLocal.length),'+642 nel periodo'],['Quiz completati','36.912','+18,4%'],['USDC netti',usd(12840),'+9,7%'],['ASH erogate','1,84M','-6,2% costo ricompense','down'],['Conversione wallet','23,6%','+2,1 punti'],['KYC verificati','68,4%','+4,8 punti'],['NFT detenuti','7.932','+312']]);
+      const vals=[42,51,47,62,58,73,69,81,76,92,88,101,96,112,108,119,105,126,132,121,143,151,138,160,149,171,165,184,177,196];document.getElementById('trafficBars').innerHTML=vals.map(v=>`<div class="bar" style="height:${Math.round(v/2)}%" data-value="${v*10} visite"></div>`).join('');
+      document.getElementById('funnel').innerHTML=[['Visitatori',100,'18.420'],['Interazione',78,'14.368'],['Wallet collegato',44,'8.105'],['Quiz iniziato',31,'5.710'],['Quiz completato',24,'4.421'],['Torneo pagato',8,'1.474']].map(x=>`<div style="width:${x[1]}%">${x[0]} · ${x[2]}</div>`).join('');
+      metricRows('opsMetrics',[['API',100,'99,98%'],['Indicizzatore chain',96,'12s'],['KYC provider',94,'Operativo'],['Pool health',82,'Buona'],['Coda premi',28,'17'],['Error rate',6,'0,6%']]);
+    }
+    function renderUsers(){const q=document.getElementById('userSearch').value.toLowerCase(),kyc=document.getElementById('kycFilter').value,nft=document.getElementById('nftFilter').value,status=document.getElementById('statusFilter').value;const rows=users.filter(u=>(!q||Object.values(u).join(' ').toLowerCase().includes(q))&&(!kyc||u.kyc===kyc)&&(!status||u.status===status)&&(!nft||(nft==='yes'?u.nfts>0:u.nfts===0)));document.getElementById('userCountBadge').textContent=`${rows.length} visualizzati`;document.getElementById('usersBody').innerHTML=rows.length?rows.map(u=>`<tr><td class="wallet" title="${u.wallet}">${short(u.wallet)}${u.local?' · locale':''}</td><td>${u.joined}</td><td>${u.last}</td><td>${badge(u.kyc)}</td><td>${u.nfts} · ${u.element}</td><td>${u.tests}</td><td>${u.quizzes}</td><td>${fmt(u.ash)}</td><td>${usd(u.usdc)}</td><td>${badge(u.status)}</td><td><button class="action" data-user="${u.wallet}">Dettagli</button></td></tr>`).join(''):`<tr><td colspan="11" class="empty">Nessun utente corrisponde ai filtri.</td></tr>`}
+    function renderQuizzes(){const q=document.getElementById('quizSearch').value.toLowerCase(),st=document.getElementById('quizStatus').value,cat=document.getElementById('quizCategory').value;const rows=quizzes.filter(x=>(!q||x.title.toLowerCase().includes(q))&&(!st||x.status===st)&&(!cat||x.category===cat));document.getElementById('quizBody').innerHTML=rows.length?rows.map(x=>`<tr><td><strong>${x.title}</strong></td><td>${x.category}</td><td>${x.difficulty}</td><td>${x.questions.length}</td><td>${x.reward}</td><td>${fmt(x.completions||0)}</td><td>${x.passRate||0}%</td><td>${badge(x.status)}</td><td><button class="action" data-edit="${x.id}">Modifica</button> · <button class="action btn-danger" data-delete="${x.id}">Elimina</button></td></tr>`).join(''):`<tr><td colspan="9" class="empty">Nessun quiz corrisponde ai filtri.</td></tr>`}
+    function renderAnalytics(){setKpis('analyticsKpis',[['Visualizzazioni','76.940','+14,2%'],['Sessioni','31.280','+10,6%'],['Durata media','04:18','+22 secondi'],['Bounce rate','31,7%','-3,4 punti'],['Nuovi utenti','64,8%','11.930'],['Ritorno utenti','35,2%','6.490'],['Pagine/sessione','2,46','+0,18'],['Wallet connect CTR','23,6%','+2,1 punti']]);metricRows('pagesMetrics',[['Home',100,'28.420'],['Quiz Crypto',67,'19.106'],['Profilo',43,'12.230'],['MBTI Test',36,'10.348'],['Tornei',31,'8.912'],['Guadagna ASH',22,'6.251']]);metricRows('deviceMetrics',[['Mobile',100,'62%'],['Desktop',55,'34%'],['Tablet',8,'4%'],['Chrome',100,'58%'],['Safari',49,'29%'],['Altri',22,'13%']]);metricRows('countryMetrics',[['Italia',100,'41%'],['USA',39,'16%'],['Germania',27,'11%'],['Francia',22,'9%'],['Spagna',17,'7%'],['Altri',39,'16%']]);metricRows('eventMetrics',[['page_view',100,'76.940'],['wallet_connect',34,'8.105'],['quiz_start',24,'5.710'],['quiz_complete',19,'4.421'],['test_complete',13,'3.082'],['tournament_paid',6,'1.474']])}
+    function renderFinance(){setKpis('financeKpis',[['USDC incassati',usd(18240),'+11,4%'],['Premi USDC',usd(5400),'-2,1% costi'],['USDC netti',usd(12840),'Margine 70,4%'],['ASH erogate','1,84M','Quiz + tornei'],['ASH da erogare','42.650','17 transazioni'],['Ticket medio',usd(12.37),'+0,84'],['Utenti paganti','1.474','8,0% visitatori'],['Rimborsi',usd(185),'1,0% ricavi']]);document.getElementById('financeBody').innerHTML=ledger.map(x=>`<tr><td>${x.date}</td><td>${x.event}</td><td>${x.type}</td><td class="wallet">${x.wallet}</td><td class="${x.usdc<0?'ledger-negative':x.usdc>0?'ledger-positive':''}">${x.usdc?`${x.usdc>0?'+':''}${x.usdc} USDC`:'—'}</td><td class="${x.ash<0?'ledger-negative':''}">${x.ash?`${x.ash} ASH`:'—'}</td><td>${badge(x.status)}</td></tr>`).join('')}
+    function renderPool(){document.getElementById('poolCards').innerHTML=[['TVL',usd(284315)],['Prezzo ASH','$0,00481'],['Riserva ASH','28,42M'],['Riserva USDC','136.704'],['Volume 24h',usd(41280)],['Commissioni 24h',usd(123.84)],['APR stimato','18,7%'],['LP token','4.291'],['Variazione 24h','+3,8%']].map(x=>`<div class="pool-card"><small>${x[0]}</small><strong>${x[1]}</strong></div>`).join('');metricRows('reserveMetrics',[['ASH',100,'51,0%'],['USDC',96,'49,0%'],['Utilizzo',72,'72,4%'],['Profondità ±2%',81,'$46K']]);metricRows('riskMetrics',[['Rapporto riserve',96,'1,04'],['Slippage $1K',22,'0,22%'],['Impermanent loss',31,'3,1%'],['Concentrazione LP',42,'42%'],['Volatilità 7g',38,'38%']])}
+    function renderAudit(){document.getElementById('auditBody').innerHTML=audit.map(x=>`<tr>${x.map((v,i)=>`<td${i===1?' class="wallet"':''}>${i===4?badge(v):v}</td>`).join('')}</tr>`).join('')}
+    function saveQuizzes(){localStorage.setItem('phoenixAdminQuizzes',JSON.stringify(quizzes));renderQuizzes()}
+    function openQuiz(id){const q=quizzes.find(x=>x.id===id);document.getElementById('quizDialogTitle').textContent=q?'Modifica quiz':'Nuovo quiz';document.getElementById('quizId').value=q?.id||'';document.getElementById('quizTitle').value=q?.title||'';document.getElementById('quizCat').value=q?.category||'Crypto';document.getElementById('quizDifficulty').value=q?.difficulty||'Media';document.getElementById('quizReward').value=q?.reward??25;document.getElementById('quizState').value=q?.status||'Bozza';document.getElementById('quizQuestions').value=(q?.questions||[]).join('\n');document.getElementById('quizDialog').showModal()}
+    function showUser(wallet){const u=users.find(x=>x.wallet===wallet);if(!u)return;document.getElementById('userDetail').innerHTML=`<div class="kpis" style="grid-template-columns:repeat(2,1fr)"><article class="kpi"><div class="label">Wallet</div><div class="value wallet" style="font-size:.9rem">${u.wallet}</div></article><article class="kpi"><div class="label">Stato</div><div class="value">${badge(u.status)}</div></article><article class="kpi"><div class="label">KYC</div><div class="value">${badge(u.kyc)}</div></article><article class="kpi"><div class="label">Rischio</div><div class="value">${badge(u.risk)}</div></article></div><div class="metric-list"><div><b>Iscritto:</b> ${u.joined}</div><div><b>Ultima attività:</b> ${u.last}</div><div><b>NFT:</b> ${u.nfts} · Elemento ${u.element}</div><div><b>Test completati:</b> ${u.tests}</div><div><b>Quiz:</b> ${u.quizzes}</div><div><b>ASH erogate:</b> ${fmt(u.ash)}</div><div><b>USDC versati:</b> ${usd(u.usdc)}</div></div>`;document.getElementById('userDialog').showModal()}
+    function exportCsv(){let rows;if(document.querySelector('[data-view].active')?.dataset.view==='users')rows=[['wallet','joined','last','country','kyc','nfts','element','tests','quizzes','ash','usdc','status'],...users.map(u=>[u.wallet,u.joined,u.last,u.country,u.kyc,u.nfts,u.element,u.tests,u.quizzes,u.ash,u.usdc,u.status])];else if(document.querySelector('[data-view].active')?.dataset.view==='quizzes')rows=[['id','title','category','difficulty','questions','reward','status','completions','passRate'],...quizzes.map(q=>[q.id,q.title,q.category,q.difficulty,q.questions.length,q.reward,q.status,q.completions||0,q.passRate||0])];else rows=[['metric','value'],['wallets',12408],['usdc_net',12840],['ash_issued',1840000],['pool_tvl',284315]];const csv=rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`phoenix-admin-${Date.now()}.csv`;a.click();URL.revokeObjectURL(a.href)}
+    document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById(`view-${b.dataset.view}`).classList.add('active');document.getElementById('pageTitle').textContent=titles[b.dataset.view]}));
+    ['userSearch','kycFilter','nftFilter','statusFilter'].forEach(id=>document.getElementById(id).addEventListener('input',renderUsers));['quizSearch','quizStatus','quizCategory'].forEach(id=>document.getElementById(id).addEventListener('input',renderQuizzes));
+    document.getElementById('usersBody').addEventListener('click',e=>{const w=e.target.dataset.user;if(w)showUser(w)});document.getElementById('quizBody').addEventListener('click',e=>{if(e.target.dataset.edit)openQuiz(e.target.dataset.edit);if(e.target.dataset.delete&&confirm('Eliminare questo quiz?')){quizzes=quizzes.filter(q=>q.id!==e.target.dataset.delete);saveQuizzes()}});document.getElementById('newQuizBtn').addEventListener('click',()=>openQuiz());
+    document.getElementById('quizForm').addEventListener('submit',e=>{e.preventDefault();const id=document.getElementById('quizId').value||`q${Date.now()}`;const previous=quizzes.find(q=>q.id===id);const q={id,title:document.getElementById('quizTitle').value.trim(),category:document.getElementById('quizCat').value,difficulty:document.getElementById('quizDifficulty').value,reward:Number(document.getElementById('quizReward').value)||0,status:document.getElementById('quizState').value,questions:document.getElementById('quizQuestions').value.split('\n').map(x=>x.trim()).filter(Boolean),completions:previous?.completions||0,passRate:previous?.passRate||0};quizzes=previous?quizzes.map(x=>x.id===id?q:x):[q,...quizzes];saveQuizzes();document.getElementById('quizDialog').close()});
+    document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.close).close()));document.getElementById('exportBtn').addEventListener('click',exportCsv);document.getElementById('refreshBtn').addEventListener('click',()=>{document.getElementById('lastSync').textContent=`Ultimo aggiornamento: ${new Date().toLocaleTimeString('it-IT')}`;renderAll()});
+    function renderAll(){renderOverview();renderUsers();renderQuizzes();renderAnalytics();renderFinance();renderPool();renderAudit()}
+    if(liveMode){document.getElementById('demoNotice').classList.add('hidden');document.getElementById('modeBadge').textContent='API COLLEGATA';document.getElementById('modeBadge').style.color='#7ce8aa';document.getElementById('sourceStatus').textContent='API configurata'}
+    renderAll();
+  })();
+  </script>
+</body>
+</html>
