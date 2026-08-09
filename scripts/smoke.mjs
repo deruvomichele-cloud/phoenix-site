@@ -39,8 +39,22 @@ try {
   const config = await fetch(`http://127.0.0.1:${port}/api/config`).then((response) => response.json());
   const home = await fetch(`http://127.0.0.1:${port}/`).then(async (response) => ({ status: response.status, html: await response.text() }));
   const kyc = await fetch(`http://127.0.0.1:${port}/kyc.html`);
+  const privacy = await fetch(`http://127.0.0.1:${port}/privacy.html`).then(async (response) => ({ status: response.status, html: await response.text() }));
   const mbtiData = await fetch(`http://127.0.0.1:${port}/data/mbti-characters.json`);
   const privatePackage = await fetch(`http://127.0.0.1:${port}/package.json`);
+  const analyticsVisitorId = crypto.randomUUID();
+  const analyticsEvent = await fetch(`http://127.0.0.1:${port}/api/events`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36" },
+    body: JSON.stringify({
+      event: "page_view",
+      visitorId: analyticsVisitorId,
+      path: "/smoke.html",
+      analyticsConsent: true,
+      consentVersion: "analytics-v1",
+      metadata: { language: "it-IT", timezone: "Europe/Rome" },
+    }),
+  });
   const challenge = await fetch(`http://127.0.0.1:${port}/api/auth/challenge`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -55,7 +69,7 @@ try {
   });
   const verified = await verifiedResponse.json();
   const cookie = verifiedResponse.headers.get("set-cookie")?.split(";")[0] || "";
-  const admin = await fetch(`http://127.0.0.1:${port}/api/admin/dashboard`, {
+  const admin = await fetch(`http://127.0.0.1:${port}/api/admin/dashboard?days=all`, {
     headers: { Cookie: cookie },
   });
   const adminDashboard = await admin.clone().json();
@@ -71,11 +85,20 @@ try {
       questions: ["Test?"],
     }),
   });
+  const detailedVisit = adminDashboard.analytics?.detailedVisitors?.find((visit) => visit.visitorId === analyticsVisitorId);
+  const withdrawal = await fetch(`http://127.0.0.1:${port}/api/analytics/consent/withdraw`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ visitorId: analyticsVisitorId }),
+  }).then((response) => response.json());
   const results = {
     health: health.ok,
     chain: config.chain.id,
     home: home.status,
     analyticsInjected: home.html.includes("/analytics.js"),
+    privacyDisclosureInjected: privacy.status === 200 && privacy.html.includes("/privacy-current.js"),
+    analyticsConsentStored: analyticsEvent.status === 202 && detailedVisit?.ipAddress === "127.0.0.1" && detailedVisit?.browser === "Chrome 124" && detailedVisit?.device === "Desktop" && detailedVisit?.os === "Windows 10/11" && adminDashboard.days === "all",
+    analyticsWithdrawal: withdrawal.removed >= 1,
     kyc: kyc.status,
     publicData: mbtiData.status,
     packageHidden: privatePackage.status,
@@ -87,7 +110,7 @@ try {
     poolAddressesVerified: adminDashboard.pool?.verifiedAddresses,
   };
   console.log(JSON.stringify(results));
-  if (!results.health || results.chain !== 8453 || results.home !== 200 || !results.analyticsInjected || results.kyc !== 200 || results.publicData !== 200 || results.packageHidden !== 404 || !results.challenge || results.unauthenticatedAdmin !== 403 || !results.adminAuthenticated || !results.quizCrud) {
+  if (!results.health || results.chain !== 8453 || results.home !== 200 || !results.analyticsInjected || !results.privacyDisclosureInjected || !results.analyticsConsentStored || !results.analyticsWithdrawal || results.kyc !== 200 || results.publicData !== 200 || results.packageHidden !== 404 || !results.challenge || results.unauthenticatedAdmin !== 403 || !results.adminAuthenticated || !results.quizCrud) {
     process.exitCode = 1;
   }
 } finally {

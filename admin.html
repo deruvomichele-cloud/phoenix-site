@@ -53,7 +53,7 @@
         <h1 id="pageTitle">Panoramica operativa</h1>
         <div class="top-actions">
           <div class="mode" id="modeBadge">CARICAMENTO</div>
-          <select class="select" id="period" aria-label="Intervallo"><option value="7">Ultimi 7 giorni</option><option value="30" selected>Ultimi 30 giorni</option><option value="90">Ultimi 90 giorni</option><option value="365">Ultimo anno</option></select>
+          <select class="select" id="period" aria-label="Intervallo"><option value="7">Ultimi 7 giorni</option><option value="30" selected>Ultimi 30 giorni</option><option value="90">Ultimi 90 giorni</option><option value="365">Ultimo anno</option><option value="all">Tutto lo storico</option></select>
           <button class="btn" id="refreshBtn">Aggiorna</button>
           <button class="btn" id="exportBtn">Esporta CSV</button>
           <a class="btn" href="index.html">Torna al sito</a>
@@ -67,7 +67,7 @@
           <div class="section-head"><div><h2>Panoramica</h2><p>Traffico, conversioni, attività utenti e flussi economici.</p></div></div>
           <div class="kpis" id="overviewKpis"></div>
           <div class="grid">
-            <article class="panel"><div class="panel-head"><h3>Visitatori e wallet collegati</h3><span class="subtle">30 giorni</span></div><div class="bars" id="trafficBars"></div></article>
+            <article class="panel"><div class="panel-head"><h3>Visitatori e wallet collegati</h3><span class="subtle" id="trafficPeriod">30 giorni</span></div><div class="bars" id="trafficBars"></div></article>
             <article class="panel"><div class="panel-head"><h3>Origine traffico</h3><span class="subtle">Sessioni</span></div><div class="donut-wrap"><div class="donut"></div><div class="legend"><span style="--c:#e33b52">Dati in caricamento</span></div></div></article>
           </div>
           <div class="grid equal">
@@ -89,10 +89,15 @@
         </section>
 
         <section class="view" id="view-analytics">
-          <div class="section-head"><div><h2>Analytics visitatori</h2><p>Acquisizione, comportamento, tecnologia e conversione.</p></div></div>
+          <div class="section-head"><div><h2>Analytics visitatori</h2><p>Acquisizione, comportamento e dati tecnici raccolti con consenso esplicito.</p></div></div>
           <div class="kpis" id="analyticsKpis"></div>
           <div class="grid equal"><article class="panel"><div class="panel-head"><h3>Pagine più visitate</h3><span class="subtle">Visualizzazioni</span></div><div class="metric-list" id="pagesMetrics"></div></article><article class="panel"><div class="panel-head"><h3>Dispositivi e browser</h3><span class="subtle">Sessioni</span></div><div class="metric-list" id="deviceMetrics"></div></article></div>
           <div class="grid equal"><article class="panel"><div class="panel-head"><h3>Paesi principali</h3><span class="subtle">Utenti unici</span></div><div class="metric-list" id="countryMetrics"></div></article><article class="panel"><div class="panel-head"><h3>Eventi principali</h3><span class="subtle">Occorrenze</span></div><div class="metric-list" id="eventMetrics"></div></article></div>
+          <article class="panel">
+            <div class="panel-head"><div><h3>Visitatori dettagliati</h3><span class="subtle" id="detailRetention">IP e dati tecnici senza scadenza automatica</span></div><span class="badge info" id="detailedVisitorCount">0 consensi</span></div>
+            <div class="filters"><input class="field" id="visitSearch" placeholder="Cerca IP, wallet, pagina…"><select class="select" id="visitBrowser"><option value="">Browser: tutti</option></select><select class="select" id="visitDevice"><option value="">Dispositivo: tutti</option></select></div>
+            <div class="table-wrap"><table><thead><tr><th>Ultima visita</th><th>IP</th><th>Browser</th><th>Sistema</th><th>Dispositivo</th><th>Ultima pagina</th><th>Pagine</th><th>Wallet / visitatore</th><th>Consenso</th></tr></thead><tbody id="visitorsDetailBody"></tbody></table></div>
+          </article>
         </section>
 
         <section class="view" id="view-finance">

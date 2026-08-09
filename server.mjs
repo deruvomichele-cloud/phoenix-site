@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
+import { isIP } from "node:net";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { DatabaseSync } from "node:sqlite";
@@ -254,17 +255,24 @@ app.post("/api/wallets/register", rateLimit("wallet", 30, 60_000), (req, res) =>
     source: cleanText(req.body?.source, 40) || "website",
     lastSeenAt: now,
   });
-  recordEvent(req, {
-    event: "wallet_connect",
-    visitorId: cleanText(req.body?.visitorId, 100),
-    wallet,
-    path: cleanPath(req.body?.path || "/"),
-    metadata: { chainId },
-  });
+  if (req.body?.analyticsConsent === true) {
+    recordEvent(req, {
+      event: "wallet_connect",
+      visitorId: cleanText(req.body?.visitorId, 100),
+      wallet,
+      path: cleanPath(req.body?.path || "/"),
+      metadata: { chainId },
+      analyticsConsent: true,
+      consentVersion: cleanText(req.body?.consentVersion, 30),
+    });
+  }
   res.status(201).json({ registered: true, wallet, joined: true });
 });
 
 app.post("/api/events", rateLimit("events", 120, 60_000), (req, res) => {
+  if (req.body?.analyticsConsent !== true) {
+    return res.status(202).json({ accepted: false, reason: "analytics_consent_required" });
+  }
   const event = cleanText(req.body?.event, 48);
   const visitorId = cleanText(req.body?.visitorId, 100);
   if (!event || !/^[a-z][a-z0-9_]{1,47}$/.test(event) || !visitorId) {
@@ -278,8 +286,17 @@ app.post("/api/events", rateLimit("events", 120, 60_000), (req, res) => {
     referrer: cleanText(req.body?.referrer, 500),
     source: cleanText(req.body?.source, 80),
     metadata: safeMetadata(req.body?.metadata),
+    analyticsConsent: true,
+    consentVersion: cleanText(req.body?.consentVersion, 30),
   });
   res.status(202).json({ accepted: true });
+});
+
+app.post("/api/analytics/consent/withdraw", rateLimit("analytics-withdraw", 12, 60_000), (req, res) => {
+  const visitorId = cleanText(req.body?.visitorId, 100);
+  if (!visitorId) return res.status(400).json({ error: "invalid_visitor" });
+  const removed = db.prepare("DELETE FROM events WHERE visitor_id=?").run(visitorId);
+  res.json({ removed: Number(removed.changes || 0) });
 });
 
 app.get("/api/kyc/status", requireSession, (req, res) => {
@@ -333,8 +350,8 @@ app.post("/api/kyc/session", rateLimit("kyc", 5, 60_000), requireSession, async 
 });
 
 app.get("/api/admin/dashboard", requireAdmin, async (req, res) => {
-  const days = [7, 30, 90, 365].includes(Number(req.query.days)) ? Number(req.query.days) : 30;
-  const since = new Date(Date.now() - days * 86_400_000).toISOString();
+  const days = req.query.days === "all" ? "all" : [7, 30, 90, 365].includes(Number(req.query.days)) ? Number(req.query.days) : 30;
+  const since = days === "all" ? "1970-01-01T00:00:00.000Z" : new Date(Date.now() - days * 86_400_000).toISOString();
   const users = db
     .prepare(
       `SELECT wallet, joined_at, last_seen_at, chain_id, source, kyc_status,
@@ -351,15 +368,15 @@ app.get("/api/admin/dashboard", requireAdmin, async (req, res) => {
   const ledger = db.prepare("SELECT * FROM ledger ORDER BY created_at DESC LIMIT 500").all();
   const audit = db.prepare("SELECT * FROM audit ORDER BY created_at DESC LIMIT 500").all();
   const pageViews = scalar(
-    "SELECT COUNT(*) value FROM events WHERE event='page_view' AND created_at>=?",
+    "SELECT COUNT(*) value FROM events WHERE event='page_view' AND detailed_consent=1 AND created_at>=?",
     since,
   );
   const visitors = scalar(
-    "SELECT COUNT(DISTINCT visitor_id) value FROM events WHERE created_at>=?",
+    "SELECT COUNT(DISTINCT visitor_id) value FROM events WHERE detailed_consent=1 AND created_at>=?",
     since,
   );
   const walletConnects = scalar(
-    "SELECT COUNT(*) value FROM events WHERE event='wallet_connect' AND created_at>=?",
+    "SELECT COUNT(*) value FROM events WHERE event='wallet_connect' AND detailed_consent=1 AND created_at>=?",
     since,
   );
   const verifiedKyc = scalar("SELECT COUNT(*) value FROM users WHERE kyc_status='Approved'");
@@ -369,29 +386,52 @@ app.get("/api/admin/dashboard", requireAdmin, async (req, res) => {
               SUM(CASE WHEN event='page_view' THEN 1 ELSE 0 END) pageViews,
               COUNT(DISTINCT visitor_id) visitors,
               SUM(CASE WHEN event='wallet_connect' THEN 1 ELSE 0 END) walletConnects
-       FROM events WHERE created_at>=? GROUP BY day ORDER BY day`,
+       FROM events WHERE detailed_consent=1 AND created_at>=? GROUP BY day ORDER BY day`,
     )
     .all(since);
   const topPages = groupedMetric(
-    "SELECT path label, COUNT(*) value FROM events WHERE event='page_view' AND created_at>=? GROUP BY path ORDER BY value DESC LIMIT 12",
+    "SELECT path label, COUNT(*) value FROM events WHERE event='page_view' AND detailed_consent=1 AND created_at>=? GROUP BY path ORDER BY value DESC LIMIT 12",
     since,
   );
   const topEvents = groupedMetric(
-    "SELECT event label, COUNT(*) value FROM events WHERE created_at>=? GROUP BY event ORDER BY value DESC LIMIT 12",
+    "SELECT event label, COUNT(*) value FROM events WHERE detailed_consent=1 AND created_at>=? GROUP BY event ORDER BY value DESC LIMIT 12",
     since,
   );
   const sources = groupedMetric(
-    "SELECT COALESCE(NULLIF(source,''),'Diretto') label, COUNT(*) value FROM events WHERE event='page_view' AND created_at>=? GROUP BY label ORDER BY value DESC LIMIT 10",
+    "SELECT COALESCE(NULLIF(source,''),'Diretto') label, COUNT(*) value FROM events WHERE event='page_view' AND detailed_consent=1 AND created_at>=? GROUP BY label ORDER BY value DESC LIMIT 10",
     since,
   );
   const countries = groupedMetric(
-    "SELECT COALESCE(NULLIF(country,''),'Non rilevato') label, COUNT(DISTINCT visitor_id) value FROM events WHERE created_at>=? GROUP BY label ORDER BY value DESC LIMIT 10",
+    "SELECT COALESCE(NULLIF(country,''),'Non rilevato') label, COUNT(DISTINCT visitor_id) value FROM events WHERE detailed_consent=1 AND created_at>=? GROUP BY label ORDER BY value DESC LIMIT 10",
     since,
   );
-  const userAgents = db
-    .prepare("SELECT user_agent FROM events WHERE created_at>=? AND user_agent IS NOT NULL")
-    .all(since)
-    .map((row) => row.user_agent);
+  const devices = groupedMetric(
+    "SELECT device label, COUNT(DISTINCT visitor_id) value FROM events WHERE detailed_consent=1 AND device IS NOT NULL AND created_at>=? GROUP BY device ORDER BY value DESC",
+    since,
+  );
+  const browsers = groupedMetric(
+    "SELECT browser label, COUNT(DISTINCT visitor_id) value FROM events WHERE detailed_consent=1 AND browser IS NOT NULL AND created_at>=? GROUP BY browser ORDER BY value DESC",
+    since,
+  );
+  const operatingSystems = groupedMetric(
+    "SELECT os label, COUNT(DISTINCT visitor_id) value FROM events WHERE detailed_consent=1 AND os IS NOT NULL AND created_at>=? GROUP BY os ORDER BY value DESC",
+    since,
+  );
+  const detailedVisitors = db.prepare(
+    `WITH ranked AS (
+       SELECT visitor_id, wallet, ip_address, browser, device, os, path, country,
+              consent_version, created_at,
+              COUNT(*) OVER (PARTITION BY visitor_id) page_views,
+              ROW_NUMBER() OVER (PARTITION BY visitor_id ORDER BY created_at DESC) row_number
+       FROM events
+       WHERE event='page_view' AND detailed_consent=1 AND ip_address IS NOT NULL AND created_at>=?
+     )
+     SELECT visitor_id visitorId,
+            COALESCE(wallet, (SELECT e.wallet FROM events e WHERE e.visitor_id=ranked.visitor_id AND e.wallet IS NOT NULL ORDER BY e.created_at DESC LIMIT 1)) wallet,
+            ip_address ipAddress, browser, device, os, path, country,
+            consent_version consentVersion, created_at lastSeenAt, page_views pageViews
+     FROM ranked WHERE row_number=1 ORDER BY created_at DESC LIMIT 500`,
+  ).all(since);
   const kycStatuses = groupedMetric(
     "SELECT kyc_status label, COUNT(*) value FROM users GROUP BY kyc_status ORDER BY value DESC",
   );
@@ -430,8 +470,11 @@ app.get("/api/admin/dashboard", requireAdmin, async (req, res) => {
       topEvents,
       sources,
       countries,
-      devices: countLabels(userAgents.map(detectDevice)),
-      browsers: countLabels(userAgents.map(detectBrowser)),
+      devices,
+      browsers,
+      operatingSystems,
+      detailedVisitors,
+      detailRetention: "until_withdrawal",
     },
     kycStatuses,
     users,
@@ -561,6 +604,12 @@ function initDatabase() {
       timezone TEXT,
       country TEXT,
       metadata_json TEXT,
+      ip_address TEXT,
+      browser TEXT,
+      device TEXT,
+      os TEXT,
+      detailed_consent INTEGER NOT NULL DEFAULT 0,
+      consent_version TEXT,
       created_at TEXT NOT NULL
     );
     CREATE INDEX IF NOT EXISTS idx_events_created ON events(created_at);
@@ -623,6 +672,18 @@ function initDatabase() {
     );
     CREATE INDEX IF NOT EXISTS idx_sessions_expiry ON sessions(expires_at);
   `);
+  ensureColumn("events", "ip_address", "TEXT");
+  ensureColumn("events", "browser", "TEXT");
+  ensureColumn("events", "device", "TEXT");
+  ensureColumn("events", "os", "TEXT");
+  ensureColumn("events", "detailed_consent", "INTEGER NOT NULL DEFAULT 0");
+  ensureColumn("events", "consent_version", "TEXT");
+  db.exec("CREATE INDEX IF NOT EXISTS idx_events_consent_created ON events(detailed_consent, created_at)");
+  db.prepare(
+    `UPDATE events SET visitor_id=NULL, wallet=NULL, path=NULL, referrer=NULL, source=NULL,
+       user_agent=NULL, language=NULL, timezone=NULL, country=NULL, metadata_json='{}'
+     WHERE detailed_consent=0`,
+  ).run();
   db.prepare("DELETE FROM sessions WHERE expires_at < ?").run(new Date().toISOString());
   db.prepare("DELETE FROM auth_challenges WHERE expires_at < ?").run(new Date().toISOString());
 }
@@ -678,10 +739,14 @@ function recordEvent(req, data) {
   const language = cleanText(metadata.language || req.get("accept-language")?.split(",")[0], 30);
   const timezone = cleanText(metadata.timezone, 80);
   const source = data.source || classifySource(data.referrer);
+  const detailedConsent = data.analyticsConsent === true;
+  const userAgent = detailedConsent ? cleanText(req.get("user-agent"), 500) : "";
+  const ipAddress = detailedConsent ? getClientIp(req) : "";
   db.prepare(
     `INSERT INTO events
-     (id,visitor_id,wallet,event,path,referrer,source,user_agent,language,timezone,country,metadata_json,created_at)
-     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+     (id,visitor_id,wallet,event,path,referrer,source,user_agent,language,timezone,country,metadata_json,
+      ip_address,browser,device,os,detailed_consent,consent_version,created_at)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
   ).run(
     crypto.randomUUID(),
     data.visitorId || null,
@@ -690,11 +755,17 @@ function recordEvent(req, data) {
     data.path || null,
     data.referrer || null,
     source || null,
-    cleanText(req.get("user-agent"), 500),
+    userAgent || null,
     language || null,
     timezone || null,
     cleanText(req.get("cf-ipcountry"), 3) || null,
     JSON.stringify(metadata),
+    ipAddress || null,
+    userAgent ? detectBrowser(userAgent) : null,
+    userAgent ? detectDevice(userAgent) : null,
+    userAgent ? detectOs(userAgent) : null,
+    detailedConsent ? 1 : 0,
+    detailedConsent ? cleanText(data.consentVersion, 30) || "analytics-v1" : null,
     new Date().toISOString(),
   );
 }
@@ -915,6 +986,9 @@ function servePublicFiles(req, res, next) {
   }
   if (extension === ".html") {
     let html = fs.readFileSync(resolved, "utf8");
+    if (relative.replaceAll("\\", "/") === "privacy.html") {
+      html = html.replace(/<\/body>/i, '<script src="/privacy-current.js" defer></script></body>');
+    }
     if (!html.includes('src="/analytics.js"') && !html.includes("src='/analytics.js'")) {
       html = html.replace(/<\/body>/i, '<script src="/analytics.js" defer></script></body>');
     }
@@ -928,6 +1002,11 @@ function servePublicFiles(req, res, next) {
 function cleanText(value, maxLength = 200) {
   if (value == null) return "";
   return String(value).replace(/[\u0000-\u001f\u007f]/g, " ").trim().slice(0, maxLength);
+}
+
+function ensureColumn(table, column, definition) {
+  const exists = db.prepare(`PRAGMA table_info(${table})`).all().some((entry) => entry.name === column);
+  if (!exists) db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
 }
 
 function cleanPath(value) {
@@ -959,17 +1038,40 @@ function classifySource(referrer) {
 }
 
 function detectDevice(userAgent = "") {
-  if (/ipad|tablet/i.test(userAgent)) return "Tablet";
-  if (/mobile|android|iphone/i.test(userAgent)) return "Mobile";
+  if (/ipad/i.test(userAgent)) return "iPad";
+  if (/iphone|ipod/i.test(userAgent)) return "iPhone";
+  if (/android/i.test(userAgent) && /mobile/i.test(userAgent)) return "Android mobile";
+  if (/android|tablet/i.test(userAgent)) return "Tablet Android";
+  if (/mobile/i.test(userAgent)) return "Mobile";
   return "Desktop";
 }
 
 function detectBrowser(userAgent = "") {
-  if (/edg\//i.test(userAgent)) return "Edge";
-  if (/firefox\//i.test(userAgent)) return "Firefox";
-  if (/opr\//i.test(userAgent)) return "Opera";
-  if (/chrome\//i.test(userAgent)) return "Chrome";
-  if (/safari\//i.test(userAgent)) return "Safari";
+  const patterns = [
+    ["Edge", /Edg(?:A|iOS)?\/(\d+)/i],
+    ["Opera", /(?:OPR|Opera)\/(\d+)/i],
+    ["Firefox", /(?:Firefox|FxiOS)\/(\d+)/i],
+    ["Chrome", /(?:Chrome|CriOS)\/(\d+)/i],
+    ["Safari", /Version\/(\d+).+Safari\//i],
+  ];
+  for (const [name, pattern] of patterns) {
+    const match = userAgent.match(pattern);
+    if (match) return `${name} ${match[1]}`;
+  }
+  return "Altro";
+}
+
+function detectOs(userAgent = "") {
+  let match;
+  if ((match = userAgent.match(/Windows NT ([\d.]+)/i))) {
+    const versions = { "10.0": "Windows 10/11", "6.3": "Windows 8.1", "6.1": "Windows 7" };
+    return versions[match[1]] || `Windows ${match[1]}`;
+  }
+  if ((match = userAgent.match(/Android ([\d.]+)/i))) return `Android ${match[1]}`;
+  if ((match = userAgent.match(/(?:iPhone OS|CPU OS) ([\d_]+)/i))) return `iOS ${match[1].replaceAll("_", ".")}`;
+  if ((match = userAgent.match(/Mac OS X ([\d_]+)/i))) return `macOS ${match[1].replaceAll("_", ".")}`;
+  if (/CrOS/i.test(userAgent)) return "ChromeOS";
+  if (/Linux/i.test(userAgent)) return "Linux";
   return "Altro";
 }
 
@@ -1005,8 +1107,15 @@ function sha256(value) {
 }
 
 function clientKey(req) {
-  const address = req.ip || req.socket.remoteAddress || "unknown";
+  const address = getClientIp(req) || "unknown";
   return sha256(address).slice(0, 20);
+}
+
+function getClientIp(req) {
+  const flyAddress = cleanText(req.get("fly-client-ip"), 64);
+  if (process.env.FLY_APP_NAME && isIP(flyAddress)) return flyAddress;
+  const remoteAddress = cleanText(req.socket.remoteAddress, 64).replace(/^::ffff:/, "");
+  return isIP(remoteAddress) ? remoteAddress : "";
 }
 
 function shortWallet(wallet) {

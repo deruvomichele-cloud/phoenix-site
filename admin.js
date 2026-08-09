@@ -32,6 +32,7 @@
   const usd = (value) => new Intl.NumberFormat("it-IT", { style: "currency", currency: "USD", maximumFractionDigits: 2 }).format(Number(value || 0));
   const when = (value) => (value ? new Date(value).toLocaleString("it-IT") : "—");
   const short = (wallet) => (wallet ? `${wallet.slice(0, 6)}…${wallet.slice(-4)}` : "—");
+  const periodLabel = () => dashboard?.days === "all" ? "tutto lo storico" : `${dashboard?.days || 30} giorni`;
   const esc = (value) => String(value ?? "").replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[char]);
   const badge = (text) => {
     const value = String(text || "—");
@@ -151,8 +152,9 @@
   function renderOverview() {
     const overview = dashboard.overview;
     const finance = dashboard.finance;
+    $("trafficPeriod").textContent = periodLabel();
     setKpis("overviewKpis", [
-      ["Visitatori unici", fmt(overview.visitors), `${dashboard.days} giorni`],
+      ["Visitatori unici", fmt(overview.visitors), periodLabel()],
       ["Visualizzazioni", fmt(overview.pageViews), "page view registrate"],
       ["Wallet iscritti", fmt(overview.users), "wallet unici"],
       ["Conversione wallet", `${fmt(overview.conversion, 1)}%`, "wallet connect / visitatori"],
@@ -210,21 +212,48 @@
 
   function renderAnalytics() {
     const overview = dashboard.overview;
-    const days = dashboard.days;
+    const days = periodLabel();
+    const detailed = dashboard.analytics.detailedVisitors || [];
     setKpis("analyticsKpis", [
-      ["Visualizzazioni", fmt(overview.pageViews), `${days} giorni`],
-      ["Visitatori", fmt(overview.visitors), "ID anonimi unici"],
+      ["Visualizzazioni", fmt(overview.pageViews), days],
+      ["Visitatori", fmt(overview.visitors), "consenso analytics"],
       ["Wallet connect", fmt(overview.walletConnects), "eventi"],
       ["Conversione", `${fmt(overview.conversion, 1)}%`, "wallet / visitatori"],
       ["Utenti registrati", fmt(overview.users), "totale storico"],
-      ["KYC Approved", fmt(overview.verifiedKyc), "totale storico"],
+      ["Consensi dettagliati", fmt(detailed.length), "IP visibili nel periodo"],
       ["Dispositivi", fmt(dashboard.analytics.devices.length), "categorie"],
       ["Sorgenti", fmt(dashboard.analytics.sources.length), "canali rilevati"],
     ]);
     metricRows("pagesMetrics", dashboard.analytics.topPages);
-    metricRows("deviceMetrics", [...dashboard.analytics.devices, ...dashboard.analytics.browsers]);
+    metricRows("deviceMetrics", [...dashboard.analytics.devices, ...dashboard.analytics.browsers, ...(dashboard.analytics.operatingSystems || [])]);
     metricRows("countryMetrics", dashboard.analytics.countries);
     metricRows("eventMetrics", dashboard.analytics.topEvents);
+    populateVisitFilter("visitBrowser", "Browser: tutti", detailed.map((visit) => visit.browser));
+    populateVisitFilter("visitDevice", "Dispositivo: tutti", detailed.map((visit) => visit.device));
+    $("detailRetention").textContent = "IP e dati tecnici senza scadenza automatica; cancellati su revoca";
+    renderDetailedVisitors();
+  }
+
+  function populateVisitFilter(id, label, values) {
+    const select = $(id);
+    const current = select.value;
+    const options = [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b, "it"));
+    select.innerHTML = `<option value="">${esc(label)}</option>${options.map((value) => `<option value="${esc(value)}">${esc(value)}</option>`).join("")}`;
+    if (options.includes(current)) select.value = current;
+  }
+
+  function renderDetailedVisitors() {
+    const search = $("visitSearch").value.trim().toLowerCase();
+    const browser = $("visitBrowser").value;
+    const device = $("visitDevice").value;
+    const rows = (dashboard.analytics.detailedVisitors || []).filter((visit) => {
+      const haystack = [visit.ipAddress, visit.wallet, visit.visitorId, visit.path, visit.browser, visit.device, visit.os].join(" ").toLowerCase();
+      return (!search || haystack.includes(search)) && (!browser || visit.browser === browser) && (!device || visit.device === device);
+    });
+    $("detailedVisitorCount").textContent = `${fmt(rows.length)} consensi`;
+    $("visitorsDetailBody").innerHTML = rows.length
+      ? rows.map((visit) => `<tr><td>${esc(when(visit.lastSeenAt))}</td><td class="wallet">${esc(visit.ipAddress || "—")}</td><td>${esc(visit.browser || "—")}</td><td>${esc(visit.os || "—")}</td><td>${esc(visit.device || "—")}</td><td title="${esc(visit.path || "—")}">${esc(visit.path || "—")}</td><td>${fmt(visit.pageViews)}</td><td class="wallet" title="${esc(visit.wallet || visit.visitorId || "")}">${esc(visit.wallet ? short(visit.wallet) : short(visit.visitorId))}</td><td>${badge("Confermato")}</td></tr>`).join("")
+      : '<tr><td colspan="9" class="empty">Nessun visitatore ha ancora accettato le analytics dettagliate nel periodo.</td></tr>';
   }
 
   function renderFinance() {
@@ -316,6 +345,7 @@
     let rows;
     if (view === "users") rows = [["wallet", "joined_at", "last_seen_at", "kyc", "nft", "tests", "quiz", "ash", "usdc", "status", "risk"], ...dashboard.users.map((user) => [user.wallet, user.joinedAt, user.lastSeenAt, user.kycStatus, user.nftCount, user.tests.join(";"), user.quizCompletions, user.ashIssued, user.usdcPaid, user.status, user.risk])];
     else if (view === "quizzes") rows = [["id", "title", "category", "difficulty", "questions", "reward", "status", "completions", "pass_rate"], ...dashboard.quizzes.map((quiz) => [quiz.id, quiz.title, quiz.category, quiz.difficulty, quiz.questions.length, quiz.reward, quiz.status, quiz.completions, quiz.passRate])];
+    else if (view === "analytics") rows = [["last_seen_at", "ip", "browser", "os", "device", "path", "page_views", "wallet", "visitor_id", "consent_version"], ...(dashboard.analytics.detailedVisitors || []).map((visit) => [visit.lastSeenAt, visit.ipAddress, visit.browser, visit.os, visit.device, visit.path, visit.pageViews, visit.wallet, visit.visitorId, visit.consentVersion])];
     else rows = [["metric", "value"], ["users", dashboard.overview.users], ["visitors", dashboard.overview.visitors], ["page_views", dashboard.overview.pageViews], ["usdc_in", dashboard.finance.usdcIn], ["ash_issued", dashboard.finance.ashIssued], ["ash_reserve", dashboard.pool.ashReserve], ["usdc_reserve", dashboard.pool.usdcReserve]];
     const csv = rows.map((row) => row.map((value) => `"${String(value ?? "").replaceAll('"', '""')}"`).join(",")).join("\n");
     const link = document.createElement("a");
@@ -344,6 +374,7 @@
   }));
   ["userSearch", "kycFilter", "nftFilter", "statusFilter"].forEach((id) => $(id).addEventListener("input", () => dashboard && renderUsers()));
   ["quizSearch", "quizStatus", "quizCategory"].forEach((id) => $(id).addEventListener("input", () => dashboard && renderQuizzes()));
+  ["visitSearch", "visitBrowser", "visitDevice"].forEach((id) => $(id).addEventListener("input", () => dashboard && renderDetailedVisitors()));
   $("usersBody").addEventListener("click", (event) => { if (event.target.dataset.user) showUser(event.target.dataset.user); });
   $("userDetail").addEventListener("click", (event) => { if (event.target.dataset.userStatus) updateUser(event.target.dataset.wallet, event.target.dataset.userStatus).catch((error) => alert(error.message)); });
   $("quizBody").addEventListener("click", async (event) => {
