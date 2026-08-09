@@ -27,6 +27,7 @@ const PUBLIC_URL = String(process.env.PUBLIC_URL || `http://localhost:${PORT}`).
 const ADMIN_WALLET = normalizeWallet(process.env.ADMIN_WALLET || "");
 const DIDIT_API_KEY = process.env.DIDIT_API_KEY || "";
 const DIDIT_WEBHOOK_SECRET = process.env.DIDIT_WEBHOOK_SECRET || "";
+const DIDIT_WHITE_LABEL = /^(1|true|yes)$/i.test(process.env.DIDIT_WHITE_LABEL || "false");
 const BASE_RPC_URL = process.env.BASE_RPC_URL || "https://mainnet.base.org";
 const ASH_CONTRACT = normalizeWallet(
   process.env.ASH_CONTRACT || "0xd4FbB5E4Dd24C3F9A0F58Efa656A489D24E93BCd",
@@ -168,7 +169,7 @@ app.get("/api/config", (_req, res) => {
       usdc: USDC_CONTRACT,
       nftCollection: NFT_COLLECTION_ADDRESS || null,
     },
-    kyc: { provider: "Didit", brand: "Phoenix", workflow: "Free KYC", whiteLabel: true, enabled: Boolean(DIDIT_API_KEY) },
+    kyc: { provider: "Didit", brand: DIDIT_WHITE_LABEL ? "Phoenix" : "Didit", workflow: "Free KYC", whiteLabel: DIDIT_WHITE_LABEL, enabled: Boolean(DIDIT_API_KEY) },
   });
 });
 
@@ -305,8 +306,8 @@ app.get("/api/kyc/status", requireSession, (req, res) => {
     .get(req.session.wallet);
   res.json({
     provider: "Didit",
-    brand: "Phoenix",
-    whiteLabel: true,
+    brand: DIDIT_WHITE_LABEL ? "Phoenix" : "Didit",
+    whiteLabel: DIDIT_WHITE_LABEL,
     status: user?.kyc_status || "Not Started",
     sessionId: user?.kyc_session_id || null,
     updatedAt: user?.kyc_updated_at || null,
@@ -350,8 +351,8 @@ app.get("/api/user/profile", requireSession, async (req, res) => {
     },
     kyc: {
       provider: "Didit",
-      brand: "Phoenix",
-      whiteLabel: true,
+      brand: DIDIT_WHITE_LABEL ? "Phoenix" : "Didit",
+      whiteLabel: DIDIT_WHITE_LABEL,
       status: user.kycStatus,
       sessionId: user.kycSessionId,
       updatedAt: user.kycUpdatedAt,
@@ -409,7 +410,7 @@ app.post("/api/kyc/session", rateLimit("kyc", 5, 60_000), requireSession, async 
       callback: `${PUBLIC_URL}/kyc.html?returned=1`,
       callback_method: "both",
       language: "it",
-      metadata: { network: "Base", source: "phoenix-site", brand: "Phoenix", white_label: true },
+      metadata: { network: "Base", source: "phoenix-site", brand: "Phoenix", white_label: DIDIT_WHITE_LABEL },
     }),
   }).catch(() => null);
   if (!response?.ok) {
@@ -531,7 +532,7 @@ app.get("/api/admin/dashboard", requireAdmin, async (req, res) => {
     days,
     config: {
       adminWalletConfigured: Boolean(ADMIN_WALLET),
-      kyc: { provider: "Didit", brand: "Phoenix", whiteLabel: true, enabled: Boolean(DIDIT_API_KEY && DIDIT_WEBHOOK_SECRET) },
+      kyc: { provider: "Didit", brand: DIDIT_WHITE_LABEL ? "Phoenix" : "Didit", whiteLabel: DIDIT_WHITE_LABEL, enabled: Boolean(DIDIT_API_KEY && DIDIT_WEBHOOK_SECRET) },
       nft: { network: "Base", collection: NFT_COLLECTION_ADDRESS || null },
     },
     overview: {

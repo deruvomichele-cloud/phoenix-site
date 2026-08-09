@@ -5,6 +5,7 @@ primary_region = "fra"
 
 [env]
   PUBLIC_URL = "https://phoenix-site.fly.dev"
+  DIDIT_WHITE_LABEL = "false"
   BASE_RPC_URL = "https://mainnet.base.org"
   ASH_CONTRACT = "0xd4FbB5E4Dd24C3F9A0F58Efa656A489D24E93BCd"
   ASH_SWAP_CONTRACT = "0xE5104018379973BA5a65b82bC7E876b766357de6"
