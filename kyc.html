@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Verifica identità · Phoenix</title>
+  <style>
+    :root{--bg:#050305;--panel:#0e080a;--line:#541d29;--red:#e33b52;--text:#fff7f8;--muted:#b7a4a9;--green:#53d890;--amber:#f2bd61}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}body{display:grid;place-items:center;padding:1.2rem;background:radial-gradient(circle at 50% 0,rgba(180,23,51,.24),transparent 38%),#050305}.card{width:min(680px,100%);padding:clamp(1.3rem,4vw,2.5rem);border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#12090c,#080506);box-shadow:0 28px 90px rgba(0,0,0,.55)}.brand{display:flex;align-items:center;gap:.85rem;margin-bottom:1.5rem}.brand img{width:56px;height:56px;object-fit:contain}.brand strong{display:block;letter-spacing:.14em}.brand small{color:#ef6074;font-weight:800;letter-spacing:.16em}h1{font-size:clamp(1.8rem,5vw,2.7rem);margin:.4rem 0}.lead{color:var(--muted);line-height:1.65}.steps{display:grid;gap:.7rem;margin:1.5rem 0}.step{padding:.9rem 1rem;border:1px solid #35131b;border-radius:11px;background:#090607}.step b{color:#ff7b8d}.consent{display:flex;gap:.75rem;align-items:flex-start;padding:1rem;border:1px solid #644819;background:#1b1207;border-radius:11px;color:#efd5a6;font-size:.9rem;line-height:1.45}.consent input{margin-top:.25rem;accent-color:var(--red)}.consent a{color:#ff91a0;font-weight:800;text-underline-offset:2px}.actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem}.btn{appearance:none;border:1px solid #642333;border-radius:10px;padding:.78rem 1rem;background:#12080b;color:#fff;text-decoration:none;font-weight:800;cursor:pointer}.btn.primary{background:linear-gradient(180deg,#e13c55,#8d1429);border-color:#f15d72}.btn:disabled{opacity:.45;cursor:not-allowed}.status{margin-top:1rem;padding:.8rem 1rem;border-radius:10px;background:#0a0708;border:1px solid #35151d;color:var(--muted)}.status.ok{border-color:#266b47;color:#85ebb1;background:#0c2519}.status.warn{border-color:#6a4b19;color:#ffd17e;background:#241807}.status.bad{border-color:#7e2838;color:#ff8fa0;background:#2b0c13}.fine{font-size:.76rem;color:#8f7f83;line-height:1.5;margin-top:1rem}.fine a{color:#ff8192}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand"><img src="ash-logo-256.png" alt="Phoenix"><div><strong>PHOENIX</strong><small>KYC · DIDIT</small></div></div>
+    <h1>Verifica la tua identità</h1>
+    <p class="lead">La verifica KYC associa il risultato al wallet che firmi. La procedura viene svolta sul portale sicuro di Didit; Phoenix riceve dal webhook firmato soltanto lo stato operativo e un riepilogo privo dei dati del documento.</p>
+    <div class="steps">
+      <div class="step"><b>1.</b> Collega il wallet e firma il messaggio di accesso gratuito.</div>
+      <div class="step"><b>2.</b> Accetta l’informativa e apri la verifica Didit.</div>
+      <div class="step"><b>3.</b> Attendi la conferma: il redirect da solo non vale come approvazione.</div>
+    </div>
+    <label class="consent"><input type="checkbox" id="consent"><span>Acconsento al trattamento dei dati necessario alla verifica d’identità e, se previsto dal flusso, dei dati biometrici. Ho letto l’<a href="privacy.html">informativa Phoenix</a> e l’<a href="https://didit.me/terms/verification-privacy-notice/" target="_blank" rel="noopener">informativa Didit sulla verifica</a>.</span></label>
+    <div class="actions"><button class="btn primary" id="startBtn">Collega wallet e continua</button><a class="btn" href="index.html">Torna al sito</a></div>
+    <div class="status" id="status">Wallet non autenticato.</div>
+    <p class="fine">Provider: Didit · Workflow: Free KYC · Rete dell’account: Base. Le chiavi API e la decisione KYC non sono mai affidate al browser.</p>
+  </main>
+  <script>
+  (()=>{
+    const button=document.getElementById('startBtn');const consent=document.getElementById('consent');const status=document.getElementById('status');
+    const setStatus=(text,type='')=>{status.textContent=text;status.className=`status ${type}`};
+    const walletProvider=()=>{const e=window.ethereum;if(!e)return null;if(e.providers?.length)return e.providers.find(p=>p.isMetaMask)||e.providers[0];return e};
+    async function json(url,options={}){const res=await fetch(url,{credentials:'include',...options,headers:{'Content-Type':'application/json',...(options.headers||{})}});const body=await res.json().catch(()=>({}));if(!res.ok)throw Object.assign(new Error(body.error||'request_failed'),{status:res.status,body});return body}
+    async function authenticate(){const provider=walletProvider();if(!provider)throw new Error('Installa un wallet EVM compatibile, per esempio MetaMask.');const accounts=await provider.request({method:'eth_requestAccounts'});const wallet=accounts?.[0];if(!wallet)throw new Error('Wallet non disponibile.');const challenge=await json('/api/auth/challenge',{method:'POST',body:JSON.stringify({wallet})});let signature;try{signature=await provider.request({method:'personal_sign',params:[challenge.message,wallet]})}catch(error){if(error?.code===4001)throw new Error('Firma annullata.');throw error}return json('/api/auth/verify',{method:'POST',body:JSON.stringify({wallet,signature})})}
+    async function refresh(){try{const me=await json('/api/auth/me');const kyc=await json('/api/kyc/status');button.textContent=kyc.status==='Approved'?'KYC approvato':'Apri verifica Didit';button.disabled=kyc.status==='Approved';setStatus(`${me.wallet.slice(0,6)}…${me.wallet.slice(-4)} · Stato KYC: ${kyc.status}`,kyc.status==='Approved'?'ok':kyc.status==='Declined'?'bad':'warn');return me}catch{return null}}
+    button.addEventListener('click',async()=>{button.disabled=true;try{if(!consent.checked)throw new Error('Devi accettare l’informativa prima di continuare.');setStatus('Autenticazione wallet…','warn');let me=await refresh();if(!me)me=await authenticate();setStatus('Creazione sessione Didit…','warn');const session=await json('/api/kyc/session',{method:'POST',body:JSON.stringify({consent:true})});window.location.assign(session.url)}catch(error){setStatus(error.message||'Operazione non riuscita.','bad');button.disabled=false}});
+    if(new URLSearchParams(location.search).has('returned'))setStatus('Verifica terminata. Attendo il webhook firmato di Didit…','warn');refresh();
+  })();
+  </script>
+</body>
+</html>

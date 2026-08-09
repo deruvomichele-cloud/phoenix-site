@@ -33,6 +33,7 @@ a{text-decoration:none;color:inherit}
 .stat-subtext{font-size:.78rem;color:rgba(240,232,234,.4);margin-top:.3rem}
 .section{margin-bottom:2.8rem;padding:1.8rem;border:1px solid rgba(192,34,62,.12);border-radius:14px;background:rgba(20,0,5,.5)}
 .section h2{font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:1.2rem;letter-spacing:-.01em}
+.kyc-panel{display:flex;align-items:center;justify-content:space-between;gap:1rem}.kyc-copy{color:rgba(240,232,234,.7);line-height:1.6}.kyc-status{display:inline-block;margin-top:.7rem;padding:.35rem .65rem;border:1px solid rgba(227,65,89,.35);border-radius:99px;color:#ff8a9c;font-size:.78rem;font-weight:800}.kyc-link{display:inline-block;background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;padding:.8rem 1.2rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;border-radius:10px;white-space:nowrap}.kyc-link:hover{box-shadow:0 0 24px rgba(227,65,89,.45)}@media(max-width:640px){.kyc-panel{display:block}.kyc-link{margin-top:1rem}}
 .bar-chart{margin-bottom:1.6rem}
 .bar-label{display:flex;justify-content:space-between;align-items:baseline;font-size:.9rem;margin-bottom:.4rem}
 .bar-label-text{font-weight:700;color:#fff}
@@ -118,6 +119,15 @@ a{text-decoration:none;color:inherit}
         <div class='stat-subtext' data-i18n='stat.ageSub'>giorni</div>
       </div>
     </div>
+  </section>
+
+  <section class='section kyc-panel'>
+    <div>
+      <h2 data-i18n='kyc.h'>Verifica identità</h2>
+      <p class='kyc-copy' data-i18n='kyc.desc'>Completa il KYC Didit associato al tuo wallet per le funzioni che richiedono verifica.</p>
+      <span class='kyc-status' id='kycStatus'>Stato: non autenticato</span>
+    </div>
+    <a class='kyc-link' href='kyc.html' data-i18n='kyc.cta'>Apri KYC</a>
   </section>
 
   <section class='section'>
@@ -210,6 +220,7 @@ const I18N={
     'rebirth.btnCustom':'Rinascita Personalizzata →',
     'regen.h':'Timeline Rigenerazione','regen.born':'Nata il','regen.next':'Rinascerà il','regen.countdown':'Giorni rimanenti',
     'regen.info':'Ogni mese la fenice rinasce con statistiche nuove casuali. Le precedenti restano nella collezione storica.',
+    'kyc.h':'Verifica identità','kyc.desc':'Completa il KYC Didit associato al tuo wallet per le funzioni che richiedono verifica.','kyc.cta':'Apri KYC',
     'coll.h':'Collezione Storica','coll.desc':'Le tue fenici precedenti. Non influiscono su quiz, ma rimangono nella collezione finché non vengono cancellate dalla blockchain.',
     'coll.blockchain':'💾 Gestite dalla blockchain — cancellazione permanente possibile'},
   en:{back:'← Home',foot:'Rise through knowledge.',
@@ -223,6 +234,7 @@ const I18N={
     'rebirth.btnCustom':'Personalized Rebirth →',
     'regen.h':'Rebirth Timeline','regen.born':'Born on','regen.next':'Will be reborn on','regen.countdown':'Days remaining',
     'regen.info':'Each month your phoenix is reborn with new random stats. Previous ones remain in historic collection.',
+    'kyc.h':'Identity verification','kyc.desc':'Complete Didit KYC linked to your wallet for features that require verification.','kyc.cta':'Open KYC',
     'coll.h':'Historic Collection','coll.desc':'Your previous phoenixes. They don\'t affect quizzes but remain in collection until blockchain deletion.',
     'coll.blockchain':'💾 Managed by blockchain — permanent deletion possible'}
 };
@@ -353,6 +365,18 @@ document.querySelectorAll('.lang-switch button').forEach(b=>{
 
 applyI18n();
 init();
+
+(async()=>{
+  const status=document.getElementById('kycStatus');
+  try{
+    const me=await fetch('/api/auth/me',{credentials:'include'});
+    if(!me.ok)return;
+    const response=await fetch('/api/kyc/status',{credentials:'include'});
+    if(!response.ok)return;
+    const kyc=await response.json();
+    status.textContent=(lang==='it'?'Stato: ':'Status: ')+kyc.status;
+  }catch{}
+})();
 
 /* FLAME */
 (function(){var c=document.getElementById('flame');var x=c.getContext('2d');var ps=[];var m={x:-100,y:-100,active:false};var dpr=window.devicePixelRatio||1;function rs(){dpr=window.devicePixelRatio||1;c.width=innerWidth*dpr;c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';x.setTransform(dpr,0,0,dpr,0,0)}rs();addEventListener('resize',rs);addEventListener('mousemove',function(e){m.x=e.clientX;m.y=e.clientY;m.active=true;for(var i=0;i<3;i++){ps.push({x:e.clientX+(Math.random()-.5)*6,y:e.clientY+(Math.random()-.5)*6,vx:(Math.random()-.5)*.6,vy:-Math.random()*1.4-.4,life:0,maxLife:28+Math.random()*20,size:6+Math.random()*8})}if(ps.length>220)ps.splice(0,ps.length-220)});addEventListener('mouseleave',function(){m.active=false});function tick(){x.globalCompositeOperation='destination-out';x.fillStyle='rgba(0,0,0,0.18)';x.fillRect(0,0,c.width/dpr,c.height/dpr);x.globalCompositeOperation='lighter';for(var i=ps.length-1;i>=0;i--){var p=ps[i];p.life++;if(p.life>=p.maxLife){ps.splice(i,1);continue}p.x+=p.vx;p.y+=p.vy;p.vy-=.05;p.vx*=.96;var t=p.life/p.maxLife;var r=p.size*(1-t*.4);var al=(1-t)*.9;var g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,r);if(t<.45){g.addColorStop(0,'rgba(255,60,70,'+al+')');g.addColorStop(.35,'rgba(200,25,40,'+al*.85+')');g.addColorStop(.7,'rgba(130,10,25,'+al*.5+')');g.addColorStop(1,'rgba(60,0,10,0)')}else{var sm=(t-.45)/.55;var a2=al*(1-sm*.5);g.addColorStop(0,'rgba(160,20,35,'+a2*.75+')');g.addColorStop(.5,'rgba(90,8,20,'+a2*.4+')');g.addColorStop(1,'rgba(30,0,5,0)')}x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,r,0,Math.PI*2);x.fill()}if(m.active){var br=14;var cg=x.createRadialGradient(m.x,m.y,0,m.x,m.y,br);cg.addColorStop(0,'rgba(255,80,90,0.95)');cg.addColorStop(.35,'rgba(220,30,45,.8)');cg.addColorStop(.7,'rgba(140,12,28,0.5)');cg.addColorStop(1,'rgba(60,0,10,0)');x.fillStyle=cg;x.beginPath();x.arc(m.x,m.y,br,0,Math.PI*2);x.fill()}requestAnimationFrame(tick)}requestAnimationFrame(tick)})();

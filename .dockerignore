@@ -1,8 +1,10 @@
 .git
 .gitignore
-Dockerfile*
-fly.toml
-README.md
-LISTING_STATUS.md
-TOKEN_LISTING_GUIDE.md
+node_modules
+.data
+.env
+.env.*
+npm-debug.log*
+work
+test
 

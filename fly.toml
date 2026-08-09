@@ -3,6 +3,17 @@ primary_region = "fra"
 
 [build]
 
+[env]
+  PUBLIC_URL = "https://phoenix-site.fly.dev"
+  BASE_RPC_URL = "https://mainnet.base.org"
+  ASH_CONTRACT = "0xd4FbB5E4Dd24C3F9A0F58Efa656A489D24E93BCd"
+  ASH_SWAP_CONTRACT = "0xE5104018379973BA5a65b82bC7E876b766357de6"
+  USDC_CONTRACT = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+
+[mounts]
+  source = "phoenix_data"
+  destination = "/data"
+
 [http_service]
   internal_port = 8080
   force_https = true

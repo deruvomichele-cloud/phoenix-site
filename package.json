@@ -1,0 +1,18 @@
+{
+  "name": "phoenix-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "ethers": "^6.15.0",
+    "express": "^5.1.0"
+  }
+}
