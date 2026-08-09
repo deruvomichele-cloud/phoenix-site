@@ -311,6 +311,81 @@ app.get("/api/kyc/status", requireSession, (req, res) => {
   });
 });
 
+app.get("/api/user/profile", requireSession, async (req, res) => {
+  const now = new Date().toISOString();
+  upsertUser(req.session.wallet, { source: "profile", lastSeenAt: now });
+  const row = db.prepare(
+    `SELECT wallet, joined_at, last_seen_at, chain_id, source, kyc_status,
+            kyc_session_id, kyc_updated_at, status, nft_count, nft_collection,
+            tests_json, quiz_completions, ash_issued, usdc_paid
+     FROM users WHERE wallet=?`,
+  ).get(req.session.wallet);
+  const user = mapUser(row);
+  const balances = await readWalletState(req.session.wallet);
+  if (NFT_COLLECTION_ADDRESS && balances.nftCount != null && balances.nftCount !== user.nftCount) {
+    db.prepare("UPDATE users SET nft_count=?, nft_collection=? WHERE wallet=?").run(
+      balances.nftCount,
+      NFT_COLLECTION_ADDRESS,
+      req.session.wallet,
+    );
+    user.nftCount = balances.nftCount;
+    user.nftCollection = NFT_COLLECTION_ADDRESS;
+  }
+  const activity = db.prepare(
+    `SELECT event, type, usdc_delta usdcDelta, ash_delta ashDelta,
+            tx_hash txHash, status, created_at createdAt
+     FROM ledger WHERE wallet=? COLLATE NOCASE ORDER BY created_at DESC LIMIT 100`,
+  ).all(req.session.wallet);
+  res.json({
+    generatedAt: now,
+    account: {
+      wallet: user.wallet,
+      joinedAt: user.joinedAt,
+      lastSeenAt: user.lastSeenAt,
+      chainId: user.chainId || 8453,
+      source: user.source,
+      status: user.status,
+    },
+    kyc: {
+      provider: "Didit",
+      status: user.kycStatus,
+      sessionId: user.kycSessionId,
+      updatedAt: user.kycUpdatedAt,
+      enabled: Boolean(DIDIT_API_KEY),
+    },
+    learning: {
+      tests: user.tests,
+      quizCompletions: user.quizCompletions,
+    },
+    rewards: {
+      ashIssued: user.ashIssued,
+      usdcPaid: user.usdcPaid,
+    },
+    nft: {
+      network: "Base",
+      collection: NFT_COLLECTION_ADDRESS || null,
+      count: NFT_COLLECTION_ADDRESS ? Number(balances.nftCount || 0) : user.nftCount,
+      configured: Boolean(NFT_COLLECTION_ADDRESS),
+    },
+    balances,
+    activity,
+  });
+});
+
+app.post("/api/user/progress", requireSession, rateLimit("user-progress", 20, 60_000), (req, res) => {
+  const tests = Array.isArray(req.body?.tests)
+    ? req.body.tests.map((test) => cleanText(test, 180)).filter(Boolean).slice(0, 12)
+    : [];
+  const quizCompletions = Number(req.body?.quizCompletions || 0);
+  if (tests.length > 12 || !Number.isInteger(quizCompletions) || quizCompletions < 0 || quizCompletions > 100_000) {
+    return res.status(400).json({ error: "invalid_progress" });
+  }
+  db.prepare(
+    `UPDATE users SET tests_json=?, quiz_completions=MAX(quiz_completions,?), last_seen_at=? WHERE wallet=?`,
+  ).run(JSON.stringify(tests), quizCompletions, new Date().toISOString(), req.session.wallet);
+  res.json({ synced: true, tests, quizCompletions });
+});
+
 app.post("/api/kyc/session", rateLimit("kyc", 5, 60_000), requireSession, async (req, res) => {
   if (!DIDIT_API_KEY) return res.status(503).json({ error: "kyc_unconfigured" });
   if (req.body?.consent !== true) return res.status(400).json({ error: "consent_required" });
@@ -882,6 +957,54 @@ function addAudit(actor, action, resource, outcome, details) {
     cleanText(details, 500),
     new Date().toISOString(),
   );
+}
+
+const walletStateCache = new Map();
+async function readWalletState(wallet) {
+  const cached = walletStateCache.get(wallet);
+  if (cached?.expiresAt > Date.now()) return cached.value;
+  const fallback = {
+    status: "unavailable",
+    chainId: 8453,
+    nativeEth: null,
+    ash: null,
+    usdc: null,
+    nftCount: null,
+    ashAddress: ASH_CONTRACT,
+    usdcAddress: USDC_CONTRACT,
+    nftCollection: NFT_COLLECTION_ADDRESS || null,
+    updatedAt: new Date().toISOString(),
+  };
+  try {
+    const provider = new JsonRpcProvider(BASE_RPC_URL, 8453, {
+      staticNetwork: true,
+      batchMaxCount: 1,
+    });
+    const balanceAbi = ["function balanceOf(address) view returns (uint256)"];
+    const ash = new Contract(ASH_CONTRACT, balanceAbi, provider);
+    const usdc = new Contract(USDC_CONTRACT, balanceAbi, provider);
+    const nft = NFT_COLLECTION_ADDRESS ? new Contract(NFT_COLLECTION_ADDRESS, balanceAbi, provider) : null;
+    const [nativeBalance, ashBalance, usdcBalance, nftBalance] = await Promise.all([
+      safeContractCall(() => provider.getBalance(wallet)),
+      safeContractCall(() => ash.balanceOf(wallet)),
+      safeContractCall(() => usdc.balanceOf(wallet)),
+      nft ? safeContractCall(() => nft.balanceOf(wallet)) : null,
+    ]);
+    const value = {
+      ...fallback,
+      status: nativeBalance != null || ashBalance != null || usdcBalance != null ? "live" : "unavailable",
+      nativeEth: nativeBalance == null ? null : formatUnits(nativeBalance, 18),
+      ash: ashBalance == null ? null : formatUnits(ashBalance, 18),
+      usdc: usdcBalance == null ? null : formatUnits(usdcBalance, 6),
+      nftCount: nftBalance == null ? null : Number(nftBalance),
+      updatedAt: new Date().toISOString(),
+    };
+    walletStateCache.set(wallet, { expiresAt: Date.now() + 30_000, value });
+    return value;
+  } catch (error) {
+    console.error("Base wallet read failed", error?.message || error);
+    return fallback;
+  }
 }
 
 let poolCache = { expiresAt: 0, value: null };

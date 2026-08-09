@@ -340,6 +340,7 @@ function finish(){
 function renderResults(){
   const {letters,firstPct}=computeType();
   const T=TYPES[letters];
+  try{localStorage.setItem('phoenixMbtiResult',JSON.stringify({type:letters,scores:firstPct,completedAt:new Date().toISOString()}));}catch(e){}
   document.getElementById('typeBadge').textContent=letters;
   document.getElementById('typeName').textContent=T[lang].n;
   document.getElementById('typeElement').textContent=(lang==='it'?'Elemento: ':'Element: ')+T.el;

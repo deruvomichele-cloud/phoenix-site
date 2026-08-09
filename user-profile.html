@@ -1,384 +1,97 @@
-<!doctype html><html lang='it'><head><meta charset='UTF-8'/><meta name='viewport' content='width=device-width,initial-scale=1.0'/><title>Phoenix — Il tuo profilo</title><style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#000;color:#f0e8ea;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;overflow-x:hidden;cursor:none;min-height:100%}
-a{text-decoration:none;color:inherit}
-@media(hover:none){html,body{cursor:auto}}
-.header{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.5rem;border-bottom:1px solid rgba(192,34,62,.18);position:sticky;top:0;background:#000;z-index:50}
-.brand{display:flex;align-items:center;gap:.4rem;flex-shrink:0}
-.brand img{width:52px;height:52px;object-fit:contain;mix-blend-mode:screen}
-.brand span{font-weight:900;letter-spacing:.06em;font-size:1.2rem;color:#fff;text-shadow:0 0 8px rgba(227,65,89,.9),0 0 18px rgba(192,34,62,.7)}
-.spacer{flex:1}
-.lang-switch{display:flex;gap:.3rem}
-.lang-switch button{background:transparent;border:2px solid transparent;padding:.2rem;border-radius:4px;cursor:none;transition:transform .2s,border-color .2s;line-height:0}
-.lang-switch button img{width:26px;height:19px;display:block;border-radius:2px}
-.lang-switch button:hover{transform:scale(1.15)}
-.lang-switch button.active{border-color:rgba(227,65,89,.8);transform:scale(1.15)}
-.btn-back{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;border:none;padding:.55rem 1.1rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:8px;cursor:none;font-size:.78rem;white-space:nowrap;margin-left:.6rem;transition:box-shadow .2s}
-.btn-back:hover{box-shadow:0 0 18px rgba(227,65,89,.6)}
-@media(hover:none){.lang-switch button,.btn-back{cursor:auto}}
-#flame{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:1000}
-.wrap{max-width:900px;margin:0 auto;padding:2.5rem 1.2rem 5rem;position:relative;z-index:2}
-.hero{text-align:center;padding:2rem 1.4rem;background:linear-gradient(135deg,rgba(192,34,62,.1),rgba(122,18,40,.1));border:1px solid rgba(192,34,62,.15);border-radius:16px;margin-bottom:2.8rem}
-.phoenix-name{font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(227,65,89,.7);font-weight:700;margin-bottom:1rem}
-.phoenix-title{font-size:clamp(2rem,6vw,3.2rem);font-weight:900;line-height:.95;letter-spacing:-.02em;background:linear-gradient(180deg,#ff5f6e,#7a1228);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem}
-.element-badge{display:inline-block;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:#ff8a9c;border:1px solid rgba(227,65,89,.4);border-radius:99px;padding:.4rem 1rem;margin-bottom:1.5rem}
-.phoenix-visual{width:240px;height:240px;margin:1.5rem auto;background:rgba(20,0,5,.6);border:2px solid rgba(192,34,62,.22);border-radius:16px;display:flex;align-items:center;justify-content:center;color:rgba(240,232,234,.4);font-size:.95rem;position:relative;overflow:hidden}
-.phoenix-visual.loading::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(227,65,89,.3),transparent);animation:shimmer 1.5s infinite}
-@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin-top:1.8rem}
-@media(max-width:640px){.stats-grid{grid-template-columns:1fr}}
-.stat-box{background:rgba(30,0,8,.6);border:1px solid rgba(192,34,62,.15);border-radius:12px;padding:1rem;text-align:center}
-.stat-label{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(240,232,234,.5);margin-bottom:.4rem}
-.stat-value{font-size:2rem;font-weight:900;color:#ff8a9c;line-height:1}
-.stat-subtext{font-size:.78rem;color:rgba(240,232,234,.4);margin-top:.3rem}
-.section{margin-bottom:2.8rem;padding:1.8rem;border:1px solid rgba(192,34,62,.12);border-radius:14px;background:rgba(20,0,5,.5)}
-.section h2{font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:1.2rem;letter-spacing:-.01em}
-.kyc-panel{display:flex;align-items:center;justify-content:space-between;gap:1rem}.kyc-copy{color:rgba(240,232,234,.7);line-height:1.6}.kyc-status{display:inline-block;margin-top:.7rem;padding:.35rem .65rem;border:1px solid rgba(227,65,89,.35);border-radius:99px;color:#ff8a9c;font-size:.78rem;font-weight:800}.kyc-link{display:inline-block;background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;padding:.8rem 1.2rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;border-radius:10px;white-space:nowrap}.kyc-link:hover{box-shadow:0 0 24px rgba(227,65,89,.45)}@media(max-width:640px){.kyc-panel{display:block}.kyc-link{margin-top:1rem}}
-.bar-chart{margin-bottom:1.6rem}
-.bar-label{display:flex;justify-content:space-between;align-items:baseline;font-size:.9rem;margin-bottom:.4rem}
-.bar-label-text{font-weight:700;color:#fff}
-.bar-label-pct{font-size:.8rem;color:#ff8a9c;font-weight:700}
-.bar-track{height:12px;background:rgba(192,34,62,.13);border-radius:99px;overflow:hidden}
-.bar-fill{height:100%;background:linear-gradient(90deg,#ff5f6e,#c0223e);transition:width 1s ease;border-radius:99px}
-.ashes-counter{text-align:center;padding:1.6rem;background:rgba(192,34,62,.1);border-radius:12px;margin-bottom:1.6rem}
-.ashes-amount-label{font-size:.9rem;color:rgba(240,232,234,.6);margin-bottom:.5rem}
-.ashes-amount{font-size:2.4rem;font-weight:900;color:#ff8a9c;line-height:1}
-.ashes-note{font-size:.8rem;color:rgba(240,232,234,.4);margin-top:.5rem}
-.rebirth-options{margin-top:1.4rem}
-.rebirth-title{font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:1.2rem}
-.rebirth-card{border:1px solid rgba(74,214,160,.3);padding:1.4rem;border-radius:12px;margin-bottom:1.2rem;background:rgba(74,214,160,.05)}
-.rebirth-card.premium{border-color:rgba(227,65,89,.3);background:rgba(227,65,89,.05)}
-.rebirth-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1rem}
-.rebirth-name{font-size:1rem;font-weight:800;color:#4ad6a0}
-.rebirth-name.premium{color:#ff5f6e}
-.rebirth-cost{font-size:.9rem;font-weight:700;color:#4ad6a0}
-.rebirth-cost.premium{color:#ff5f6e}
-.rebirth-desc{font-size:.9rem;color:rgba(240,232,234,.7);line-height:1.6;margin-bottom:1rem}
-.rebirth-btn{background:linear-gradient(180deg,#4ad6a0,#2d8a7a);color:#000;border:none;padding:.85rem 1.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;border-radius:12px;cursor:none;font-size:.9rem;transition:transform .15s,box-shadow .15s}
-.rebirth-btn:hover{transform:translateY(-2px);box-shadow:0 0 24px rgba(74,214,160,.4)}
-.rebirth-btn.premium{background:linear-gradient(180deg,#c0223e,#7a1228);color:#fff;box-shadow:0 0 24px rgba(192,34,62,.4)}
-.rebirth-btn.premium:hover{box-shadow:0 0 34px rgba(227,65,89,.6)}
-@media(hover:none){.rebirth-btn{cursor:auto}}
-.timeline{position:relative;padding:1.5rem;background:rgba(30,0,8,.6);border:1px solid rgba(192,34,62,.15);border-radius:12px}
-.timeline-row{display:flex;justify-content:space-between;align-items:center;padding:.8rem 0;border-bottom:1px solid rgba(192,34,62,.08)}
-.timeline-row:last-child{border-bottom:none}
-.timeline-label{font-size:.9rem;font-weight:700;color:#fff}
-.timeline-value{font-size:.9rem;color:#ff8a9c;font-weight:700}
-.countdown{font-size:1.3rem;font-weight:900;color:#ff5f6e}
-.collection{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-top:1.4rem}
-.collection-card{background:rgba(30,0,8,.6);border:1px solid rgba(192,34,62,.15);border-radius:12px;padding:1rem;text-align:center;position:relative;overflow:hidden}
-.collection-card.active::before{content:'';position:absolute;inset:0;border:2px solid #ff5f6e;border-radius:12px;pointer-events:none}
-.collection-gen{font-size:1.3rem;font-weight:900;color:#ff5f6e;margin-bottom:.3rem}
-.collection-element{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:#ff8a9c;margin-bottom:.5rem}
-.collection-date{font-size:.75rem;color:rgba(240,232,234,.4);margin-bottom:.5rem}
-.collection-status{display:inline-block;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:.3rem .6rem;border-radius:99px;background:rgba(192,34,62,.2);border:1px solid rgba(227,65,89,.3);color:#ff8a9c}
-.collection-card.archived{opacity:.6}
-.hidden{display:none!important}
-.footer{border-top:1px solid rgba(192,34,62,.12);padding:1.6rem;text-align:center;color:rgba(240,232,234,.3);font-size:.75rem;position:relative;z-index:2}
-</style></head>
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Il mio profilo · Phoenix</title>
+  <meta name="description" content="Profilo Phoenix: KYC, progressi, premi e asset Base associati al wallet.">
+  <style>
+    :root{--bg:#050305;--panel:#0d0709;--panel2:#13090d;--line:#421720;--text:#f8f1f3;--muted:#a9959b;--red:#e33b52;--red2:#8f152a;--green:#58d997;--amber:#f1bd68;--blue:#79bfff}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}a{color:inherit}button,input{font:inherit}.hidden{display:none!important}
+    body{background:radial-gradient(circle at 85% -10%,rgba(178,25,52,.22),transparent 34%),radial-gradient(circle at 5% 45%,rgba(112,17,34,.12),transparent 30%),#050305}
+    .header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem clamp(1rem,3vw,2.2rem);border-bottom:1px solid var(--line);background:rgba(5,3,5,.92);backdrop-filter:blur(16px)}
+    .brand{display:flex;align-items:center;gap:.7rem;text-decoration:none}.brand img{width:46px;height:46px;object-fit:contain}.brand strong{display:block;letter-spacing:.12em}.brand small{display:block;color:#ff6279;font-weight:850;letter-spacing:.16em}
+    .header-actions{display:flex;gap:.55rem;align-items:center}.btn{border:1px solid #58212d;border-radius:9px;background:#10080a;color:#fff;padding:.68rem .9rem;text-decoration:none;font-weight:780;cursor:pointer}.btn:hover{border-color:#b13049;background:#190b0f}.btn-primary{background:linear-gradient(#d83750,#8d1429);border-color:#eb5268}.btn-danger{color:#ff93a1}
+    .wrap{width:min(1180px,calc(100% - 2rem));margin:0 auto;padding:2rem 0 5rem}.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1.2rem;padding:1.45rem;margin-bottom:1rem;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,rgba(26,10,14,.94),rgba(9,5,6,.95))}.eyebrow{color:#ff7185;font-weight:850;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}.hero h1{margin:.25rem 0 .45rem;font-size:clamp(1.8rem,5vw,3rem)}.wallet{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#ff9baa}.status-line{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}.sync{color:var(--muted);font-size:.78rem;text-align:right}
+    .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem;margin-bottom:.8rem}.card{border:1px solid var(--line);border-radius:13px;background:linear-gradient(145deg,var(--panel2),var(--panel));padding:1rem;min-width:0}.card .label{color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.09em}.card .value{font-size:1.55rem;font-weight:880;margin-top:.42rem;overflow:hidden;text-overflow:ellipsis}.card .sub{color:var(--muted);font-size:.75rem;margin-top:.28rem}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem}.panel{border:1px solid var(--line);border-radius:13px;background:linear-gradient(145deg,#10080b,#080506);padding:1.15rem;min-width:0}.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}.panel h2{margin:0;font-size:1.08rem}.panel p{color:var(--muted);line-height:1.55}.badge{display:inline-flex;border:1px solid #63313a;border-radius:99px;padding:.28rem .52rem;font-size:.69rem;font-weight:850}.badge.ok{color:#81e9ad;border-color:#286c49;background:#0e2a1d}.badge.warn{color:#ffd283;border-color:#70501b;background:#291d09}.badge.bad{color:#ff8b99;border-color:#772936;background:#2b0d13}.badge.info{color:#91ccff;border-color:#2e5b7e;background:#0d2231}
+    .details{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}.detail{padding:.72rem;border:1px solid #311219;border-radius:9px;background:#090607}.detail small{display:block;color:var(--muted);font-size:.69rem;margin-bottom:.3rem}.detail b{font-size:.86rem;word-break:break-word}.list{display:grid;gap:.55rem}.list-row{display:flex;justify-content:space-between;gap:1rem;padding:.7rem;border-bottom:1px solid #2c1118}.list-row:last-child{border-bottom:0}.list-row span{color:var(--muted)}
+    .kyc{border-color:#6e2131;background:linear-gradient(140deg,rgba(118,15,35,.17),#090506)}.kyc-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}.empty{padding:1.4rem;text-align:center;color:var(--muted)}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:11px}table{width:100%;border-collapse:collapse;min-width:760px}th,td{text-align:left;padding:.75rem;border-bottom:1px solid #2d1118;font-size:.76rem;white-space:nowrap}th{background:#15090d;color:#cbb8bd;text-transform:uppercase;letter-spacing:.06em;font-size:.65rem}tr:last-child td{border-bottom:0}
+    .auth-gate{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:1rem;background:rgba(3,2,3,.94);backdrop-filter:blur(14px)}.auth-card{width:min(520px,100%);padding:2rem;border:1px solid #76273a;border-radius:17px;background:linear-gradient(145deg,#160a0e,#080506);box-shadow:0 30px 100px #000}.auth-card h2{margin:.2rem 0 .7rem}.auth-card p{color:var(--muted);line-height:1.6}.auth-status{min-height:1.4rem;color:#ff9cab;margin-top:.8rem;font-size:.82rem}
+    .notice{padding:.85rem 1rem;border:1px solid #604619;border-radius:10px;background:#1c1308;color:#efd39e;font-size:.8rem;margin-bottom:.8rem}.footer{text-align:center;color:#725f64;border-top:1px solid var(--line);padding:1.4rem;font-size:.76rem}.footer a{color:#bda8ae}
+    @media(max-width:850px){.kpis{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.hero{align-items:flex-start}.details{grid-template-columns:1fr}.header-actions #refreshBtn{display:none}}
+    @media(max-width:540px){.kpis{grid-template-columns:1fr}.hero{display:block}.sync{text-align:left;margin-top:1rem}.brand small{display:none}.btn{padding:.6rem .7rem;font-size:.78rem}}
+  </style>
+</head>
 <body>
-<canvas id='flame'></canvas>
-<header class='header'>
-  <a href='index.html' class='brand'>
-    <img src='https://i.ibb.co/chkW0mST/fenice-sfondo-completamente-nero-c499a262.png' alt='Phoenix'/>
-    <span>PHOENIX</span>
-  </a>
-  <div class='spacer'></div>
-  <div class='lang-switch'>
-    <button class='active' data-lang='it'><img src='https://flagcdn.com/24x18/it.png' alt='IT'/></button>
-    <button data-lang='en'><img src='https://flagcdn.com/24x18/gb.png' alt='EN'/></button>
+  <div class="auth-gate" id="authGate">
+    <div class="auth-card">
+      <div class="brand"><img src="ash-logo-256.png" alt="Phoenix"><div><strong>PHOENIX</strong><small>PROFILO UTENTE</small></div></div>
+      <h2>Apri il tuo profilo</h2>
+      <p>Collega il wallet e firma il messaggio gratuito. La firma dimostra che il profilo appartiene a te: non invia transazioni e non costa gas.</p>
+      <button class="btn btn-primary" id="connectBtn">Collega wallet e firma</button>
+      <div class="auth-status" id="authStatus">Verifica sessione…</div>
+      <a class="btn" href="index.html">Torna al sito</a>
+    </div>
   </div>
-  <a href='index.html' class='btn-back' data-i18n='back'>← Home</a>
-</header>
 
-<div class='wrap'>
-  <section class='hero'>
-    <div class='phoenix-name' data-i18n='hero.label'>La tua Fenice</div>
-    <h1 class='phoenix-title' id='phoenixName'>Phoenix</h1>
-    <div class='element-badge' id='elementName'>Elemento</div>
-    <div class='phoenix-visual loading' id='phoenixVisual' data-i18n='hero.loading'>Animazione in caricamento...</div>
-    <div class='stats-grid'>
-      <div class='stat-box'>
-        <div class='stat-label' data-i18n='stat.power'>Potenza Lunare</div>
-        <div class='stat-value' id='moonPower'>0%</div>
-        <div class='stat-subtext' id='moonPhase'>Luna Nuova</div>
-      </div>
-      <div class='stat-box'>
-        <div class='stat-label' data-i18n='stat.boost'>Bonus Elemento</div>
-        <div class='stat-value' id='elemBoost'>0%</div>
-        <div class='stat-subtext' data-i18n='stat.boostSub'>Cresce ogni giorno</div>
-      </div>
-      <div class='stat-box'>
-        <div class='stat-label' data-i18n='stat.gen'>Generazione</div>
-        <div class='stat-value' id='generation'>#1</div>
-        <div class='stat-subtext' id='genDate'>Gen 1, 2026</div>
-      </div>
-      <div class='stat-box'>
-        <div class='stat-label' data-i18n='stat.age'>Età</div>
-        <div class='stat-value' id='ageDisplay'>0g</div>
-        <div class='stat-subtext' data-i18n='stat.ageSub'>giorni</div>
-      </div>
-    </div>
-  </section>
+  <header class="header">
+    <a class="brand" href="index.html"><img src="ash-logo-256.png" alt="Phoenix"><div><strong>PHOENIX</strong><small>IL MIO PROFILO</small></div></a>
+    <div class="header-actions"><button class="btn" id="refreshBtn">Aggiorna</button><button class="btn btn-danger" id="logoutBtn">Esci</button><a class="btn" href="index.html">Home</a></div>
+  </header>
 
-  <section class='section kyc-panel'>
-    <div>
-      <h2 data-i18n='kyc.h'>Verifica identità</h2>
-      <p class='kyc-copy' data-i18n='kyc.desc'>Completa il KYC Didit associato al tuo wallet per le funzioni che richiedono verifica.</p>
-      <span class='kyc-status' id='kycStatus'>Stato: non autenticato</span>
-    </div>
-    <a class='kyc-link' href='kyc.html' data-i18n='kyc.cta'>Apri KYC</a>
-  </section>
+  <main class="wrap">
+    <section class="hero">
+      <div><div class="eyebrow">Account Phoenix · Base</div><h1>Il mio profilo</h1><div class="status-line"><span class="wallet" id="walletAddress">—</span><span class="badge info" id="accountStatus">Caricamento</span></div></div>
+      <div class="sync"><div id="lastSync">Ultimo aggiornamento: —</div><a id="walletExplorer" target="_blank" rel="noopener">Apri su BaseScan ↗</a></div>
+    </section>
 
-  <section class='section'>
-    <h2 data-i18n='moon.h'>Influenza Lunare</h2>
-    <div class='bar-chart'>
-      <div class='bar-label'>
-        <span class='bar-label-text' data-i18n='moon.power'>Potenza (0-100%)</span>
-        <span class='bar-label-pct' id='moonPowerPct'>0%</span>
-      </div>
-      <div class='bar-track'><div class='bar-fill' id='moonPowerBar' style='width:0'></div></div>
-    </div>
-    <div style='margin-top:1rem;font-size:.9rem;color:rgba(240,232,234,.65);line-height:1.6'>
-      <p data-i18n='moon.desc'>La potenza della fenice cresce al crescere della luna e raggiunge il massimo durante il plenilunio. Influisce su tutti i tuoi quiz.</p>
-    </div>
-  </section>
+    <div class="notice">I saldi provengono direttamente da Base. “ASH ottenute” e “USDC ricevuti” provengono invece dal registro Phoenix e non vengono confusi con i saldi del wallet.</div>
 
-  <section class='section'>
-    <h2 data-i18n='ashes.h'>Ceneri della Fenice</h2>
-    <div class='ashes-counter'>
-      <div class='ashes-amount-label' data-i18n='ashes.amount'>Ceneri disponibili</div>
-      <div class='ashes-amount' id='ashesAmount'>342</div>
-      <div class='ashes-note' data-i18n='ashes.note'>Accumulate dalla rinascita precedente</div>
-    </div>
-    
-    <div class='rebirth-options'>
-      <h3 class='rebirth-title' data-i18n='rebirth.title'>Scegli la modalità di rinascita</h3>
-      
-      <div class='rebirth-card'>
-        <div class='rebirth-header'>
-          <h4 class='rebirth-name' data-i18n='rebirth.standard'>Rinascita Standard</h4>
-          <div class='rebirth-cost'>80 ASH</div>
-        </div>
-        <p class='rebirth-desc' data-i18n='rebirth.standardDesc'>La fenice rinasce con caratteristiche legate alla tua personalità (Big Five + MBTI). Statistiche casuali ma coerenti con il tuo profilo.</p>
-        <button class='rebirth-btn' id='rebirthStandard' data-i18n='rebirth.btn'>Rinascita Standard →</button>
-      </div>
-      
-      <div class='rebirth-card premium'>
-        <div class='rebirth-header'>
-          <h4 class='rebirth-name premium' data-i18n='rebirth.custom'>Rinascita Personalizzata</h4>
-          <div class='rebirth-cost premium'>250 ASH</div>
-        </div>
-        <p class='rebirth-desc' data-i18n='rebirth.customDesc'>Tu scegli gli elementi dominanti della nuova fenice. Crea il tuo profilo ideale e personalizza completamente l\'aspetto.</p>
-        <button class='rebirth-btn premium' id='rebirthCustom' data-i18n='rebirth.btnCustom'>Rinascita Personalizzata →</button>
-      </div>
-    </div>
-  </section>
+    <section class="kpis">
+      <article class="card"><div class="label">Saldo ASH su Base</div><div class="value" id="ashBalance">—</div><div class="sub">Token nel wallet</div></article>
+      <article class="card"><div class="label">Saldo USDC su Base</div><div class="value" id="usdcBalance">—</div><div class="sub">USDC nel wallet</div></article>
+      <article class="card"><div class="label">ETH su Base</div><div class="value" id="ethBalance">—</div><div class="sub">Gas disponibile</div></article>
+      <article class="card"><div class="label">NFT Phoenix</div><div class="value" id="nftCount">—</div><div class="sub" id="nftStatus">Collezione in attesa</div></article>
+    </section>
 
-  <section class='section'>
-    <h2 data-i18n='regen.h'>Timeline Rigenerazione</h2>
-    <div class='timeline'>
-      <div class='timeline-row'>
-        <span class='timeline-label' data-i18n='regen.born'>Nata il</span>
-        <span class='timeline-value' id='bornDate'>—</span>
-      </div>
-      <div class='timeline-row'>
-        <span class='timeline-label' data-i18n='regen.next'>Rinascerà il</span>
-        <span class='timeline-value' id='nextRebirth'>—</span>
-      </div>
-      <div class='timeline-row'>
-        <span class='timeline-label' data-i18n='regen.countdown'>Giorni rimanenti</span>
-        <span class='countdown' id='daysLeft'>28</span>
-      </div>
-      <div style='margin-top:1rem;font-size:.85rem;color:rgba(240,232,234,.55);line-height:1.5'>
-        <p data-i18n='regen.info'>Ogni mese la fenice rinasce con statistiche nuove casuali. Le precedenti restano nella collezione storica.</p>
-      </div>
-    </div>
-  </section>
+    <section class="grid">
+      <article class="panel kyc">
+        <div class="panel-head"><div><h2>Verifica identità</h2><p>Stato KYC Didit associato esclusivamente a questo wallet.</p></div><span class="badge warn" id="kycBadge">Non avviato</span></div>
+        <div class="details"><div class="detail"><small>Provider</small><b>Didit</b></div><div class="detail"><small>Ultimo aggiornamento</small><b id="kycUpdated">—</b></div></div>
+        <div class="kyc-actions"><a class="btn btn-primary" href="kyc.html" id="kycButton">Avvia verifica KYC</a><a class="btn" href="privacy.html">Privacy KYC</a></div>
+      </article>
 
-  <section class='section'>
-    <h2 data-i18n='coll.h'>Collezione Storica</h2>
-    <p style='font-size:.9rem;color:rgba(240,232,234,.65);margin-bottom:1.4rem' data-i18n='coll.desc'>Le tue fenici precedenti. Non influiscono su quiz, ma rimangono nella collezione finché non vengono cancellate dalla blockchain.</p>
-    <div class='collection' id='collection'></div>
-    <div style='margin-top:1.4rem;text-align:center;font-size:.8rem;color:rgba(240,232,234,.4)' data-i18n='coll.blockchain'>💾 Gestite dalla blockchain — cancellazione permanente possibile</div>
-  </section>
-</div>
+      <article class="panel">
+        <div class="panel-head"><div><h2>Account</h2><p>Informazioni di iscrizione del wallet.</p></div></div>
+        <div class="details"><div class="detail"><small>Iscritto dal</small><b id="joinedAt">—</b></div><div class="detail"><small>Ultima attività</small><b id="lastSeenAt">—</b></div><div class="detail"><small>Rete</small><b>Base · Chain 8453</b></div><div class="detail"><small>Origine iscrizione</small><b id="accountSource">—</b></div></div>
+      </article>
+    </section>
 
-<footer class='footer'>&copy; 2026 Phoenix Academy · <span data-i18n='foot'>Risorgi attraverso la conoscenza.</span></footer>
+    <section class="grid">
+      <article class="panel">
+        <div class="panel-head"><div><h2>Test e quiz</h2><p>Risultati sincronizzati con questo profilo.</p></div><span class="badge info" id="quizBadge">0 quiz</span></div>
+        <div class="list" id="testsList"><div class="empty">Nessun test sincronizzato.</div></div>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><div><h2>Premi Phoenix</h2><p>Valori registrati dal backend per quiz e tornei.</p></div></div>
+        <div class="list"><div class="list-row"><span>ASH erogate</span><b id="ashIssued">0 ASH</b></div><div class="list-row"><span>USDC ricevuti</span><b id="usdcPaid">0 USDC</b></div><div class="list-row"><span>Quiz completati</span><b id="quizCompletions">0</b></div></div>
+      </article>
+    </section>
 
-<script>
-let lang='it';
-const I18N={
-  it:{back:'← Home',foot:'Risorgi attraverso la conoscenza.',
-    'hero.label':'La tua Fenice','hero.loading':'Animazione in caricamento...',
-    'stat.power':'Potenza Lunare','stat.boost':'Bonus Elemento','stat.boostSub':'Cresce ogni giorno',
-    'stat.gen':'Generazione','stat.age':'Età','stat.ageSub':'giorni',
-    'moon.h':'Influenza Lunare','moon.power':'Potenza (0-100%)','moon.desc':'La potenza della fenice cresce al crescere della luna e raggiunge il massimo durante il plenilunio. Influisce su tutti i tuoi quiz.',
-    'ashes.h':'Ceneri della Fenice','ashes.amount':'Ceneri disponibili','ashes.note':'Accumulate dalla rinascita precedente',
-    'rebirth.title':'Scegli la modalità di rinascita','rebirth.standard':'Rinascita Standard','rebirth.standardDesc':'La fenice rinasce con caratteristiche legate alla tua personalità (Big Five + MBTI). Statistiche casuali ma coerenti con il tuo profilo.',
-    'rebirth.btn':'Rinascita Standard →','rebirth.custom':'Rinascita Personalizzata','rebirth.customDesc':'Tu scegli gli elementi dominanti della nuova fenice. Crea il tuo profilo ideale e personalizza completamente l\'aspetto.',
-    'rebirth.btnCustom':'Rinascita Personalizzata →',
-    'regen.h':'Timeline Rigenerazione','regen.born':'Nata il','regen.next':'Rinascerà il','regen.countdown':'Giorni rimanenti',
-    'regen.info':'Ogni mese la fenice rinasce con statistiche nuove casuali. Le precedenti restano nella collezione storica.',
-    'kyc.h':'Verifica identità','kyc.desc':'Completa il KYC Didit associato al tuo wallet per le funzioni che richiedono verifica.','kyc.cta':'Apri KYC',
-    'coll.h':'Collezione Storica','coll.desc':'Le tue fenici precedenti. Non influiscono su quiz, ma rimangono nella collezione finché non vengono cancellate dalla blockchain.',
-    'coll.blockchain':'💾 Gestite dalla blockchain — cancellazione permanente possibile'},
-  en:{back:'← Home',foot:'Rise through knowledge.',
-    'hero.label':'Your Phoenix','hero.loading':'Animation loading...',
-    'stat.power':'Lunar Power','stat.boost':'Element Bonus','stat.boostSub':'Grows each day',
-    'stat.gen':'Generation','stat.age':'Age','stat.ageSub':'days',
-    'moon.h':'Lunar Influence','moon.power':'Power (0-100%)','moon.desc':'Your phoenix\'s power grows with the moon and peaks at full moon. It affects all your quizzes.',
-    'ashes.h':'Phoenix Ashes','ashes.amount':'Ashes available','ashes.note':'Accumulated from previous rebirth',
-    'rebirth.title':'Choose rebirth mode','rebirth.standard':'Standard Rebirth','rebirth.standardDesc':'Your phoenix is reborn with traits linked to your personality (Big Five + MBTI). Random stats but consistent with your profile.',
-    'rebirth.btn':'Standard Rebirth →','rebirth.custom':'Personalized Rebirth','rebirth.customDesc':'You choose the dominant elements of your new phoenix. Create your ideal profile and fully customize its appearance.',
-    'rebirth.btnCustom':'Personalized Rebirth →',
-    'regen.h':'Rebirth Timeline','regen.born':'Born on','regen.next':'Will be reborn on','regen.countdown':'Days remaining',
-    'regen.info':'Each month your phoenix is reborn with new random stats. Previous ones remain in historic collection.',
-    'kyc.h':'Identity verification','kyc.desc':'Complete Didit KYC linked to your wallet for features that require verification.','kyc.cta':'Open KYC',
-    'coll.h':'Historic Collection','coll.desc':'Your previous phoenixes. They don\'t affect quizzes but remain in collection until blockchain deletion.',
-    'coll.blockchain':'💾 Managed by blockchain — permanent deletion possible'}
-};
+    <section class="panel" style="margin-bottom:.8rem">
+      <div class="panel-head"><div><h2>Progressi su questo dispositivo</h2><p>I punteggi locali vengono mostrati separatamente perché il localStorage può essere modificato e non prova un premio finanziario.</p></div></div>
+      <div class="details"><div class="detail"><small>Miglior Quiz Crypto</small><b id="localCrypto">—</b></div><div class="detail"><small>Miglior Quiz Gaming</small><b id="localGaming">—</b></div><div class="detail"><small>ASH quiz locali</small><b id="localAsh">0</b></div><div class="detail"><small>Sincronizzazione test</small><b id="progressSync">In attesa</b></div></div>
+    </section>
 
-// Demo user data
-const userData={
-  phoenixName:'Ignis',
-  element:'Fuoco',
-  generation:1,
-  bornDate:new Date(2026,5,1),
-  stats:{O:65,C:72,E:58,A:55,N:42},
-  mbti:'ISFP',
-  ashes:342
-};
+    <section class="panel">
+      <div class="panel-head"><div><h2>Attività economica personale</h2><p>Pagamenti e ricompense attribuiti al tuo wallet.</p></div><span class="badge info" id="activityCount">0 operazioni</span></div>
+      <div class="table-wrap"><table><thead><tr><th>Data</th><th>Evento</th><th>Tipo</th><th>USDC</th><th>ASH</th><th>Transazione</th><th>Stato</th></tr></thead><tbody id="activityBody"></tbody></table></div>
+    </section>
+  </main>
 
-function applyI18n(){
-  document.documentElement.lang=lang;
-  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(I18N[lang][k])el.textContent=I18N[lang][k];});
-}
-
-function getMoonPhase(date){
-  const knownNewMoon=new Date(2000,0,6);
-  const diff=Math.floor((date-knownNewMoon)/(24*3600*1000));
-  const cycle=diff%29.53;
-  return cycle;
-}
-
-function updateMoonStats(){
-  const now=new Date();
-  const phase=getMoonPhase(now);
-  const power=Math.round(Math.sin((phase/29.53)*Math.PI)*100);
-  const phases=['Luna Nuova','Crescente','Primo Quarto','Gibbosa Crescente','Luna Piena','Gibbosa Calante','Ultimo Quarto','Calante'];
-  const phaseIdx=Math.floor((phase/29.53)*8)%8;
-  const phaseName=lang==='it'?phases[phaseIdx]:['New Moon','Waxing','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning'][phaseIdx];
-  
-  document.getElementById('moonPower').textContent=power+'%';
-  document.getElementById('moonPhase').textContent=phaseName;
-  document.getElementById('moonPowerPct').textContent=power+'%';
-  document.getElementById('moonPowerBar').style.width=power+'%';
-  return power;
-}
-
-function updateElementBoost(){
-  const now=new Date();
-  const dayOfMonth=now.getDate();
-  const boost=Math.min(dayOfMonth*3.3, 100);
-  document.getElementById('elemBoost').textContent=Math.round(boost)+'%';
-  return boost;
-}
-
-function updateAge(){
-  const born=userData.bornDate;
-  const now=new Date();
-  const days=Math.floor((now-born)/(24*3600*1000));
-  document.getElementById('ageDisplay').textContent=days+'g';
-}
-
-function updateTimeline(){
-  const born=userData.bornDate;
-  const rebirth=new Date(born.getTime()+28*24*3600*1000);
-  const now=new Date();
-  const daysLeft=Math.max(0,Math.ceil((rebirth-now)/(24*3600*1000)));
-  
-  document.getElementById('bornDate').textContent=born.toLocaleDateString(lang==='it'?'it-IT':'en-US');
-  document.getElementById('nextRebirth').textContent=rebirth.toLocaleDateString(lang==='it'?'it-IT':'en-US');
-  document.getElementById('daysLeft').textContent=daysLeft;
-}
-
-function buildCollection(){
-  const prevPhoenixes=[
-    {gen:0,element:'Aria',born:new Date(2026,4,4),status:'archived'},
-    {gen:-1,element:'Ombra',born:new Date(2026,3,7),status:'archived'},
-    {gen:-2,element:'Luce',born:new Date(2026,2,9),status:'archived'}
-  ];
-  const html=prevPhoenixes.map(p=>{
-    const statusLabel=lang==='it'?'Archivio':'Archive';
-    return `<div class='collection-card archived'>
-      <div class='collection-gen'>#${userData.generation+p.gen}</div>
-      <div class='collection-element'>${p.element}</div>
-      <div class='collection-date'>${p.born.toLocaleDateString(lang==='it'?'it-IT':'en-US')}</div>
-      <div class='collection-status'>${statusLabel}</div>
-    </div>`;
-  }).join('');
-  
-  const current=`<div class='collection-card active'>
-    <div class='collection-gen'>#${userData.generation}</div>
-    <div class='collection-element'>${userData.element}</div>
-    <div class='collection-date'>${userData.bornDate.toLocaleDateString(lang==='it'?'it-IT':'en-US')}</div>
-    <div class='collection-status' style='background:rgba(74,214,160,.2);border-color:rgba(74,214,160,.3);color:#4ad6a0'>${lang==='it'?'Attiva':'Active'}</div>
-  </div>`;
-  
-  document.getElementById('collection').innerHTML=current+html;
-}
-
-function init(){
-  document.getElementById('phoenixName').textContent=userData.phoenixName+' · Gen #'+userData.generation;
-  document.getElementById('elementName').textContent=userData.element;
-  document.getElementById('generation').textContent='#'+userData.generation;
-  document.getElementById('genDate').textContent=`Gen ${userData.generation}, ${userData.bornDate.getFullYear()}`;
-  document.getElementById('ashesAmount').textContent=userData.ashes;
-  
-  updateMoonStats();
-  updateElementBoost();
-  updateAge();
-  updateTimeline();
-  buildCollection();
-  
-  // Click handlers
-  document.getElementById('rebirthStandard').onclick=()=>alert(lang==='it'?'Rinascita Standard: 80 ASH\n(Da implementare con blockchain)':'Standard Rebirth: 80 ASH\n(To be implemented with blockchain)');
-  document.getElementById('rebirthCustom').onclick=()=>alert(lang==='it'?'Rinascita Personalizzata: 250 ASH\n(Da implementare con blockchain)':'Personalized Rebirth: 250 ASH\n(To be implemented with blockchain)');
-  
-  setInterval(()=>{
-    updateMoonStats();
-    updateElementBoost();
-    updateAge();
-    updateTimeline();
-  },10000);
-}
-
-document.querySelectorAll('.lang-switch button').forEach(b=>{
-  b.onclick=()=>{
-    document.querySelectorAll('.lang-switch button').forEach(x=>x.classList.remove('active'));
-    b.classList.add('active');
-    lang=b.dataset.lang;
-    applyI18n();
-  };
-});
-
-applyI18n();
-init();
-
-(async()=>{
-  const status=document.getElementById('kycStatus');
-  try{
-    const me=await fetch('/api/auth/me',{credentials:'include'});
-    if(!me.ok)return;
-    const response=await fetch('/api/kyc/status',{credentials:'include'});
-    if(!response.ok)return;
-    const kyc=await response.json();
-    status.textContent=(lang==='it'?'Stato: ':'Status: ')+kyc.status;
-  }catch{}
-})();
-
-/* FLAME */
-(function(){var c=document.getElementById('flame');var x=c.getContext('2d');var ps=[];var m={x:-100,y:-100,active:false};var dpr=window.devicePixelRatio||1;function rs(){dpr=window.devicePixelRatio||1;c.width=innerWidth*dpr;c.height=innerHeight*dpr;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';x.setTransform(dpr,0,0,dpr,0,0)}rs();addEventListener('resize',rs);addEventListener('mousemove',function(e){m.x=e.clientX;m.y=e.clientY;m.active=true;for(var i=0;i<3;i++){ps.push({x:e.clientX+(Math.random()-.5)*6,y:e.clientY+(Math.random()-.5)*6,vx:(Math.random()-.5)*.6,vy:-Math.random()*1.4-.4,life:0,maxLife:28+Math.random()*20,size:6+Math.random()*8})}if(ps.length>220)ps.splice(0,ps.length-220)});addEventListener('mouseleave',function(){m.active=false});function tick(){x.globalCompositeOperation='destination-out';x.fillStyle='rgba(0,0,0,0.18)';x.fillRect(0,0,c.width/dpr,c.height/dpr);x.globalCompositeOperation='lighter';for(var i=ps.length-1;i>=0;i--){var p=ps[i];p.life++;if(p.life>=p.maxLife){ps.splice(i,1);continue}p.x+=p.vx;p.y+=p.vy;p.vy-=.05;p.vx*=.96;var t=p.life/p.maxLife;var r=p.size*(1-t*.4);var al=(1-t)*.9;var g=x.createRadialGradient(p.x,p.y,0,p.x,p.y,r);if(t<.45){g.addColorStop(0,'rgba(255,60,70,'+al+')');g.addColorStop(.35,'rgba(200,25,40,'+al*.85+')');g.addColorStop(.7,'rgba(130,10,25,'+al*.5+')');g.addColorStop(1,'rgba(60,0,10,0)')}else{var sm=(t-.45)/.55;var a2=al*(1-sm*.5);g.addColorStop(0,'rgba(160,20,35,'+a2*.75+')');g.addColorStop(.5,'rgba(90,8,20,'+a2*.4+')');g.addColorStop(1,'rgba(30,0,5,0)')}x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,r,0,Math.PI*2);x.fill()}if(m.active){var br=14;var cg=x.createRadialGradient(m.x,m.y,0,m.x,m.y,br);cg.addColorStop(0,'rgba(255,80,90,0.95)');cg.addColorStop(.35,'rgba(220,30,45,.8)');cg.addColorStop(.7,'rgba(140,12,28,0.5)');cg.addColorStop(1,'rgba(60,0,10,0)');x.fillStyle=cg;x.beginPath();x.arc(m.x,m.y,br,0,Math.PI*2);x.fill()}requestAnimationFrame(tick)}requestAnimationFrame(tick)})();
-</script>
-</body></html>
+  <footer class="footer">© 2026 Phoenix Academy · <a href="terms.html">T&amp;C</a> · <a href="privacy.html">Privacy</a></footer>
+  <script src="user-profile.js" defer></script>
+</body>
+</html>

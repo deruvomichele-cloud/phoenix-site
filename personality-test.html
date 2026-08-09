@@ -343,6 +343,7 @@ function finish(){
 /* ============ RESULTS ============ */
 function renderResults(){
   const pct=scores();
+  try{localStorage.setItem('phoenixBigFiveResult',JSON.stringify({scores:pct,completedAt:new Date().toISOString()}));}catch(e){}
   drawRadar(pct);
   const bars=document.getElementById('bars'); bars.innerHTML='';
   ORDER.forEach(t=>{

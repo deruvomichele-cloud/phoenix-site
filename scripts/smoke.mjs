@@ -69,6 +69,14 @@ try {
   });
   const verified = await verifiedResponse.json();
   const cookie = verifiedResponse.headers.get("set-cookie")?.split(";")[0] || "";
+  const progressSync = await fetch(`http://127.0.0.1:${port}/api/user/progress`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Cookie: cookie },
+    body: JSON.stringify({ tests: ["MBTI: INTJ"], quizCompletions: 1 }),
+  });
+  const userProfile = await fetch(`http://127.0.0.1:${port}/api/user/profile`, {
+    headers: { Cookie: cookie },
+  }).then((response) => response.json());
   const admin = await fetch(`http://127.0.0.1:${port}/api/admin/dashboard?days=all`, {
     headers: { Cookie: cookie },
   });
@@ -105,12 +113,13 @@ try {
     challenge: Boolean(challenge.message),
     unauthenticatedAdmin: unauthenticatedAdmin.status,
     adminAuthenticated: verified.admin === true && admin.status === 200,
+    userProfile: progressSync.status === 200 && userProfile.account?.wallet === adminWallet.address.toLowerCase() && userProfile.kyc?.provider === "Didit" && userProfile.learning?.tests?.includes("MBTI: INTJ") && userProfile.balances?.chainId === 8453,
     quizCrud: createdQuiz.status === 201,
     poolStatus: adminDashboard.pool?.status,
     poolAddressesVerified: adminDashboard.pool?.verifiedAddresses,
   };
   console.log(JSON.stringify(results));
-  if (!results.health || results.chain !== 8453 || results.home !== 200 || !results.analyticsInjected || !results.privacyDisclosureInjected || !results.analyticsConsentStored || !results.analyticsWithdrawal || results.kyc !== 200 || results.publicData !== 200 || results.packageHidden !== 404 || !results.challenge || results.unauthenticatedAdmin !== 403 || !results.adminAuthenticated || !results.quizCrud) {
+  if (!results.health || results.chain !== 8453 || results.home !== 200 || !results.analyticsInjected || !results.privacyDisclosureInjected || !results.analyticsConsentStored || !results.analyticsWithdrawal || results.kyc !== 200 || results.publicData !== 200 || results.packageHidden !== 404 || !results.challenge || results.unauthenticatedAdmin !== 403 || !results.adminAuthenticated || !results.userProfile || !results.quizCrud) {
     process.exitCode = 1;
   }
 } finally {
