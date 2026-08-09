@@ -55,6 +55,8 @@ app.get("/favicon.ico", (_req, res) => {
 const homeHtml = fs
   .readFileSync(path.join(ROOT, "index.html"), "utf8")
   .replace("<button class='ghost' data-i18n='cta.how'>Scopri come funziona</button>", "")
+  .replace("data-i18n='nav.test'>Test ▾", "data-i18n='nav.test'>MBTI 16 ▾")
+  .replaceAll("'nav.test':'Test'", "'nav.test':'MBTI 16'")
   .replace(
     "<button class='cta js-connect' data-i18n='cta.connect'>Connect Wallet</button>",
     "<a href='user-profile.html' class='cta' style='background:#0a0507;border:1px solid rgba(227,65,89,.5);box-shadow:none;padding:.65rem 1rem'>Profilo</a><button class='cta js-connect' data-i18n='cta.connect'>Connect Wallet</button>",
