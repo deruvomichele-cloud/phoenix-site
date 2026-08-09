@@ -102,6 +102,7 @@ try {
   const results = {
     health: health.ok,
     chain: config.chain.id,
+    kycBrand: config.kyc?.brand === "Phoenix" && config.kyc?.whiteLabel === true,
     home: home.status,
     analyticsInjected: home.html.includes("/analytics.js"),
     privacyDisclosureInjected: privacy.status === 200 && privacy.html.includes("/privacy-current.js"),
@@ -119,7 +120,7 @@ try {
     poolAddressesVerified: adminDashboard.pool?.verifiedAddresses,
   };
   console.log(JSON.stringify(results));
-  if (!results.health || results.chain !== 8453 || results.home !== 200 || !results.analyticsInjected || !results.privacyDisclosureInjected || !results.analyticsConsentStored || !results.analyticsWithdrawal || results.kyc !== 200 || results.publicData !== 200 || results.packageHidden !== 404 || !results.challenge || results.unauthenticatedAdmin !== 403 || !results.adminAuthenticated || !results.userProfile || !results.quizCrud) {
+  if (!results.health || results.chain !== 8453 || !results.kycBrand || results.home !== 200 || !results.analyticsInjected || !results.privacyDisclosureInjected || !results.analyticsConsentStored || !results.analyticsWithdrawal || results.kyc !== 200 || results.publicData !== 200 || results.packageHidden !== 404 || !results.challenge || results.unauthenticatedAdmin !== 403 || !results.adminAuthenticated || !results.userProfile || !results.quizCrud) {
     process.exitCode = 1;
   }
 } finally {
