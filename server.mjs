@@ -52,6 +52,12 @@ const app = express();
 app.get("/favicon.ico", (_req, res) => {
   res.type("image/png").sendFile(path.join(ROOT, "ash-logo-256.png"));
 });
+const homeHtml = fs
+  .readFileSync(path.join(ROOT, "index.html"), "utf8")
+  .replace("<button class='ghost' data-i18n='cta.how'>Scopri come funziona</button>", "");
+app.get(["/", "/index.html"], (_req, res) => {
+  res.type("html").send(homeHtml);
+});
 app.set("trust proxy", true);
 app.disable("x-powered-by");
 app.use((req, res, next) => {
