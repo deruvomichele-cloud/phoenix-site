@@ -49,6 +49,9 @@ initDatabase();
 seedQuizzes();
 
 const app = express();
+app.get("/favicon.ico", (_req, res) => {
+  res.redirect(302, "https://i.ibb.co/chkW0mST/fenice-sfondo-completamente-nero-c499a262.png");
+});
 app.set("trust proxy", true);
 app.disable("x-powered-by");
 app.use((req, res, next) => {
