@@ -7,6 +7,7 @@
     "node": ">=24"
   },
   "scripts": {
+    "deploy:fly": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/deploy-fly.ps1",
     "start": "node server.mjs",
     "smoke": "node scripts/smoke.mjs",
     "test": "node --test"
